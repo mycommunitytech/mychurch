@@ -99,6 +99,12 @@ function Header({ title, subtitle, Icon, accent, right }: { title: string; subti
 
 /* ── kinds ─────────────────────────────────────────────────────── */
 
+/* Вузький екран (телефон): макет — контейнер, і коли він вужчий за 400px,
+   широкі види перебудовуються самі — таблиця лишає дві колонки, дошка
+   гортається вбік, календар показує лише дні з подіями. Інакше в 350px
+   кожне слово обрізалось до «Мікроф…» або ламалось по літерах. */
+const NARROW_DAYS = 4;
+
 function ListBody({ spec }: { spec: Extract<MockSpec, { kind: "list" }> }) {
   return (
     <div className="p-2 flex flex-col">
@@ -109,7 +115,7 @@ function ListBody({ spec }: { spec: Extract<MockSpec, { kind: "list" }> }) {
             <span className="text-[13.5px] font-medium text-ink leading-none truncate">{it.title}</span>
             {it.sub && <span className="text-[11.5px] text-ink-3 leading-none truncate">{it.sub}</span>}
           </div>
-          {it.meta && <span className="text-[12px] text-ink-2 tabular-nums shrink-0">{it.meta}</span>}
+          {it.meta && <span className={["text-[12px] text-ink-2 tabular-nums shrink-0", it.badge ? "@max-[400px]:hidden" : ""].join(" ")}>{it.meta}</span>}
           {it.badge && <Badge badge={it.badge} />}
         </div>
       ))}
@@ -125,18 +131,22 @@ function ListBody({ spec }: { spec: Extract<MockSpec, { kind: "list" }> }) {
 function TableBody({ spec }: { spec: Extract<MockSpec, { kind: "table" }> }) {
   const hasBadge = spec.rows.some((r) => r.badge);
   const cols = spec.columns.map((_, i) => (i === 0 ? "minmax(0,1.4fr)" : "minmax(0,1fr)")).join(" ") + (hasBadge ? " auto" : "");
+  const narrow = "minmax(0,1.5fr) minmax(0,1fr)" + (hasBadge ? " auto" : "");
+  const grid = { "--cols": cols, "--cols-narrow": narrow } as CSSProperties;
+  const gridCls = "grid [grid-template-columns:var(--cols)] @max-[400px]:[grid-template-columns:var(--cols-narrow)]";
+  const extra = (ci: number) => (ci >= 2 ? "@max-[400px]:hidden" : "");
   return (
     <div className="p-2">
-      <div className="grid gap-3 px-2.5 py-2" style={{ gridTemplateColumns: cols }}>
-        {spec.columns.map((c) => (
-          <span key={c} className="text-[10.5px] font-semibold uppercase tracking-[0.08em] text-ink-3 truncate">{c}</span>
+      <div className={`${gridCls} gap-3 px-2.5 py-2`} style={grid}>
+        {spec.columns.map((c, ci) => (
+          <span key={c} className={["text-[10.5px] font-semibold uppercase tracking-[0.08em] text-ink-3 truncate", extra(ci)].join(" ")}>{c}</span>
         ))}
         {hasBadge && <span />}
       </div>
       {spec.rows.map((r, i) => (
-        <div key={i} className="mock-row grid items-center gap-3 px-2.5 py-2.5 border-t border-hairline text-[12.5px]" style={{ gridTemplateColumns: cols, ...delay(i) }}>
+        <div key={i} className={`mock-row ${gridCls} items-center gap-3 px-2.5 py-2.5 border-t border-hairline text-[12.5px]`} style={{ ...grid, ...delay(i) }}>
           {r.cells.map((c, ci) => (
-            <span key={ci} className={ci === 0 ? "font-medium text-ink truncate" : "text-ink-2 truncate tabular-nums"}>{c}</span>
+            <span key={ci} className={[ci === 0 ? "font-medium text-ink truncate" : "text-ink-2 truncate tabular-nums", extra(ci)].join(" ")}>{c}</span>
           ))}
           {hasBadge && <span className="flex justify-end">{r.badge && <Badge badge={r.badge} />}</span>}
         </div>
@@ -148,12 +158,12 @@ function TableBody({ spec }: { spec: Extract<MockSpec, { kind: "table" }> }) {
 function StatsBody({ spec, accent }: { spec: Extract<MockSpec, { kind: "stats" }>; accent: string }) {
   const max = Math.max(1, ...spec.bars.map((b) => b.value));
   return (
-    <div className="p-4 flex flex-col gap-4">
-      <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${spec.kpis.length}, minmax(0,1fr))` }}>
+    <div className="p-4 @max-[400px]:p-3 flex flex-col gap-4">
+      <div className="grid gap-2 @max-[400px]:gap-1.5" style={{ gridTemplateColumns: `repeat(${spec.kpis.length}, minmax(0,1fr))` }}>
         {spec.kpis.map((k, i) => (
-          <div key={k.label} className="mock-row rounded-xl border border-hairline bg-surface-2 px-3 py-2.5 flex flex-col gap-1.5 min-w-0" style={delay(i)}>
+          <div key={k.label} className="mock-row rounded-xl border border-hairline bg-surface-2 px-3 @max-[400px]:px-2 py-2.5 flex flex-col gap-1.5 min-w-0" style={delay(i)}>
             <span className="text-[11px] text-ink-3 leading-none truncate">{k.label}</span>
-            <span className="text-[20px] font-semibold text-ink leading-none tracking-[-0.5px] tabular-nums truncate">{k.value}</span>
+            <span className="text-[20px] @max-[400px]:text-[15px] @max-[400px]:tracking-[-0.3px] font-semibold text-ink leading-none tracking-[-0.5px] tabular-nums truncate">{k.value}</span>
             {k.trend && <span className="text-[11px] font-medium text-[#0e7a3c] dark:text-[#3ddc97] leading-none truncate">{k.trend}</span>}
           </div>
         ))}
@@ -211,9 +221,9 @@ function ChatBody({ spec, accent }: { spec: Extract<MockSpec, { kind: "chat" }>;
 
 function BoardBody({ spec }: { spec: Extract<MockSpec, { kind: "board" }> }) {
   return (
-    <div className="p-2.5 grid grid-cols-3 gap-2 items-start">
+    <div className="p-2.5 grid grid-cols-3 @max-[400px]:grid-cols-[repeat(3,152px)] @max-[400px]:overflow-x-auto @max-[400px]:snap-x no-scrollbar gap-2 items-start">
       {spec.columns.map((col, ci) => (
-        <div key={col.title} className="flex flex-col gap-2 rounded-xl bg-surface-2 border border-hairline p-1.5 min-w-0">
+        <div key={col.title} className="flex flex-col gap-2 rounded-xl bg-surface-2 border border-hairline p-1.5 min-w-0 snap-start">
           <div className="flex items-center justify-between gap-1 px-1 pt-0.5">
             <span className="text-[10.5px] font-semibold uppercase tracking-[0.06em] text-ink-3 truncate">{col.title}</span>
             <span className="text-[10.5px] text-ink-3 tabular-nums shrink-0">{col.cards.length}</span>
@@ -232,17 +242,35 @@ function BoardBody({ spec }: { spec: Extract<MockSpec, { kind: "board" }> }) {
 }
 
 function CalendarBody({ spec }: { spec: Extract<MockSpec, { kind: "calendar" }> }) {
-  const cols = `repeat(${spec.days.length}, minmax(0,1fr))`;
+  const all = spec.days.map((_, i) => i);
+  /* Найзавантаженіші дні, за рівних — ближчі до неділі: у церкві тиждень
+     важчає до вихідних, і неділя не має випадати з показу. */
+  const count = (di: number) => spec.events.filter((e) => e.day === di).length;
+  const busy = all
+    .filter((di) => count(di) > 0)
+    .sort((a, b) => count(b) - count(a) || b - a)
+    .slice(0, NARROW_DAYS)
+    .sort((a, b) => a - b);
+  return (
+    <>
+      <div className="@max-[400px]:hidden"><CalendarGrid spec={spec} days={all} /></div>
+      <div className="hidden @max-[400px]:block"><CalendarGrid spec={spec} days={busy.length >= 2 ? busy : all.slice(0, NARROW_DAYS)} /></div>
+    </>
+  );
+}
+
+function CalendarGrid({ spec, days }: { spec: Extract<MockSpec, { kind: "calendar" }>; days: number[] }) {
+  const cols = `repeat(${days.length}, minmax(0,1fr))`;
   const ROWS = 8;
   return (
     <div className="p-3 flex flex-col gap-1.5">
       <div className="grid gap-1" style={{ gridTemplateColumns: cols }}>
-        {spec.days.map((d, i) => (
-          <span key={d + i} className="text-[10.5px] font-semibold uppercase tracking-[0.06em] text-ink-3 text-center truncate">{d}</span>
+        {days.map((di) => (
+          <span key={di} className="text-[10.5px] font-semibold uppercase tracking-[0.06em] text-ink-3 text-center truncate">{spec.days[di]}</span>
         ))}
       </div>
       <div className="grid gap-1 h-[216px]" style={{ gridTemplateColumns: cols }}>
-        {spec.days.map((_, di) => (
+        {days.map((di) => (
           <div key={di} className="relative rounded-lg bg-surface-2 border border-hairline overflow-hidden">
             {Array.from({ length: ROWS - 1 }, (_, r) => (
               <span key={r} aria-hidden className="absolute left-0 right-0 border-t border-hairline" style={{ top: `${((r + 1) / ROWS) * 100}%` }} />
@@ -351,7 +379,7 @@ export default function ModuleMock({ spec, accent, Icon }: { spec: MockSpec; acc
   }
 
   return (
-    <div ref={ref} className={["relative w-full max-w-[440px] mx-auto", on ? "mock-on" : ""].join(" ")}>
+    <div ref={ref} className={["@container relative w-full max-w-[440px] mx-auto", on ? "mock-on" : ""].join(" ")}>
       <div
         aria-hidden
         className="absolute -inset-6 rounded-[40px] -z-10 blur-3xl opacity-70"

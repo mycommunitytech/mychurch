@@ -327,7 +327,8 @@ export default function Ministries({ onModulePage = false }: { onModulePage?: bo
     <section id="ministries" className="w-full flex flex-col items-center py-16 md:py-24 scroll-mt-24">
       <div className="w-full max-w-[1120px] px-5 md:px-8 flex flex-col gap-10 md:gap-14">
         <FadeIn className="flex flex-col items-center text-center gap-4">
-          <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-brand">{t.eyebrow}</span>
+          {/* На сторінці модуля «Служіння» ця назва вже стоїть заголовком згори. */}
+          {!onModulePage && <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-brand">{t.eyebrow}</span>}
           <h2 className="text-balance font-semibold text-ink text-[32px] sm:text-[44px] md:text-[56px] leading-[1.05] tracking-[-1.2px] md:tracking-[-2px] max-w-[820px]">
             {t.title}
           </h2>
