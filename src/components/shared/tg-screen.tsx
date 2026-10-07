@@ -115,34 +115,56 @@ export function TgInline({
   className,
   dense,
   demo,
+  onTap,
+  active,
 }: {
   rows: TgButton[][];
   className?: string;
   dense?: boolean;
   /** Підпис кнопки, по якій «тисне» примарний курсор (CursorDemo). */
   demo?: string;
+  /** Передали — кнопки справді натискаються (блоки /telegram). */
+  onTap?: (label: string) => void;
+  /** Підпис вибраної кнопки — вона заливається своїм кольором. */
+  active?: string | null;
 }) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       {rows.map((row, r) => (
         <div key={r} className="flex gap-1.5">
-          {row.map((b) => (
-            <span
-              key={b.t}
-              data-demo={demo === b.t ? "click" : undefined}
-              className={cn(
-                "flex-1 min-w-0 rounded-[10px] border flex items-center justify-center text-center leading-[1.2] px-2.5 truncate",
-                dense ? "h-8 text-[12px]" : "h-9 text-[12.5px] font-medium",
-                b.primary && "bg-brand border-brand text-white font-semibold",
-                b.tone === "green" && "bg-[#12a150]/12 border-[#12a150]/35 text-[#0f8a45] dark:text-[#3ddc97] font-semibold",
-                b.tone === "red" && "bg-[#f05b8b]/12 border-[#f05b8b]/35 text-[#d1376b] dark:text-[#ff8fb4] font-semibold",
-                !b.primary && !b.tone && "tg-inline-btn border-hairline-strong text-ink-2",
-                demo === b.t && "ring-2 ring-offset-2 ring-offset-transparent ring-brand/35"
-              )}
-            >
-              {b.t}
-            </span>
-          ))}
+          {row.map((b) => {
+            const on = active === b.t;
+            const cls = cn(
+              "flex-1 min-w-0 rounded-[10px] border flex items-center justify-center text-center leading-[1.2] px-2.5 truncate",
+              dense ? "h-8 text-[12px]" : "h-9 text-[12.5px] font-medium",
+              b.primary && "bg-brand border-brand text-white font-semibold",
+              b.tone === "green" &&
+                (on
+                  ? "bg-[#12a150] border-[#12a150] text-white font-semibold"
+                  : "bg-[#12a150]/12 border-[#12a150]/35 text-[#0f8a45] dark:text-[#3ddc97] font-semibold"),
+              b.tone === "red" &&
+                (on
+                  ? "bg-[#f05b8b] border-[#f05b8b] text-white font-semibold"
+                  : "bg-[#f05b8b]/12 border-[#f05b8b]/35 text-[#d1376b] dark:text-[#ff8fb4] font-semibold"),
+              !b.primary && !b.tone && "tg-inline-btn border-hairline-strong text-ink-2",
+              demo === b.t && "ring-2 ring-offset-2 ring-offset-transparent ring-brand/35"
+            );
+            return onTap ? (
+              <button
+                key={b.t}
+                type="button"
+                onClick={() => onTap(b.t)}
+                aria-pressed={active === undefined ? undefined : on}
+                className={cn(cls, "transition-[transform,background-color,color] duration-150 active:scale-[0.97]")}
+              >
+                {b.t}
+              </button>
+            ) : (
+              <span key={b.t} data-demo={demo === b.t ? "click" : undefined} className={cls}>
+                {b.t}
+              </span>
+            );
+          })}
         </div>
       ))}
     </div>

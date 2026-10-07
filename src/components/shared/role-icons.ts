@@ -19,6 +19,8 @@ export const ROLE_ICONS: Record<string, LucideIcon> = {
   leader: UsersRound,
   deacon: HandHeart,
   volunteer: Flame,
+  /* Волонтер є лише в брифі: своєї сторінки ролі в нього немає. */
+  helper: HeartHandshake,
   visitor: UserPlus,
   member: User,
   hr: Network,
@@ -38,6 +40,7 @@ export const ROLE_ACCENTS: Record<string, string> = {
   leader: "#12a150",
   deacon: "#e11d48",
   volunteer: "#f59e0b",
+  helper: "#14b8a6",
   visitor: "#0ea5e9",
   member: "#f05b8b",
   hr: "#8b5bf0",

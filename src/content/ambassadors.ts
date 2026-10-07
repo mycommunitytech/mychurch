@@ -19,10 +19,16 @@ export interface AmbassadorCopy {
   seoDescription: string;
 
   eyebrow: string;
+  /** Власний рядок церкви під її знаком — так вона називає себе сама.
+      Пишемо лише те, що церква про себе каже; своє нічого не додаємо. */
+  tagline?: string;
   /** Плашка над заголовком: скільки часу ми працюємо разом. */
   badge: string;
   /** H1: одне коротке твердження, а не опис церкви. */
   title: string;
+  /** Кінець `title` з назвою церкви: стоїть окремим рядком кольором
+      церкви й не переноситься посередині (2026-10-07). */
+  titleAccent?: string;
   /** Одне речення під заголовком. */
   lead: string;
   /** Факти з відкритих даних церкви; ідуть рядком під шапкою. Міста тут
@@ -38,6 +44,14 @@ export interface AmbassadorCopy {
   heroPhoto: { src: string; alt: string };
   photoCredit: string;
   photoCreditCta: string;
+
+  /** Промо-фільм (`AmbassadorDetail.promo`). `promoTitle` — назва вікна
+      з роликом для скрінрідера; `promoCta` — кнопка поверх кадрів громади
+      на головній і кадру в шапці сторінки церкви; `promoCredit` — кредит
+      у кутку блоку `proof`, поки під кнопкою грає петля з фільму. */
+  promoTitle: string;
+  promoCta: string;
+  promoCredit: string;
 
   /** Рядок із сайту церкви дослівно; `href` — сторінка, звідки він. */
   quote: { text: string; source: string; href: string };
@@ -62,7 +76,7 @@ export interface AmbassadorCopy {
   clipsTitle: string;
   clipsText: string;
   /** Відео-відгуки церкви, по одному на модуль: id модуля, а поруч — хто
-      говорить. Назви й описи модулів беруться зі словника, файли й постери
+      говорить. Назви й описи модулів беруться зі словника, ролики й постери
       — з src/content/modules/videos.ts. Ім'я без підтвердження церкви не
       пишемо: порожній `speaker` — просто немає підпису. */
   clips: {
@@ -71,6 +85,15 @@ export interface AmbassadorCopy {
     /** Рядок із самого запису, дослівно. Немає розшифровки — немає
         цитати: переказувати за людину ми не будемо. */
     quote?: string;
+    /** `true` = цей запис стоїть кружечком на головній. Четвірку обирає
+        церква, а не код: там мають бути різні люди й різні теми. */
+    featured?: boolean;
+    /** `true` = слова підтверджені (їх дала сама людина або церква).
+        Без цього прапорця `quote` — наша чернетка: на сторінці
+        амбасадора вона ще може стояти як підпис до запису, але на
+        головній її не показуємо. Вигаданий відгук від реальної людини
+        на першому екрані сайту стояти не може. */
+    confirmed?: boolean;
   }[];
 
   /* ── Блок «Було і стало» знято зі сторінки 2026-09-21. Копія лишається
@@ -95,12 +118,18 @@ export interface AmbassadorDetail {
   /** Акцент сторінки; має читатись і на світлій, і на темній темі. */
   accent: string;
   logo?: string;
+  /** Світла версія знака для темної теми: темний знак на темній плашці
+      губиться (2026-09-30). Немає — у темній темі стоїть `logo`. */
+  logoLight?: string;
   initials: string;
   website: string;
-  /** Промо-ролик для головної: файл у нас на хостингу (public/clips)
-      і кадр із нього, щоб до натискання нічого не вантажилось.
-      Порожньо = блок просто без відео. */
-  promo?: { src: string; poster: string };
+  /** Промо-фільм церкви: id ролика на YouTube, його обкладинка з YouTube,
+      збережена в себе (до натискання нічого не вантажиться), і тривалість
+      для підпису на кнопці. Кнопка стоїть у блоці `proof` на головній і
+      на кадрі в шапці сторінки церкви, грає у своєму вікні. Порожньо =
+      промо ніде немає. `loop` — беззвучний шматок фільму на кілька
+      секунд, що крутиться під кнопкою в блоці `proof` замість фото. */
+  promo?: { videoId: string; poster: string; duration: string; loop?: string };
   copy: Record<Lang, AmbassadorCopy>;
 }
 
@@ -111,18 +140,30 @@ export const AMBASSADORS: AmbassadorDetail[] = [
     city: "Черкаси",
     accent: "#0f766e",
     logo: "/new-life-logo.png",
+    logoLight: "/new-life-logo-light.png",
     initials: "НЖ",
     website: "https://newlife.ck.ua/",
-    /* Справжній запис «Люди і сім'ї» з системи церкви. */
-    promo: { src: "/clips/people.mp4", poster: "/ambassadors/video/people.webp" },
+    /* «MyChurch Promo» з каналу церкви (2026-09-30): півтори хвилини
+       життя громади — служіння, малі групи, інфостійка, хрещення, Kid's
+       Town. Обкладинка — їхня ж, з YouTube. Петля — 0:09.8–0:23.9 фільму
+       (табір, молодь, мала група, заняття), без дітей крупним планом;
+       1280×720, H.264 без звуку, 1,8 МБ. */
+    promo: {
+      videoId: "Iu1uDRepmKI",
+      poster: "/ambassadors/video/cover/promo.webp",
+      duration: "1:32",
+      loop: "/ambassadors/video/promo-loop.mp4",
+    },
     copy: {
       ua: {
         seoTitle: "Церква «Нове Життя», Черкаси — амбасадор «Моєї Церкви»",
         seoDescription:
           "Як черкаська церква «Нове Життя» працює в «Моїй Церкві»: що змінилось у служіннях, які модулі ввімкнені і як проходило впровадження.",
         eyebrow: "Амбасадор",
+        tagline: "Церква для кожного",
         badge: "Вже 1,5 року будуємо церковні процеси",
-        title: "Як це працює в «Новому Житті»",
+        title: "Як це працює в церкві «Нове Життя»",
+        titleAccent: "«Нове Життя»",
         lead: "Черкаська церква з двома недільними служіннями, малими групами, дитячим містечком і двома підлітковими.",
         facts: [
           { label: "Адреса", value: "проспект Перемоги, 13/5" },
@@ -132,22 +173,32 @@ export const AMBASSADORS: AmbassadorDetail[] = [
         siteCta: "Сайт церкви",
         backLabel: "Про нас",
 
+        /* Кадр шапки вирізаний під її рамку 4:5 заздалегідь, щоб обидві
+           підняті руки лишились у кадрі. Хрещення тут стояло до 2026-09-25 —
+           замінено на прохання власника («інше фото»); цитата про людей,
+           а не про будівлю, і кадр — теж люди. У стрічці його немає. */
         heroPhoto: {
-          src: "/ambassadors/newlife/khreshchennia.webp",
-          alt: "Хрещення у відкритому басейні на подвір'ї церкви «Нове Життя»",
+          src: "/ambassadors/newlife/khvala-hero.webp",
+          alt: "Поклоніння в «Новому Житті»: людина з піднятими руками посеред залу",
         },
         gallery: [
-          { src: "/ambassadors/newlife/propovid.webp", alt: "Проповідь на недільному служінні" },
-          { src: "/ambassadors/newlife/spilnota.webp", alt: "Спілкування в холі після служіння" },
-          { src: "/ambassadors/newlife/mala-grupa.webp", alt: "Зустріч малої групи" },
-          { src: "/ambassadors/newlife/kids-town.webp", alt: "Дитяче містечко" },
-          { src: "/ambassadors/newlife/sluzhinnia.webp", alt: "Команда на служінні" },
-          { src: "/ambassadors/newlife/cliff.webp", alt: "Підліткове служіння — спільне фото після зустрічі" },
-          { src: "/ambassadors/newlife/kids-town-zal.webp", alt: "Зал дитячого містечка" },
-          { src: "/ambassadors/newlife/mala-grupa-2.webp", alt: "Мала група за столом" },
+          { src: "/ambassadors/newlife/foye-podrugy.webp", alt: "Люди спілкуються в холі церкви" },
+          { src: "/ambassadors/newlife/kava-u-kholi.webp", alt: "Біля кавового бару в холі церкви" },
+          { src: "/ambassadors/newlife/propovid-vyshyvanka.webp", alt: "Проповідь у вишиванці на тлі прапора України" },
+          { src: "/ambassadors/newlife/mala-grupa-dyvan.webp", alt: "Зустріч малої групи" },
+          { src: "/ambassadors/newlife/kids-town-zaniattia.webp", alt: "Заняття в дитячому містечку" },
+          { src: "/ambassadors/newlife/proslavlennia.webp", alt: "Команда прославлення на сцені" },
+          { src: "/ambassadors/newlife/svitshoty.webp", alt: "Дві дівчини у світшотах «Нового Життя»" },
+          { src: "/ambassadors/newlife/nastilni-igry.webp", alt: "Настільна гра з дітьми та лідерами" },
+          { src: "/ambassadors/newlife/khreshchennia-basein.webp", alt: "Хрещення в басейні церкви" },
         ],
         photoCredit: "Фото — церкви «Нове Життя»",
         photoCreditCta: "newlife.ck.ua",
+        promoTitle: "Промо «Моєї Церкви»",
+        /* Без слова «промо» (2026-09-30): кнопка стоїть на кадрі фільму,
+           тож «Дивитись» уже каже все. */
+        promoCta: "Дивитись",
+        promoCredit: "Відео — церкви «Нове Життя»",
 
         quote: {
           text: "Ми віримо, що церква — це не будівля, а люди.",
@@ -159,8 +210,8 @@ export const AMBASSADORS: AmbassadorDetail[] = [
         aboutText:
           "«Нове Життя» збирається в Черкасах на два недільні служіння. При церкві працюють малі групи, дитяче містечко, спортивний клуб і два підліткові служіння.",
         aboutPhoto: {
-          src: "/ambassadors/newlife/foye.webp",
-          alt: "Люди спілкуються в залі церкви після служіння",
+          src: "/ambassadors/newlife/zal.webp",
+          alt: "Повний зал на служінні в «Новому Житті»",
         },
 
         reviewsTitle: "Що кажуть у церкві",
@@ -180,16 +231,20 @@ export const AMBASSADORS: AmbassadorDetail[] = [
         clips: [
           {
             id: "people",
-            speaker: { name: "Сергій Васильович", role: "пастор" },
+            featured: true,
+            speaker: { name: "Сергій Кравченко", role: "пастор" },
             /* Цей рядок дав користувач — не чернетка. */
             quote:
               "Церква — це люди, і нам важливо знати самих людей! Система допомагає формувати порядок.",
+            confirmed: true,
           },
           {
             id: "groups",
-            speaker: { name: "Руслан Володимирович", role: "пастор" },
+            featured: true,
+            speaker: { name: "Руслан Хлопук", role: "пастор" },
             /* Цей рядок дав користувач — не чернетка. */
             quote: "Для лідера це простий інструмент для організації своєї групи.",
+            confirmed: true,
           },
           {
             id: "onboarding",
@@ -197,6 +252,7 @@ export const AMBASSADORS: AmbassadorDetail[] = [
             /* Цей рядок дав користувач — не чернетка. */
             quote:
               "Простий і зрозумілий шлях адаптації. Людині важливо розуміти наступні кроки.",
+            confirmed: true,
           },
           {
             id: "learning",
@@ -204,9 +260,11 @@ export const AMBASSADORS: AmbassadorDetail[] = [
             /* Цей рядок дав користувач — не чернетка. */
             quote:
               "Навчання — це постійний процес: тренінги, матеріали. Налаштовуєте раз — працює завжди.",
+            confirmed: true,
           },
           {
             id: "forms",
+            featured: true,
             speaker: { name: "Іра Коробченко", role: "лідер Infobox" },
             quote:
               "Google Форми закрили. Анкета одразу в базі, руками нічого не переносимо.",
@@ -219,16 +277,21 @@ export const AMBASSADORS: AmbassadorDetail[] = [
           },
           {
             id: "automations",
+            featured: true,
             speaker: { name: "Равш Юсупов", role: "лідер медіа" },
             quote:
               "Нагадування шле система. Ми лише перевіряємо.",
           },
           {
             id: "org",
-            speaker: { name: "Сергій Васильович", role: "пастор" },
+            speaker: { name: "Сергій Кравченко", role: "пастор" },
             quote:
               "Видно, хто за що відповідає. Питання «а хто цим займається» зникло.",
           },
+          /* Два записи, що з'явились на каналі церкви 2026-09-30. Хто
+             говорить, церква ще не підписала — тож без імені й цитати. */
+          { id: "analytics" },
+          { id: "telegram-bot" },
         ],
 
         changeTitle: "Було і стало",
@@ -253,8 +316,10 @@ export const AMBASSADORS: AmbassadorDetail[] = [
         seoDescription:
           "How New Life Church in Cherkasy runs on My Church: what changed across its ministries, which modules are switched on and how the rollout went.",
         eyebrow: "Ambassador",
+        tagline: "A church for everyone",
         badge: "Building church processes together for 1.5 years",
-        title: "How it works at New Life",
+        title: "How it works at New Life Church",
+        titleAccent: "New Life Church",
         lead: "A Cherkasy church with two Sunday services, small groups, a kids' town and two teen ministries.",
         facts: [
           { label: "Address", value: "13/5 Peremohy Avenue" },
@@ -265,21 +330,25 @@ export const AMBASSADORS: AmbassadorDetail[] = [
         backLabel: "About us",
 
         heroPhoto: {
-          src: "/ambassadors/newlife/khreshchennia.webp",
-          alt: "A baptism in an outdoor pool at New Life church",
+          src: "/ambassadors/newlife/khvala-hero.webp",
+          alt: "Worship at New Life: a man with raised hands in the middle of the hall",
         },
         gallery: [
-          { src: "/ambassadors/newlife/propovid.webp", alt: "A sermon at a Sunday service" },
-          { src: "/ambassadors/newlife/spilnota.webp", alt: "People talking in the hall after a service" },
-          { src: "/ambassadors/newlife/mala-grupa.webp", alt: "A small group meeting" },
-          { src: "/ambassadors/newlife/kids-town.webp", alt: "The kids' town" },
-          { src: "/ambassadors/newlife/sluzhinnia.webp", alt: "A team serving on Sunday" },
-          { src: "/ambassadors/newlife/cliff.webp", alt: "The teen ministry after a meeting" },
-          { src: "/ambassadors/newlife/kids-town-zal.webp", alt: "The kids' town hall" },
-          { src: "/ambassadors/newlife/mala-grupa-2.webp", alt: "A small group around the table" },
+          { src: "/ambassadors/newlife/foye-podrugy.webp", alt: "People talking in the church lobby" },
+          { src: "/ambassadors/newlife/kava-u-kholi.webp", alt: "At the coffee bar in the church lobby" },
+          { src: "/ambassadors/newlife/propovid-vyshyvanka.webp", alt: "A sermon in an embroidered shirt, the Ukrainian flag behind" },
+          { src: "/ambassadors/newlife/mala-grupa-dyvan.webp", alt: "A small group meeting" },
+          { src: "/ambassadors/newlife/kids-town-zaniattia.webp", alt: "A class in the kids' town" },
+          { src: "/ambassadors/newlife/proslavlennia.webp", alt: "The worship team on stage" },
+          { src: "/ambassadors/newlife/svitshoty.webp", alt: "Two girls in New Life sweatshirts" },
+          { src: "/ambassadors/newlife/nastilni-igry.webp", alt: "A board game with kids and leaders" },
+          { src: "/ambassadors/newlife/khreshchennia-basein.webp", alt: "A baptism in the church pool" },
         ],
         photoCredit: "Photos by New Life church",
         photoCreditCta: "newlife.ck.ua",
+        promoTitle: "MyChurch promo",
+        promoCta: "Watch",
+        promoCredit: "Video by New Life church",
 
         quote: {
           text: "We believe the church is not a building, but people.",
@@ -291,8 +360,8 @@ export const AMBASSADORS: AmbassadorDetail[] = [
         aboutText:
           "New Life meets in Cherkasy for two Sunday services. The church runs small groups, a kids' town, a sports club and two teen ministries.",
         aboutPhoto: {
-          src: "/ambassadors/newlife/foye.webp",
-          alt: "People talking in the church hall after a service",
+          src: "/ambassadors/newlife/zal.webp",
+          alt: "A full hall at a New Life service",
         },
 
         reviewsTitle: "What the church says",
@@ -304,13 +373,15 @@ export const AMBASSADORS: AmbassadorDetail[] = [
         clips: [
           {
             id: "people",
-            speaker: { name: "Serhii Vasylovych", role: "pastor" },
+            featured: true,
+            speaker: { name: "Serhii Kravchenko", role: "pastor" },
             quote:
               "The church is people — and it matters to us to know the people themselves. The system helps us keep order.",
           },
           {
             id: "groups",
-            speaker: { name: "Ruslan Volodymyrovych", role: "pastor" },
+            featured: true,
+            speaker: { name: "Ruslan Khlopuk", role: "pastor" },
             quote: "For a leader it is a simple tool to run their own group.",
           },
           {
@@ -326,6 +397,7 @@ export const AMBASSADORS: AmbassadorDetail[] = [
           },
           {
             id: "forms",
+            featured: true,
             speaker: { name: "Ira Korobchenko", role: "Infobox lead" },
             quote: "We closed Google Forms. A form lands in the database, nothing retyped.",
           },
@@ -336,14 +408,17 @@ export const AMBASSADORS: AmbassadorDetail[] = [
           },
           {
             id: "automations",
+            featured: true,
             speaker: { name: "Ravsh Yusupov", role: "media lead" },
             quote: "The system sends the reminders. We just check.",
           },
           {
             id: "org",
-            speaker: { name: "Serhii Vasylovych", role: "pastor" },
+            speaker: { name: "Serhii Kravchenko", role: "pastor" },
             quote: "You can see who owns what. The question «who handles this?» is gone.",
           },
+          { id: "analytics" },
+          { id: "telegram-bot" },
         ],
 
         changeTitle: "Before and after",

@@ -9,8 +9,10 @@ import { absoluteUrl } from "@/lib/seo";
 export const dynamic = "force-static";
 
 /* Карта сайту: усі сторінки, які мають потрапити в пошук.
-   Вартості тут свідомо немає — вона закрита від індексації
-   (noIndex у своєму pageMeta), на неї ведемо тільки з самого сайту.
+   Вартість відкрита для пошуку з 2026-09-25: ШІ-помічники порівнюють
+   системи для церкви саме за ціною, і без цієї сторінки «Моя Церква»
+   випадала з таких порівнянь. Сум на ній і далі немає — лише щаблі
+   й програма безкоштовного підключення.
    Пріоритети — відносні: головна найвища, службові сторінки нижчі. */
 
 const STATIC_PAGES: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] }[] = [
@@ -21,8 +23,10 @@ const STATIC_PAGES: { path: string; priority: number; changeFrequency: MetadataR
   { path: "/blog", priority: 0.9, changeFrequency: "weekly" },
   { path: "/telegram", priority: 0.8, changeFrequency: "monthly" },
   { path: "/import", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/pricing", priority: 0.8, changeFrequency: "monthly" },
   { path: "/consulting", priority: 0.7, changeFrequency: "monthly" },
   { path: "/about", priority: 0.7, changeFrequency: "yearly" },
+  { path: "/cooperation", priority: 0.6, changeFrequency: "monthly" },
   { path: "/faq", priority: 0.7, changeFrequency: "monthly" },
   { path: "/support", priority: 0.6, changeFrequency: "monthly" },
   { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },

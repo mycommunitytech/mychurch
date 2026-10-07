@@ -27,11 +27,22 @@
 
 Вручну, через `track()` з `@/lib/analytics/client`:
 
-- `modal_open` / `modal_close` — модалка демо;
+- `modal_open` / `modal_close` — модалка демо і слухавка «перетелефонуємо»
+  (у подіях форм розрізняються по `source`: `demo`, `callback`, `material`);
 - `form_start`, `form_error`, `form_submit` — кроки форми (тексту полів не пишемо);
 - `lead` — заявка дійшла (у GA4 ще й `generate_lead`);
-- `builder_pick`, `builder_cta`, `solved_pick`, `solved_cta`,
-  `brief_size`, `brief_tool` — вибір у конструкторі, у блоці «було — стало» й у брифі;
+- `calendly_open` / `calendly_close` / `calendly_scheduled` — вікно календаря
+  зустрічей (Calendly): відкрили, закрили (`scheduled` каже, чи записались),
+  записались на зустріч. `source` — звідки відкрили: `cta` (фінальний блок),
+  `demo` (після заявки в модалці), `footer`. Вікно є лише з адресою в
+  `NEXT_PUBLIC_CALENDLY_URL`;
+- `builder_pick`, `builder_cta`, `solved_pick`, `solved_cta` — вибір у
+  конструкторі й у блоці «було — стало»; `builder_cta` тепер відкриває вікно
+  демо з обраними бажаннями. Події `brief_*` зникли разом із формою брифу
+  (2026-09-22);
+- `promo_play` — увімкнули промо-фільм «Нового Життя»: `source` — `home`
+  (кнопка на кадрах громади, відкриває вікно) або `ambassador` (плеєр під
+  шапкою сторінки церкви);
 - `analytics_off` — людина вимкнула збір на `/privacy`.
 
 Щоб додати свій крок — або повісьте `data-track="назва"` на елемент, або

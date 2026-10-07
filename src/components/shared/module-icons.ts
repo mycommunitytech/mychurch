@@ -68,16 +68,23 @@ export const MODULE_ACCENTS: Record<string, string> = {
   assistant: "#a855f7",
 };
 
+/* Ключі — id груп каталогу з i18n (`modules.groups`), перегрупованого
+   2026-09-23. Старі ключі (serving, schedule, outreach, team, property,
+   insight) лишились нижче: на них ще спираються зняті з сторінок блоки. */
 export const GROUP_ICONS: Record<string, LucideIcon> = {
-  people: Users, serving: Flame, schedule: CalendarDays, outreach: Megaphone,
-  team: Network, property: Building2, insight: BarChart3, platform: SlidersHorizontal,
-  integrations: Plug,
+  people: Users, activities: Flame, planning: CalendarDays, tools: Megaphone,
+  analytics: BarChart3, structure: Network, resources: Building2,
+  accounting: Calculator, platform: SlidersHorizontal, integrations: Plug,
+  serving: Flame, schedule: CalendarDays, outreach: Megaphone, team: Network,
+  property: Building2, insight: BarChart3,
 };
 
 export const GROUP_ACCENTS: Record<string, string> = {
-  people: "#0ea5e9", serving: "#f97316", schedule: "#3b82f6", outreach: "#d946ef",
-  team: "#7c5cf0", property: "#8b5e3c", insight: "#0891b2", platform: "#64748b",
-  integrations: "#14b8a6",
+  people: "#0ea5e9", activities: "#f97316", planning: "#3b82f6", tools: "#d946ef",
+  analytics: "#0891b2", structure: "#7c5cf0", resources: "#8b5e3c",
+  accounting: "#16a34a", platform: "#64748b", integrations: "#14b8a6",
+  serving: "#f97316", schedule: "#3b82f6", outreach: "#d946ef", team: "#7c5cf0",
+  property: "#8b5e3c", insight: "#0891b2",
 };
 
 /** A module's own colour, falling back to its group's when it has none. */

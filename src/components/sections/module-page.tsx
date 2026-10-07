@@ -14,7 +14,7 @@ import HomeGroups from "@/components/sections/home-groups";
 import { MODULE_ICONS, moduleAccent, AUDIENCE_ROLE_ACCENTS } from "@/components/shared/module-icons";
 import { ROLE_LOOKS } from "@/components/shared/role-icons";
 import { getModule, hasModulePage } from "@/content/modules";
-import { getModuleClip, getModuleVideoPoster } from "@/content/modules/videos";
+import { getModuleVideo, getModuleVideoPoster } from "@/content/modules/videos";
 import type { ModuleCopy, Tone } from "@/content/modules/types";
 import { useDemoModal } from "@/context/demo-modal-context";
 import { useWorkspace } from "@/context/workspace-context";
@@ -167,7 +167,7 @@ function Hero({ ctx, groupId, groupTitle, soon, stage }: { ctx: Ctx; groupId: st
 
 /* ── Video ──────────────────────────────────────────────────────── */
 /* `tight` — запис стоїть одразу під сценою шапки на тому самому тлі. */
-function Video({ ctx, clip, tight }: { ctx: Ctx; clip: string; tight: boolean }) {
+function Video({ ctx, videoId, tight }: { ctx: Ctx; videoId: string; tight: boolean }) {
   const { id, name, accent, t } = ctx;
   const title = t.modulePage.videoTitle.replace("{name}", name);
   return (
@@ -176,7 +176,7 @@ function Video({ ctx, clip, tight }: { ctx: Ctx; clip: string; tight: boolean })
         <BlockTitle title={title} text={t.modulePage.videoText} />
         <FadeIn variant="scale" className="w-full">
           <ClipPlayer
-            src={clip}
+            videoId={videoId}
             poster={getModuleVideoPoster(id)}
             title={title}
             accent={accent}
@@ -505,7 +505,7 @@ export default function ModulePage({ id }: { id: string }) {
   const accent = moduleAccent(id, groupId);
   const copy = detail.copy[lang];
   const ctx: Ctx = { id, name, accent, copy, t };
-  const clip = getModuleClip(id);
+  const video = getModuleVideo(id);
   /* Набір команди на подію показуємо там, де про нього й питають — у плануванні служіння. */
   const needs = id === "service-planning";
   /* Демо, які раніше стояли на головній: там вони ставали черговим макетом
@@ -524,7 +524,7 @@ export default function ModulePage({ id }: { id: string }) {
       {needs && <ServicePlanning onModulePage />}
       {ministriesDemo && <Ministries onModulePage />}
       {groupsDemo && <HomeGroups onModulePage />}
-      {clip && <Video ctx={ctx} clip={clip} tight={!liveDemo} />}
+      {video && <Video ctx={ctx} videoId={video} tight={!liveDemo} />}
       <Features ctx={ctx} />
       <Steps ctx={ctx} />
       <Pipeline ctx={ctx} />

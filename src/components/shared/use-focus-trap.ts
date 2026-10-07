@@ -2,8 +2,11 @@
 
 import { useEffect, type RefObject } from "react";
 
+/* iframe у списку заради вікна календаря: без нього Tab перескакував би
+   з останньої кнопки шапки назад на першу й ніколи не заходив у сам
+   календар. Усередині iframe клавіатуру веде вже його документ. */
 const FOCUSABLE =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
 
 function visibleFocusable(root: HTMLElement) {
   return [...root.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(

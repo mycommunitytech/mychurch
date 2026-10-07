@@ -213,7 +213,7 @@ export default function Hero() {
               className="btn-primary btn-brand group relative flex items-center justify-center h-[52px] w-full sm:w-auto px-8 rounded-full overflow-hidden"
             >
               <span className="relative text-white font-semibold text-[16px] tracking-[-0.32px] leading-[1.4] whitespace-nowrap">
-                {t.common.bookDemo}
+                {t.hero.cta}
               </span>
             </button>
 

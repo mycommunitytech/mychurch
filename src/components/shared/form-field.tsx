@@ -20,6 +20,12 @@ interface FieldProps {
   onChange: (v: string) => void;
   /** Опційно: підпис для скрінрідера, якщо він має відрізнятись від плейсхолдера. */
   label?: string;
+  /* Обов'язковий у наших формах рівно один рядок — номер, і позначає
+     його зірочка в самому полі. Решту не підписуємо взагалі: приписка
+     «необов'язково» біля кожного рядка робила з форми бланк. */
+  required?: boolean;
+  /** Що означає зірочка — для скрінрідера. */
+  requiredLabel?: string;
 }
 
 const KIND = {
@@ -30,10 +36,31 @@ const KIND = {
   church: { Icon: Church, type: "text", autoComplete: "organization", inputMode: undefined },
 } satisfies Record<FieldKind, { Icon: typeof User; type: string; autoComplete: string; inputMode?: "tel" }>;
 
+/* Оболонка поля: та сама рамка, наведення і фокус, що в однорядкового
+   поля, але без висоти — нею користуються й текстове поле брифу, і рядок,
+   у який складаються обрані бажання. */
+export const FIELD_SHELL = cn(
+  "field-shell flex flex-col gap-1.5 px-5 py-4 rounded-[14px] bg-surface border border-hairline transition-[border-color,box-shadow] duration-150 cursor-text",
+  "[&:hover:not(:focus-within)]:border-hairline-strong [&:hover:not(:focus-within)]:shadow-[0px_1px_2px_rgba(0,0,0,0.06)]",
+  "focus-within:border-[#007aff] focus-within:shadow-[0px_2px_4px_rgba(0,122,255,0.12)]"
+);
+
+/* Зірочка обов'язкового поля. Колір фірмовий, а не червоний: це не
+   помилка, а позначка «без цього не обійдемось». Для скрінрідера поруч
+   стоїть слово, бо саму зірочку він прочитає як «зірочка». */
+export function RequiredMark({ label }: { label: string }) {
+  return (
+    <span className="shrink-0 leading-none text-[15px] font-semibold text-brand">
+      <span aria-hidden>*</span>
+      <span className="sr-only">{label}</span>
+    </span>
+  );
+}
+
 /* One-line text input, used by the demo modal and the church-brief form.
-   Назву церкви тут не питаємо: вона є лише у формі знайомства, першим
-   питанням — «як називається церква та трохи про себе». */
-export function Field({ kind, placeholder, value, error, onChange, label }: FieldProps) {
+   Назву церкви питаємо окремим рядком — вона їде в картку окремим полем,
+   а не тоне всередині розповіді про себе. */
+export function Field({ kind, placeholder, value, error, onChange, label, required, requiredLabel }: FieldProps) {
   const id = useId();
   const errorId = `${id}-error`;
   const { Icon, type, autoComplete, inputMode } = KIND[kind];
@@ -89,10 +116,13 @@ export function Field({ kind, placeholder, value, error, onChange, label }: Fiel
           onFocus={kind === "tel" && !value ? () => onChange(UA_PREFIX) : undefined}
           onChange={handleChange}
           onBlur={kind === "name" ? handleBlur : undefined}
+          aria-required={required || undefined}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
           className="flex-1 min-w-0 text-[16px] text-ink/[0.88] placeholder:text-[#6f6f75] bg-transparent outline-none leading-[1.4] cursor-text"
         />
+        {/* Зірочка стоїть у самому рядку: один знак поле не тисне. */}
+        {required && <RequiredMark label={requiredLabel ?? ""} />}
       </label>
       {/* role="alert" — помилку має почути й той, хто не бачить поля. */}
       {error && (

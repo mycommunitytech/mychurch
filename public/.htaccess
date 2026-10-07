@@ -26,6 +26,14 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Один хост на весь сайт. www.mychurch.com.ua віддавав ту саму сторінку
+  # кодом 200, тобто кожна адреса існувала двічі: пошук бачить дубль, а вага
+  # посилань ділиться між двома копіями. Canonical у <head> лише підказка —
+  # редирект прибирає дубль насправді. Правило стоїть першим, щоб решта
+  # (коса риска, амбасадори) відпрацьовувала вже на канонічному хості.
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
   # Список амбасадорів окремою сторінкою не потрібен — він один.
   # Раніше це робив redirects() у next.config, але статичний експорт
   # редиректів не вміє, тож правило живе на хостингу.
@@ -35,6 +43,11 @@ ErrorDocument 404 /404.html
   # як зветься сайт церкви. Старе посилання вже розійшлось, тож ведемо його
   # на нову адресу, а не в 404.
   RewriteRule ^ambassadors/nove-zhyttia/?$ https://%{HTTP_HOST}/ambassadors/newlife/ [R=301,L]
+
+  # Дві статті про CRM прибрано з блогу 2026-10-07 («Церковна СРМ: що це і
+  # як її обрати», «Яку CRM обрати для церкви: порівняння систем»). Їх уже
+  # проіндексовано, тож людина з пошуку потрапляє в блог, а не в 404.
+  RewriteRule ^blog/(tserkovna-crm|porivniannia-crm-dlia-tserkvy)/?$ https://%{HTTP_HOST}/blog/ [R=301,L]
 
   # Коса риска в кінці. Експорт кладе кожну сторінку текою з index.html,
   # тож /modules без риски — це запит теки, який інакше дописав би mod_dir.
@@ -52,6 +65,15 @@ ErrorDocument 404 /404.html
 <IfModule !mod_rewrite.c>
   RedirectMatch 301 ^/ambassadors/?$ https://mychurch.com.ua/ambassadors/newlife/
   RedirectMatch 301 ^/ambassadors/nove-zhyttia/?$ https://mychurch.com.ua/ambassadors/newlife/
+  RedirectMatch 301 ^/blog/(tserkovna-crm|porivniannia-crm-dlia-tserkvy)/?$ https://mychurch.com.ua/blog/
+</IfModule>
+
+# --- Текстові файли ---
+#
+# robots.txt і llms.txt хостинг віддає як text/plain без charset, і частина
+# клієнтів читає кирилицю в llms.txt як latin-1. Явне UTF-8 це прибирає.
+<IfModule mod_mime.c>
+  AddCharset UTF-8 .txt
 </IfModule>
 
 # --- Демо-записи ---
@@ -63,5 +85,22 @@ ErrorDocument 404 /404.html
 <IfModule mod_headers.c>
   <FilesMatch "\.(mp4|webm)$">
     Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
+
+# --- Кеш сторінок ---
+#
+# Статику (js, css, картинки, шрифти, .txt) хостинг віддає nginx-ом сам,
+# з кешем на 30 днів (у відповідях його ETag і Expires) — до Apache і цього
+# файла вона не доходить. Через Apache проходять лише HTML-сторінки, і саме
+# їм потрібне «щоразу перевіряти»: назви шматків js/css у кожній збірці
+# нові, тож стара сторінка з кешу браузера після заливки посилалась би на
+# файли, яких уже немає. З no-cache браузер питає сервер (304, якщо не
+# змінилось) і одразу бачить нову збірку. Те саме для Google: свіжа
+# сторінка на кожному обході. Кеш на пристрої для роботи без мережі — це
+# вже сервіс-воркер (sw.js у корені, scripts/sw.template.js).
+<IfModule mod_headers.c>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
   </FilesMatch>
 </IfModule>

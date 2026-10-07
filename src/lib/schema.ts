@@ -12,6 +12,13 @@ type Json = Record<string, unknown>;
 const ORG_ID = `${SITE_URL}/#organization`;
 const SITE_ID = `${SITE_URL}/#website`;
 
+/* Назву «Моя Церква» носить і мобільний застосунок ПЦУ (App Store,
+   Google Play), і пошук та ШІ-помічники плутають нас із ним. Поле
+   schema.org `disambiguatingDescription` існує саме для цього: одним
+   реченням каже, котра це «Моя Церква». */
+const DISAMBIGUATION =
+  "Українська система обліку й організації церкви (mychurch.com.ua), а не мобільний застосунок «Моя Церква» Православної церкви України.";
+
 /** Хто ми — один запис на весь сайт, решта схем посилається на нього по @id. */
 export function organizationSchema(): Json {
   return {
@@ -27,6 +34,7 @@ export function organizationSchema(): Json {
       height: 256,
     },
     description: SITE_DESCRIPTION,
+    disambiguatingDescription: DISAMBIGUATION,
     slogan: "Досягай людей",
     email: SITE_EMAIL,
     telephone: SITE_PHONE,
@@ -71,6 +79,7 @@ export function softwareSchema(): Json {
     operatingSystem: "Web browser",
     inLanguage: "uk",
     description: SITE_DESCRIPTION,
+    disambiguatingDescription: DISAMBIGUATION,
     publisher: { "@id": ORG_ID },
     featureList: [
       "Облік людей і сімей",

@@ -1,17 +1,20 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import FadeIn from "@/components/shared/fade-in";
-import { BLOG_CATEGORIES, BLOG_COPY, BLOG_POSTS, starterPosts } from "@/content/blog";
+import { BLOG_CATEGORIES, BLOG_COPY, BLOG_POSTS, morePosts, readingMinutes, starterPosts } from "@/content/blog";
 import type { BlogPost } from "@/content/blog";
 import { BLOG_CATEGORY_ACCENTS, BLOG_CATEGORY_ICONS } from "@/components/shared/blog-icons";
+import { PLAN_COPY, PLAN_COVER, PLAN_LIVE } from "@/content/plan";
 import { useLang } from "@/lib/lang";
 
 /* ────────────────────────────────────────────────────────────────
-   /blog — сім статей, кожна великим блоком. Не сітка однакових
-   карток: перший і останній блоки широкі, решта — вужчі, тому
-   мозаїка читається в порядку «з чого почати».
+   /blog — сім статей «з чого почати», кожна великим блоком. Не сітка
+   однакових карток: перший і останній блоки широкі, решта — вужчі,
+   тому мозаїка читається в порядку «з чого почати». Решта статей —
+   нижче рядками змісту («Ще в блозі»), щоб до кожної вело посилання.
    ──────────────────────────────────────────────────────────────── */
 
 function formatDate(date: string, lang: "ua" | "en") {
@@ -28,8 +31,10 @@ export default function BlogIndex() {
   const t = BLOG_COPY[lang];
   const categories = BLOG_CATEGORIES[lang];
   const starter = starterPosts(lang);
+  const more = morePosts(lang);
 
   const categoryTitle = (post: BlogPost) => categories.find((c) => c.id === post.category)?.title ?? "";
+  const plan = PLAN_COPY[lang];
 
   return (
     <>
@@ -126,7 +131,7 @@ export default function BlogIndex() {
                       <span>{formatDate(post.date, lang)}</span>
                       <span className="w-1 h-1 rounded-full bg-ink-3/50" />
                       <span className="tabular-nums">
-                        {post.minutes} {t.minutes}
+                        {readingMinutes(post, lang)} {t.minutes}
                       </span>
                       <span className="ml-auto inline-flex items-center gap-1.5 font-medium" style={{ color: accent }}>
                         {t.readLabel}
@@ -138,9 +143,80 @@ export default function BlogIndex() {
               );
             })}
           </div>
+
+          {more.length > 0 && (
+            <FadeIn className="flex flex-col gap-4 pt-6 md:pt-10">
+              <h2 className="font-semibold text-ink text-[22px] md:text-[28px] leading-[1.2] tracking-[-0.6px]">{t.moreTitle}</h2>
+              <ul className="flex flex-col border-t border-hairline">
+                {more.map((post) => {
+                  const accent = BLOG_CATEGORY_ACCENTS[post.category];
+                  const copy = post.copy[lang];
+                  return (
+                    <li key={post.slug} className="border-b border-hairline">
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        className="group grid grid-cols-1 md:grid-cols-[180px_1fr_auto] gap-x-8 gap-y-2 py-5 md:py-6"
+                      >
+                        <span className="text-[12.5px] font-semibold uppercase tracking-[0.12em] pt-1.5" style={{ color: accent }}>
+                          {categoryTitle(post)}
+                        </span>
+                        <span className="flex flex-col gap-1.5 min-w-0">
+                          <span className="font-semibold text-ink text-[19px] md:text-[22px] leading-[1.25] tracking-[-0.4px] group-hover:text-brand transition-colors">
+                            {copy.title}
+                          </span>
+                          <span className="text-[15px] text-ink-2 leading-[1.55] line-clamp-2 max-w-[640px]">{copy.lead}</span>
+                        </span>
+                        <span className="flex items-center gap-3 text-[13px] text-ink-3 md:pt-1.5 md:self-start whitespace-nowrap">
+                          <span>{formatDate(post.updated ?? post.date, lang)}</span>
+                          <span className="w-1 h-1 rounded-full bg-ink-3/50" />
+                          <span className="tabular-nums">
+                            {readingMinutes(post, lang)} {t.minutes}
+                          </span>
+                          <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" style={{ color: accent }} />
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </FadeIn>
+          )}
         </div>
       </section>
 
+      {/* ── Матеріал: те саме, що в статтях, але файлом ─────────
+           Поки сторінка схована (PLAN_LIVE), смуги тут немає. */}
+      {PLAN_LIVE && (
+        <section className="w-full flex flex-col items-center bg-page px-5 md:px-8 pb-14 md:pb-20">
+          <FadeIn variant="scale" className="w-full max-w-[1120px]">
+            <Link
+              href="/plan"
+              className="hover-lift group flex flex-col sm:flex-row items-stretch gap-6 sm:gap-9 rounded-[24px] border border-hairline bg-surface p-6 md:p-9"
+            >
+              {/* Обкладинка справжнього файла: видно, що це папір, а не
+                  ще одна стаття. */}
+              <span className="relative shrink-0 w-[96px] sm:w-[118px] aspect-[210/297] self-center rounded-[8px] overflow-hidden border border-hairline shadow-[0_14px_36px_-20px_rgba(0,0,0,0.45)]">
+                <Image src={PLAN_COVER} alt={plan.hero.coverAlt} fill sizes="118px" className="object-cover" />
+              </span>
+              <span className="flex flex-col justify-center gap-2.5 min-w-0">
+                <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-brand">
+                  {plan.hero.eyebrow}
+                </span>
+                <span className="font-semibold text-ink text-[24px] md:text-[32px] leading-[1.12] tracking-[-0.8px] group-hover:text-brand transition-colors">
+                  {plan.teaser.title}
+                </span>
+                <span className="text-[15.5px] md:text-[17px] text-ink-2 leading-[1.55] max-w-[620px]">
+                  {plan.teaser.text}
+                </span>
+                <span className="inline-flex items-center gap-1.5 pt-1 text-[15px] font-medium text-brand">
+                  {plan.teaser.action}
+                  <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                </span>
+              </span>
+            </Link>
+          </FadeIn>
+        </section>
+      )}
     </>
   );
 }

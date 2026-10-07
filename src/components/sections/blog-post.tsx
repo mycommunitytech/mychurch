@@ -2,13 +2,13 @@
 
 import { Fragment, useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronRight, Info, Quote, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronRight, Info, Quote } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import FadeIn from "@/components/shared/fade-in";
 import BlogVisual from "@/components/shared/blog-visual";
 import ModuleMock from "@/components/shared/module-mock";
 import BlogReadingBar from "@/components/shared/blog-reading-bar";
-import { BLOG_CATEGORIES, BLOG_COPY, getPost, getRelated } from "@/content/blog";
+import { BLOG_CATEGORIES, BLOG_COPY, getPost, getRelated, readingMinutes, splitLinks } from "@/content/blog";
 import type { BlogBlock } from "@/content/blog";
 import { BLOG_CATEGORY_ACCENTS, BLOG_CATEGORY_ICONS } from "@/components/shared/blog-icons";
 import { useDemoModal } from "@/context/demo-modal-context";
@@ -30,6 +30,28 @@ function formatDate(date: string, lang: "ua" | "en") {
 
 function sectionId(index: number) {
   return `r-${index + 1}`;
+}
+
+/* Текст із посиланнями `[слова](/адреса)`. Свої адреси — через Link,
+   чужі відкриваються в новій вкладці. */
+function Rich({ text }: { text: string }) {
+  return (
+    <>
+      {splitLinks(text).map((part, i) => {
+        if (typeof part === "string") return <Fragment key={i}>{part}</Fragment>;
+        const className = "text-brand underline decoration-[1.5px] underline-offset-[3px] decoration-brand/35 hover:decoration-brand transition-colors";
+        return part.href.startsWith("/") ? (
+          <Link key={i} href={part.href} className={className}>
+            {part.label}
+          </Link>
+        ) : (
+          <a key={i} href={part.href} target="_blank" rel="noopener noreferrer" className={className}>
+            {part.label}
+          </a>
+        );
+      })}
+    </>
+  );
 }
 
 /* Екран продукту, картинка й таблиця виходять за колонку тексту: стаття
@@ -133,7 +155,11 @@ function Block({
       );
 
     case "text":
-      return <p className="text-[16.5px] md:text-[17.5px] text-ink-2 leading-[1.7]">{block.text}</p>;
+      return (
+        <p className="text-[16.5px] md:text-[17.5px] text-ink-2 leading-[1.7]">
+          <Rich text={block.text} />
+        </p>
+      );
 
     case "list":
       return (
@@ -148,7 +174,9 @@ function Block({
                 >
                   <Check className="w-3 h-3" strokeWidth={3} />
                 </span>
-                <span className="text-[16px] md:text-[16.5px] text-ink-2 leading-[1.6]">{item}</span>
+                <span className="text-[16px] md:text-[16.5px] text-ink-2 leading-[1.6]">
+                  <Rich text={item} />
+                </span>
               </li>
             ))}
           </ul>
@@ -168,7 +196,9 @@ function Block({
               </span>
               <span className="flex flex-col gap-1 pt-0.5">
                 <span className="text-[16.5px] font-semibold text-ink leading-[1.35]">{item.title}</span>
-                <span className="text-[16px] text-ink-2 leading-[1.6]">{item.text}</span>
+                <span className="text-[16px] text-ink-2 leading-[1.6]">
+                  <Rich text={item.text} />
+                </span>
               </span>
             </li>
           ))}
@@ -189,7 +219,9 @@ function Block({
           </span>
           <span className="flex flex-col gap-1.5">
             <span className="text-[16px] font-semibold text-ink leading-[1.35]">{block.title}</span>
-            <span className="text-[16px] text-ink-2 leading-[1.6]">{block.text}</span>
+            <span className="text-[16px] text-ink-2 leading-[1.6]">
+              <Rich text={block.text} />
+            </span>
           </span>
         </div>
       );
@@ -230,7 +262,7 @@ function Block({
                         i === 0 ? "font-medium text-ink" : "text-ink-2",
                       ].join(" ")}
                     >
-                      {cell}
+                      <Rich text={cell} />
                     </td>
                   ))}
                 </tr>
@@ -375,7 +407,7 @@ export default function BlogPostPage({ slug }: { slug: string }) {
               )}
               <span className="w-1 h-1 rounded-full bg-ink-3/50" />
               <span className="tabular-nums">
-                {post.minutes} {t.minutes}
+                {readingMinutes(post, lang)} {t.minutes}
               </span>
             </div>
           </FadeIn>
@@ -499,24 +531,6 @@ export default function BlogPostPage({ slug }: { slug: string }) {
                   <p className="text-[16px] text-ink-2 leading-[1.6]">{item.a}</p>
                 </div>
               ))}
-            </div>
-          </FadeIn>
-
-          {/* Пошукові запити теми */}
-          <FadeIn>
-            <div className="rounded-[20px] border border-dashed border-hairline-strong p-5 md:p-6 flex flex-col gap-3.5">
-              <div className="flex items-center gap-2.5">
-                <Search className="w-4 h-4 text-ink-3" strokeWidth={2} />
-                <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-ink-3">{t.post.keywordsTitle}</span>
-              </div>
-              <p className="text-[14.5px] text-ink-3 leading-[1.5]">{t.post.keywordsText}</p>
-              <div className="flex flex-wrap gap-2">
-                {copy.keywords.map((keyword) => (
-                  <span key={keyword} className="rounded-full border border-hairline bg-surface-2 px-3 py-1.5 text-[13px] text-ink-2 leading-none">
-                    {keyword}
-                  </span>
-                ))}
-              </div>
             </div>
           </FadeIn>
 

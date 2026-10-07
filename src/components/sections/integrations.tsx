@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import FadeIn, { prefersReducedMotion } from "@/components/shared/fade-in";
-import { TgHeader, TgKeyboard, TgMessage } from "@/components/shared/tg-screen";
+import { TgHeader, TgInline, TgKeyboard, TgMessage } from "@/components/shared/tg-screen";
 import { TELEGRAM_COPY } from "@/content/telegram";
 import { useLang, useT } from "@/lib/lang";
 import { cn } from "@/lib/utils";
@@ -46,27 +46,28 @@ export default function Integrations() {
   }, []);
 
   /* Бот не стоїть мовчки: вітається, людина тисне кнопку меню — і він
-     відповідає справжнім екраном із content/telegram.ts. Далі все
-     спочатку. Без анімацій лишається саме привітання. */
+     відповідає справжнім екраном із content/telegram.ts.
+
+     Розмова накопичується, а не змінює одна одну: привітання лишається
+     на місці, під ним лягає натиснута кнопка, потім відповідь. Раніше
+     кожен крок стирав попередній, і півцикла екран стояв порожнім
+     (2026-09-22: «погана візуалізація»). Без анімацій видно всю
+     розмову одразу. */
   const ASK = tg.hero.phone.keyboard[0][1];
   const answer = tg.hero.phone.screens.find((x) => x.id === ASK);
-  const [step, setStep] = useState<"greet" | "ask" | "typing" | "answer">("greet");
+  /* 0 — привітання, 1 — натиснули кнопку, 2 — бот друкує, 3 — відповідь. */
+  const [step, setStep] = useState(3);
 
   useEffect(() => {
     if (!on || !answer) return;
     const timers: number[] = [];
     const run = () => {
-      timers.push(window.setTimeout(() => setStep("ask"), 2600));
-      timers.push(window.setTimeout(() => setStep("typing"), 3200));
-      timers.push(window.setTimeout(() => setStep("answer"), 4100));
-      timers.push(
-        window.setTimeout(() => {
-          setStep("greet");
-          run();
-        }, 9000)
-      );
+      timers.push(window.setTimeout(() => setStep(0), 0));
+      timers.push(window.setTimeout(() => setStep(1), 2600));
+      timers.push(window.setTimeout(() => setStep(2), 3200));
+      timers.push(window.setTimeout(() => setStep(3), 4100));
+      timers.push(window.setTimeout(run, 11000));
     };
-    timers.push(window.setTimeout(() => setStep("greet"), 0));
     run();
     return () => timers.forEach(clearTimeout);
   }, [on, answer]);
@@ -103,20 +104,20 @@ export default function Integrations() {
                     привітання і кнопки з `content/telegram.ts`. Назву церкви
                     в шапці не пишемо: бот у кожної свій. */}
                 <TgHeader title={t.bot.name} sub={tg.hero.phone.status} />
-                {/* Вікно чату вище, ніж одна бульбашка: інакше екран бота
-                    виглядав смужкою посеред половини картки. */}
-                <div className="tg-wallpaper p-3.5 min-h-[170px] md:min-h-[210px] flex flex-col items-start gap-2">
-                  {step === "greet" && (
-                    <TgMessage lines={tg.hero.phone.greeting} time={false} className="bubble-in max-w-full" />
-                  )}
+                {/* Висота вікна стала: повідомлення з'являються по черзі, і
+                    з `min-height` картка підростала на кожному — увесь блок
+                    смикався на очах. Тепер місце під найвищий стан чату
+                    зарезервоване одразу, і нічого не рухається (2026-09-22). */}
+                <div className="tg-wallpaper p-3.5 h-[268px] md:h-[304px] overflow-hidden flex flex-col items-start gap-2">
+                  <TgMessage lines={tg.hero.phone.greeting} time={false} className="bubble-in max-w-full" />
 
-                  {(step === "ask" || step === "typing") && (
+                  {step >= 1 && (
                     <span className="tg-bubble-out bubble-in self-end max-w-[86%] rounded-[14px] rounded-br-[4px] px-3.5 py-2 text-[13.5px] text-ink leading-[1.35]">
                       {ASK}
                     </span>
                   )}
 
-                  {step === "typing" && (
+                  {step === 2 && (
                     <span className="tg-bubble bubble-in self-start rounded-[14px] rounded-bl-[4px] px-3.5 py-3 flex items-center gap-1.5">
                       <i className="tg-dot" />
                       <i className="tg-dot" />
@@ -125,11 +126,15 @@ export default function Integrations() {
                     </span>
                   )}
 
-                  {step === "answer" && answer && (
-                    <TgMessage lines={answer.lines} time={false} className="bubble-in max-w-full" />
+                  {/* Відповідь бота — з його ж кнопками: сам заголовок
+                      «Мої групи (2)» без списку виглядав порожнім. */}
+                  {step >= 3 && answer && (
+                    <TgMessage lines={answer.lines} time={false} className="bubble-in max-w-full">
+                      {answer.buttons && <TgInline rows={answer.buttons} className="pt-1.5" dense />}
+                    </TgMessage>
                   )}
                 </div>
-                <TgKeyboard rows={tg.hero.phone.keyboard} className="mock-row" active={step === "ask" ? ASK : null} />
+                <TgKeyboard rows={tg.hero.phone.keyboard} className="mock-row" active={step >= 1 ? ASK : null} />
               </div>
             </div>
 

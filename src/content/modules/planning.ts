@@ -4,11 +4,11 @@ import type { ModuleDetail } from "./types";
 export const planningModules: ModuleDetail[] = [
   {
     id: "calendar",
-    group: "schedule",
+    group: "planning",
     related: ["rooms", "service-planning", "events", "groups"],
     copy: {
       ua: {
-        seoTitle: "Календар — модуль «Моя Церква»",
+        seoTitle: "Календар церкви — служіння, групи, бронювання | Моя Церква",
         seoDescription: "Служіння, зустрічі малих груп, події та бронювання приміщень в одному календарі церкви. Кожен бачить своє, а накладки видно ще до збереження.",
         title: "Усе, що відбувається в церкві, — в одному календарі",
         lead: "Служіння, репетиції, зустрічі малих груп, конференції та бронювання залів — у спільному календарі. Кожен бачить своє: пастор — усю церкву, лідер — свою групу, рецепція — сьогоднішній день.",
@@ -119,7 +119,7 @@ export const planningModules: ModuleDetail[] = [
   },
   {
     id: "seasons",
-    group: "schedule",
+    group: "planning",
     related: ["goals", "calendar", "events", "analytics"],
     copy: {
       ua: {
@@ -246,7 +246,7 @@ export const planningModules: ModuleDetail[] = [
   },
   {
     id: "goals",
-    group: "insight",
+    group: "analytics",
     related: ["analytics", "seasons", "groups", "ministries"],
     copy: {
       ua: {
@@ -407,11 +407,11 @@ export const planningModules: ModuleDetail[] = [
   },
   {
     id: "events",
-    group: "schedule",
+    group: "planning",
     related: ["forms", "links", "calendar", "camps"],
     copy: {
       ua: {
-        seoTitle: "Організатор подій — модуль «Моя Церква»",
+        seoTitle: "Реєстрація на події церкви — організатор подій | Моя Церква",
         seoDescription: "Конференції, служіння, табори: реєстрація, квитки, команда, розклад і нагадування в одному місці. Кожен учасник одразу потрапляє в базу церкви.",
         title: "Від анонсу до підсумків — уся подія в одному місці",
         lead: "Конференція, вечір для сімей чи молодіжний табір — модуль веде подію від сторінки реєстрації до звіту після. Учасники, квитки, команда, розклад і нагадування — в одному місці, а не в п'яти чатах.",

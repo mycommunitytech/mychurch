@@ -1,0 +1,732 @@
+/* Сцена «безлад → порядок» у блоці «Допоможемо організувати».
+   Фаза стоїть атрибутом на полотні (`data-phase`), і все нижче читає її
+   звідти: у `chaos` клаптики лежать навскоси й ворушаться, в усіх інших
+   фазах вони стоять у клітинках вікна плитками модулів. Стан без фази
+   (`order`) — це і є готова картинка: її бачать без JavaScript і ті, кому
+   рух заважає. */
+
+.stage {
+  position: relative;
+  flex-shrink: 0;
+  transform-origin: top center;
+  --fly: cubic-bezier(0.62, 0, 0.18, 1.06);
+  --step: 85ms;
+}
+
+/* ── Вікно, у яке все складається ───────────────────────── */
+.frame {
+  position: absolute;
+  left: 14px;
+  top: 26px;
+  width: 472px;
+  height: 348px;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  box-shadow: 0 30px 60px -34px rgba(0, 45, 110, 0.4), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: opacity 0.5s ease 0.05s, transform 0.8s var(--ease-out-soft) 0.05s;
+}
+.stage[data-phase="chaos"] .frame {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: none;
+}
+
+.frameHead {
+  height: 46px;
+  padding: 0 14px 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* Порожні клітинки: видно, куди саме летить кожен клаптик. Плитки
+   потім лягають рівно на них і закривають. */
+.slot {
+  position: absolute;
+  width: 140px;
+  height: 84px;
+  border-radius: 14px;
+  border: 1.5px dashed color-mix(in oklab, var(--brand) 28%, transparent);
+  background: color-mix(in oklab, var(--brand) 4%, transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease 1.2s;
+}
+/* Пунктир видно лише, поки клаптики летять; далі його закривають плитки,
+   і край рамки не має визирати з-під них. */
+.stage[data-phase="gather"] .slot {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.team {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.teamFaces {
+  display: flex;
+}
+.face {
+  display: flex;
+  margin-left: -7px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px var(--surface);
+  transition: opacity 0.3s ease calc(var(--a) * 110ms), transform 0.5s var(--ease-pop) calc(var(--a) * 110ms);
+}
+.face:first-child {
+  margin-left: 0;
+}
+.teamLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-2);
+  white-space: nowrap;
+  transition: opacity 0.4s ease 0.45s, transform 0.5s var(--ease-out-soft) 0.45s;
+}
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
+}
+/* Команда приходить останньою — це крок «Навчання». */
+.stage[data-phase="chaos"] .face,
+.stage[data-phase="gather"] .face {
+  opacity: 0;
+  transform: translateY(4px) scale(0.4);
+  transition: none;
+}
+.stage[data-phase="chaos"] .teamLabel,
+.stage[data-phase="gather"] .teamLabel {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: none;
+}
+
+/* ── Клаптик, що стає плиткою ───────────────────────────── */
+.item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 140px;
+  height: 84px;
+  z-index: var(--z);
+  transform: translate(var(--ox), var(--oy));
+  transition: transform 1s var(--fly) calc(var(--d) * var(--step));
+}
+.stage[data-phase="chaos"] .item {
+  transform: translate(var(--mx), var(--my)) rotate(var(--mr));
+  transition: none;
+}
+
+/* Сам клаптик — свого розміру, по центру коробки. На льоту він
+   стискається до плитки і гасне, а плитка проступає на його місці. */
+.mess {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--w);
+  height: var(--h);
+  margin: calc(var(--h) / -2) 0 0 calc(var(--w) / -2);
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events: none;
+  transition:
+    opacity 0.34s ease calc(var(--d) * var(--step) + 0.42s),
+    transform 0.9s var(--fly) calc(var(--d) * var(--step));
+}
+.stage[data-phase="chaos"] .mess {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.jitter {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 12px rgba(15, 23, 42, 0.14)) drop-shadow(0 1px 1px rgba(15, 23, 42, 0.1));
+}
+/* Безлад не лежить спокійно: кожен клаптик ворушиться у свому ритмі.
+   Під час польоту рух не зупиняємо — клаптик у цей час уже гасне. */
+.stage[data-phase="chaos"] .jitter,
+.stage[data-phase="gather"] .jitter {
+  animation: jitter calc(2.3s + var(--d) * 0.19s) ease-in-out calc(var(--d) * -0.37s) infinite;
+}
+@keyframes jitter {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  22% { transform: translate(2px, -3px) rotate(1.4deg); }
+  47% { transform: translate(-3px, 1px) rotate(-1.2deg); }
+  71% { transform: translate(2px, 3px) rotate(0.8deg); }
+}
+
+.tile {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 12px 12px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 18px -14px rgba(0, 45, 110, 0.3);
+  transition: opacity 0.4s ease calc(var(--d) * var(--step) + 0.56s);
+}
+.stage[data-phase="chaos"] .tile {
+  opacity: 0;
+  transition: none;
+}
+/* Люди в плитці: замість цифри — обличчя, і вони проступають по одному,
+   коли плитка вже лягла. */
+.people {
+  display: flex;
+  padding-left: 1px;
+}
+.person {
+  display: flex;
+  margin-left: -8px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px var(--surface);
+  transition:
+    opacity 0.25s ease calc(var(--d) * var(--step) + 0.62s + var(--j) * 60ms),
+    transform 0.45s var(--ease-pop) calc(var(--d) * var(--step) + 0.62s + var(--j) * 60ms);
+}
+.person:first-child {
+  margin-left: 0;
+}
+.stage[data-phase="chaos"] .person {
+  opacity: 0;
+  transform: scale(0.5);
+  transition: none;
+}
+
+/* Шматочок інтерфейсу в плитці проступає, коли плитка вже лягла. */
+.pop {
+  transition:
+    opacity 0.3s ease calc(var(--d) * var(--step) + 0.62s),
+    transform 0.45s var(--ease-pop) calc(var(--d) * var(--step) + 0.62s);
+}
+.stage[data-phase="chaos"] .pop {
+  opacity: 0;
+  transform: translateY(4px) scale(0.85);
+  transition: none;
+}
+
+.pill {
+  height: 26px;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px 0 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pillOk {
+  background: rgba(22, 163, 74, 0.12);
+  color: #15803d;
+}
+.pillAccent {
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  color: var(--accent);
+}
+:global(.dark) .pillOk {
+  color: #4ade80;
+}
+
+/* Листок календаря: місяць на кольоровій смужці, під ним число. */
+.leaf {
+  width: 26px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid var(--hairline-strong);
+  background: var(--surface);
+}
+.leaf b {
+  height: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  color: #fff;
+  font-size: 6.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.leaf span {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.qr {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  fill: var(--ink);
+  shape-rendering: crispEdges;
+}
+
+/* Повідомлення, що дійшло: бульбашка з хвостиком і двома галочками. */
+.bubble {
+  height: 26px;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 9px 0 11px;
+  border-radius: 13px 13px 13px 4px;
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Міні-графік росте від осі, коли плитка лягла. */
+.bars {
+  height: 26px;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+.bars i {
+  display: block;
+  width: 9px;
+  border-radius: 3px 3px 1px 1px;
+  background: color-mix(in oklab, var(--accent) 72%, transparent);
+  transform-origin: bottom;
+  transition: transform 0.5s var(--ease-out-soft) calc(var(--d) * var(--step) + 0.62s + var(--j) * 60ms);
+}
+.bars i:last-child {
+  background: var(--accent);
+}
+.stage[data-phase="chaos"] .bars i {
+  transform: scaleY(0);
+  transition: none;
+}
+
+.tileIcon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 13%, transparent);
+}
+
+/* ── Клаптики безладу ──────────────────────────────────────
+   Папір лишається світлим і в темній темі: це речі зі столу, а не
+   екрани. Чат і голосове — екранні, тому беруть кольори теми. */
+.paper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #fffdf8;
+  color: #1f2937;
+}
+.pen {
+  display: block;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 12.5px;
+  line-height: 17px;
+  color: #1e40af;
+}
+.scribble {
+  height: 8px;
+  fill: none;
+  stroke: #1e40af;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+/* Таблиця «ФІНАЛ(2)» */
+.xlsx {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+.xlsxBar {
+  height: 22px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+  background: #1d6f42;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+}
+.xlsxGrid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
+}
+.cell,
+.cellOdd,
+.cellMarked {
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  border-right: 1px solid rgba(15, 23, 42, 0.08);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+.cell i {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(15, 23, 42, 0.2);
+}
+.cellOdd {
+  justify-content: center;
+  background: #fee2e2;
+  color: #dc2626;
+  font-size: 9px;
+  font-weight: 700;
+}
+.cellMarked {
+  background: #fef08a;
+}
+
+/* Чат без відповіді */
+.chat {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+.chatBubble {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 11px 8px;
+  border-radius: 14px 14px 14px 4px;
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+}
+.chatFrom {
+  font-size: 10px;
+  font-weight: 600;
+  color: #7c3aed;
+}
+.chatText {
+  font-size: 12.5px;
+  line-height: 1.25;
+  color: var(--ink);
+}
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 0 0 2px var(--surface);
+}
+.stage[data-phase="chaos"] .badge {
+  animation: badgeBeat 1.3s ease-in-out infinite;
+}
+@keyframes badgeBeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.18); }
+  30% { transform: scale(1); }
+}
+
+/* Зошит групи */
+.notebook {
+  padding: 6px 10px 0 26px;
+  background-color: #fffdf8;
+  background-image:
+    linear-gradient(to right, transparent 19px, rgba(239, 68, 68, 0.45) 19px, rgba(239, 68, 68, 0.45) 20px, transparent 20px),
+    repeating-linear-gradient(to bottom, transparent 0, transparent 16px, rgba(59, 130, 246, 0.22) 16px, rgba(59, 130, 246, 0.22) 17px);
+  background-position: 0 0, 0 6px;
+}
+.noteRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 17px;
+}
+.noteRow b {
+  font-size: 12px;
+  font-weight: 700;
+  color: #16a34a;
+}
+.noteRow b.markBad {
+  color: #dc2626;
+}
+.noteRow b.markUnsure {
+  color: #d97706;
+}
+
+/* Настінний календар */
+.calendar {
+  background: #fff;
+}
+.calTop {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ef4444;
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.calGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 6px 6px 0;
+}
+.calGrid span {
+  position: relative;
+  text-align: center;
+  font-size: 8px;
+  line-height: 14px;
+  color: rgba(15, 23, 42, 0.55);
+}
+.calGrid .dayCircled {
+  color: #dc2626;
+  font-weight: 700;
+}
+.calGrid .dayCircled::after {
+  content: "";
+  position: absolute;
+  inset: -2px -2px;
+  border: 1.5px solid #dc2626;
+  border-radius: 50%;
+  transform: rotate(-10deg);
+}
+.calGrid .dayCrossed {
+  text-decoration: line-through 1.5px #dc2626;
+}
+.calNote {
+  position: absolute;
+  right: 9px;
+  bottom: 8px;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 13px;
+  color: #dc2626;
+  transform: rotate(-7deg);
+}
+
+/* Фото нової сім'ї, чиїх імен ніхто не записав */
+.photo {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 7px 7px 0;
+  border-radius: 3px;
+  background: #fff;
+}
+.photoPic {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 6px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, #bfdbfe 0%, #dbeafe 58%, #bbf7d0 58%, #86efac 100%);
+}
+.photoPerson {
+  display: flex;
+  margin-left: -8px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px #fff;
+}
+.photoPerson:first-child {
+  margin-left: 0;
+}
+.photoCaption {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 2px;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 10.5px;
+  line-height: 1.2;
+  color: #1e40af;
+}
+
+/* Стікер */
+.sticky {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 18px 12px 10px;
+  border-radius: 2px 2px 16px 2px;
+  background: linear-gradient(172deg, #fef3a0 0%, #fde68a 62%, #fcd34d 100%);
+  color: #422006;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 13.5px;
+  line-height: 1.28;
+}
+.tape {
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  width: 46px;
+  height: 14px;
+  margin-left: -23px;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transform: rotate(-4deg);
+}
+
+/* Паперова анкета */
+.form {
+  padding: 9px 11px;
+  background: #fff;
+}
+.formTitle {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #111827;
+}
+.formField {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 8.5px;
+  color: rgba(15, 23, 42, 0.5);
+}
+.formLine {
+  display: flex;
+  align-items: flex-end;
+  height: 13px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.25);
+}
+
+/* Підрахунок явки рисками */
+.tally {
+  padding: 9px 10px;
+  /* Верх — відірваний край аркуша. */
+  clip-path: polygon(0 4px, 9% 0, 18% 3px, 29% 0, 40% 4px, 52% 1px, 63% 4px, 74% 0, 86% 3px, 94% 0, 100% 3px, 100% 100%, 0 100%);
+  border-radius: 0 0 6px 6px;
+}
+.tallyMarks {
+  display: block;
+  width: 112px;
+  height: 25px;
+  margin-top: 5px;
+  stroke: #1e40af;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.tallyNote {
+  position: absolute;
+  right: 10px;
+  bottom: 7px;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 14px;
+  color: #1e40af;
+}
+
+/* Голосове на 47 секунд */
+.voice {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 13px 0 8px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+}
+.voicePlay {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 2px;
+  border-radius: 999px;
+  background: #3b82f6;
+  color: #fff;
+}
+.wave {
+  flex: 1;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.wave i {
+  display: block;
+  width: 2.5px;
+  border-radius: 2px;
+  background: rgba(59, 130, 246, 0.55);
+}
+.stage[data-phase="chaos"] .wave i {
+  animation: waveBeat 0.9s ease-in-out infinite alternate;
+}
+@keyframes waveBeat {
+  from { transform: scaleY(0.45); }
+  to { transform: scaleY(1); }
+}
+.voiceTime {
+  font-size: 10.5px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+:global(.dark) .jitter {
+  filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.45)) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage *,
+  .stage *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

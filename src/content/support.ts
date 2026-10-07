@@ -215,7 +215,7 @@ const ua: SupportCopy = {
     items: [
       {
         title: "Щоденні резервні копії",
-        text: "Копіювання відбувається автоматично щодня. Відновити можна будь-який знімок за останні 30 днів.",
+        text: "Копіювання відбувається автоматично щодня, без вашої участі.",
       },
       {
         title: "Дані в ЄС",
@@ -227,7 +227,7 @@ const ua: SupportCopy = {
       },
       {
         title: "Дані лишаються вашими",
-        text: "Повний експорт у CSV або Excel доступний будь-коли. Після скасування підписки дані зберігаються ще 60 днів.",
+        text: "Повний експорт у CSV або Excel доступний будь-коли. Після скасування підписки дані не зникають того ж дня — встигнете все забрати.",
       },
     ],
     selfText: "Часто відповідь знаходиться швидше — ось три місця, де вже є пояснення.",
@@ -349,7 +349,7 @@ const en: SupportCopy = {
     items: [
       {
         title: "Daily backups",
-        text: "Backups run automatically every day. Any snapshot from the last 30 days can be restored.",
+        text: "Backups run automatically every day, with nothing for you to do.",
       },
       {
         title: "Data in the EU",
@@ -361,7 +361,7 @@ const en: SupportCopy = {
       },
       {
         title: "The data stays yours",
-        text: "A full export to CSV or Excel is available at any time. After a cancellation the data is kept for another 60 days.",
+        text: "A full export to CSV or Excel is available at any time. After a cancellation the data doesn't vanish the same day — there is time to take it all.",
       },
     ],
     selfText: "Often the answer is quicker to find — three places that already explain it.",

@@ -17,7 +17,6 @@ export default function ConsultingProcess() {
           align="left"
           eyebrow={c.processEyebrow}
           title={c.processTitle}
-          text={c.processText}
         />
 
         <div className="flex flex-col">
@@ -47,14 +46,9 @@ export default function ConsultingProcess() {
                     </span>
 
                     <div className="flex flex-col gap-4 pt-0.5 md:pt-1">
-                      <div className="flex flex-col gap-2">
-                        <h3 className="font-semibold text-ink text-[20px] md:text-[24px] leading-[1.25] tracking-[-0.5px]">
-                          {stage.title}
-                        </h3>
-                        <p className="text-[15.5px] md:text-[16.5px] text-ink-2 leading-[1.55] max-w-[620px]">
-                          {stage.text}
-                        </p>
-                      </div>
+                      <h3 className="font-semibold text-ink text-[20px] md:text-[24px] leading-[1.25] tracking-[-0.5px]">
+                        {stage.title}
+                      </h3>
 
                       <ul className="flex flex-col gap-2">
                         {stage.does.map((d) => (

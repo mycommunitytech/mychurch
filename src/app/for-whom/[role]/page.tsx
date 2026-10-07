@@ -20,8 +20,12 @@ export async function generateMetadata({ params }: { params: Promise<{ role: str
   const { role } = await params;
   const r = i18n.ua.audience.roles.find((x) => x.id === role);
   if (!r) return {};
+  /* «Член церкви у церкві» — рядок, який давав шаблон: назва ролі вже
+     містить слово «церква». Уточнення додаємо тільки тим ролям, яким воно
+     справді потрібне («Пастор», «Адміністрація», «Бухгалтер»). */
+  const subject = /церкв/i.test(r.name) ? r.name : `${r.name} у церкві`;
   return pageMeta({
-    title: `${r.name} у церкві — що бачить і що може | Моя Церква`,
+    title: `${subject} — що бачить і що може | Моя Церква`,
     /* Опис у пошуку — розгорнутий `description`, а не `tagline`: той
        коротший за 60 символів і виглядає в сніпеті обрізаним. */
     description: r.description,

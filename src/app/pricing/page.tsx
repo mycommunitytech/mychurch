@@ -12,7 +12,6 @@ export const metadata: Metadata = pageMeta({
   title: PRICING_COPY.ua.seoTitle,
   description: PRICING_COPY.ua.seoDescription,
   path: "/pricing",
-  noIndex: true,
   keywords: [
     "скільки коштує система для церкви",
     "вартість ChMS українською",

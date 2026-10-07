@@ -4,7 +4,7 @@ import type { ModuleDetail } from "./types";
 export const aiModules: ModuleDetail[] = [
   {
     id: "assistant",
-    group: "insight",
+    group: "analytics",
     related: ["analytics", "people", "automations", "telegram-bot"],
     copy: {
       ua: {

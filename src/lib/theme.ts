@@ -30,16 +30,38 @@ function getServerSnapshot(): Theme {
   return "light";
 }
 
-export function applyTheme(theme: Theme) {
+/* Колір смуги браузера на телефоні — має збігатися з обраною темою, а не
+   системною, інакше над темною сторінкою висить біла смуга. Тег один, його
+   створює стартовий скрипт у layout.tsx. Кольори = --page. */
+export const THEME_BAR = { light: "#fcfcfc", dark: "#080a0f" } as const;
+
+function paint(theme: Theme) {
   const el = document.documentElement;
   el.classList.toggle("dark", theme === "dark");
-  el.style.colorScheme = theme;
+  /* `only light`: інакше Samsung Internet, Chrome з «темним режимом для
+     сайтів» і вбудовані браузери Telegram/Instagram на Android самі
+     «затемнюють» світлу тему — кольори сіріють, графіки інвертуються. */
+  el.style.colorScheme = theme === "dark" ? "dark" : "only light";
+  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute("content", THEME_BAR[theme]));
+  emit();
+}
+
+/* Тема міняється миттєво, а плавність дає View Transition: браузер знімає
+   кадр старої теми і розчиняє його в новий — одна анімація на весь екран
+   замість переходу кольору на кожному з тисяч елементів (див. «ЗМІНА ТЕМИ»
+   в globals.css). Без підтримки API чи з reduce-motion — просто перемикаємо. */
+export function applyTheme(theme: Theme) {
   try {
     localStorage.setItem(THEME_KEY, theme);
   } catch {
     /* private mode — the choice just won't persist */
   }
-  emit();
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!document.startViewTransition || calm) {
+    paint(theme);
+    return;
+  }
+  document.startViewTransition(() => paint(theme));
 }
 
 export function useTheme() {

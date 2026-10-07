@@ -65,6 +65,10 @@
 
 :root {
   /* ── Light theme ─────────────────────────────── */
+  /* Телефон у темному режимі не має права сам перефарбовувати світлу тему
+     (Samsung Internet, auto-dark у Chrome, вебв'ю застосунків): у нас є своя
+     темна. Те саме ставить скрипт у layout.tsx і applyTheme у theme.ts. */
+  color-scheme: only light;
   --page: #fcfcfc;
   --surface: #ffffff;
   --surface-2: #fafafb;
@@ -117,6 +121,7 @@
 
 .dark {
   /* ── Dark theme ──────────────────────────────── */
+  color-scheme: dark;
   --page: #080a0f;
   --surface: #11151d;
   --surface-2: #151a23;
@@ -178,7 +183,6 @@
   body {
     @apply bg-page text-ink font-sans;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
     overscroll-behavior: none;
     overflow-x: clip;
     /* A long unbroken word (a URL, a long Ukrainian compound) breaks rather
@@ -192,16 +196,6 @@
      На телефоні шапка 64px — 80 просто впирається в нуль. */
   main {
     scroll-margin-top: 80px;
-  }
-  /* Theme swap should feel deliberate, not instant */
-  html.theme-ready body,
-  html.theme-ready body * {
-    transition: background-color 0.25s ease, border-color 0.25s ease,
-      color 0.25s ease, fill 0.25s ease;
-  }
-  html.theme-ready .no-theme-transition,
-  html.theme-ready .no-theme-transition * {
-    transition: none;
   }
   ::selection {
     background: var(--brand);
@@ -229,6 +223,63 @@
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   ЗМІНА ТЕМИ
+   Раніше кожен елемент сторінки мав перехід кольорів (body *): на
+   зміні теми браузер одночасно анімував тисячі вузлів, і на телефоні
+   сторінка на пів секунди застигала — а ще кожен ховер і кожна зміна
+   класу тягнулись за цим переходом. Тепер тема міняється миттєво, а
+   плавність дає один знімок екрана, що розчиняється в новий
+   (applyTheme у src/lib/theme.ts). Браузери без View Transitions
+   просто перемикають тему без анімації.
+   ============================================================ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+  animation-timing-function: ease;
+}
+
+/* ============================================================
+   БЛОКИ ПОЗА ЕКРАНОМ
+   Головна — це ~4300 елементів, і на телефоні браузер щоразу, коли
+   демо-анімація щось міняє, перераховував стилі й розкладку всієї
+   сторінки: за перші 2,5 с — понад сотню разів, ~0,9 с процесора.
+   `content-visibility: auto` пропускає блоки, до яких ще не догорнули;
+   браузер розкладає їх за пів екрана до появи. `auto 900px` — оцінка
+   висоти до першого показу, далі браузер пам'ятає справжню. Якорі
+   перед стрибком розкладають усе (settleSections у src/lib/scroll.ts,
+   клас .cv-settle), тож сідають точно.
+   ============================================================ */
+.lazy-sections > section:not(:first-of-type) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+.cv-settle .lazy-sections > section { content-visibility: visible; }
+
+/* Анімації в секціях поза екраном стоять на паузі (атрибут ставить
+   src/components/shared/offscreen-pause.tsx). Коли сторінка просто стоїть,
+   JS майже не працює — процесор і батарею з'їдали саме нескінченні
+   CSS-анімації блоків, яких не видно: перерахунок стилів, шари, малювання
+   щокадру. Повертається блок у кадр — анімації йдуть далі з того ж місця. */
+[data-offscreen] *,
+[data-offscreen] *::before,
+[data-offscreen] *::after {
+  animation-play-state: paused !important;
+}
+
+/* Нерухоме скло (шапка, кнопка «вгору») на телефоні — без розмиття. Під
+   ним на кожному кадрі прокрутки їде новий вміст, і браузер щокадру заново
+   розмиває шар: на слабких Android це й був головний ривок при гортанні.
+   Натомість майже непрозора заливка того ж кольору. Картки над фото й відео
+   своє розмиття лишають — там воно тримає читабельність тексту. */
+@media (max-width: 767px) {
+  .glass-fixed {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background-color: color-mix(in oklab, var(--surface) 96%, transparent) !important;
   }
 }
 
@@ -441,6 +492,14 @@
 }
 .aurora-a { animation: auroraDrift 18s ease-in-out infinite; }
 .aurora-b { animation: auroraDriftAlt 22s ease-in-out infinite; }
+/* На телефоні кожна пляма — окремий шар ~900×620 при щільності 3×, тобто
+   мегабайти відеопам'яті, які GPU перемальовує щокадру, навіть коли пляма
+   вже за екраном. Дрейф за 18–22 с на малому екрані й так не помітний, а
+   прокрутка від нього смикалась. Пляма лишається — нерухомою. */
+@media (max-width: 767px) {
+  .aurora-a,
+  .aurora-b { animation: none; }
+}
 
 @keyframes gradientSpin {
   from { transform: rotate3d(0, 0, 1, 0deg); }
@@ -653,6 +712,17 @@
 }
 .confetti-dot { animation: confettiBurst 0.9s var(--ease-out-soft) both; }
 
+/* Конфеті вистрілює з центру картки: папірці розлітаються врізнобіч,
+   кружляючи, і їх тягне донизу. Кожен несе свій шлях, оберт і вагу. */
+@keyframes confettiShot {
+  0%   { opacity: 0; transform: translate3d(0, 0, 0) rotate(0deg) scale(0.5); }
+  8%   { opacity: 1; }
+  65%  { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(var(--dx, 0px), var(--dy, 120px), 0) rotate(var(--spin, 540deg)) scale(1); }
+}
+.confetti-shot { animation: confettiShot 1.5s cubic-bezier(0.12, 0.66, 0.3, 1) both; }
+@media (prefers-reduced-motion: reduce) { .confetti-shot { display: none; } }
+
 @keyframes pinIn {
   0%   { opacity: 0; transform: translateY(8px) scale(0.6); }
   60%  { transform: translateY(-2px) scale(1.06); }
@@ -680,6 +750,19 @@
 }
 .tap-hint { animation: tapHint 1.4s ease-in-out infinite; }
 @keyframes barGrowX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Риска, що перекреслює слово в заголовку: їде зліва направо, коли блок
+   доїхав до екрана. Кому рух заважає — риска просто стоїть намальованою,
+   без ходу. Тримаємо це в CSS, а не в ефекті: інакше компонент мусив би
+   писати стан просто в тілі useEffect. */
+.strike-line { transform: scaleX(0); }
+.strike-draw {
+  animation: barGrowX 520ms cubic-bezier(0.22, 1, 0.36, 1) 420ms forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .strike-draw { animation: none; transform: scaleX(1); }
+}
+
 
 
 /* ============================================================
@@ -869,6 +952,28 @@
   background-image: radial-gradient(color-mix(in oklab, var(--brand) 18%, transparent) 1px, transparent 1px);
   background-size: 18px 18px;
 }
+
+/* ============================================================
+   MODULE CANVAS (home → capabilities): сітка, що згасає до країв
+   ============================================================ */
+.caps-fade-x {
+  mask-image: linear-gradient(to right, transparent 0%, black 16%, black 84%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 16%, black 84%, transparent 100%);
+}
+.caps-fade-y {
+  mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 80%, transparent 100%);
+}
+@media (max-width: 1023px) {
+  /* На телефоні сітка вміщається, тож збоку не гасимо; зверху ключові плитки
+     стоять одразу, згасає лише хвіст дрібних клітинок унизу. */
+  .caps-fade-x { mask-image: none; -webkit-mask-image: none; }
+  .caps-fade-y {
+    mask-image: linear-gradient(to bottom, black 0%, black 72%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 72%, transparent 100%);
+  }
+}
+.group:hover .caps-icon { color: var(--accent); }
 
 /* ============================================================
    MODULE MARQUEE (home → capabilities)
@@ -1426,6 +1531,25 @@ main:focus {
 
 @media (prefers-reduced-motion: reduce) {
   .perk-in { animation: none; }
+}
+
+/* ============================================================
+   ВІКНО ВИБОРУ БАЖАНЬ у брифі: на телефоні воно виїжджає знизу,
+   на великому екрані — просто проявляється на місці.
+   ============================================================ */
+@keyframes pickerFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pickerSheet {
+  from { opacity: 0; transform: translate3d(0, 26px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+.picker-fade  { animation: pickerFade 0.18s var(--ease-out-soft) both; }
+.picker-sheet { animation: pickerSheet 0.26s var(--ease-out-soft) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .picker-fade, .picker-sheet { animation: none; }
 }
 
 

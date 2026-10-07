@@ -1,20 +1,60 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Send } from "lucide-react";
 import FadeIn from "@/components/shared/fade-in";
 import { useT } from "@/lib/lang";
 import { SITE_EMAIL, SITE_TELEGRAM } from "@/lib/seo";
 
-/* ────────────────────────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────────
    Питання та відповіді.
 
-   До 2026-09-21 сторінка була однаковими картками з плюсами, а над
-   ними — ще й ряд чипів із тими самими назвами рубрик, що й заголовки
-   нижче. Тепер це документ: рубрика заголовком, під нею рядки «питання
-   ліворуч — відповідь праворуч». Акордеон зник разом із довгими
-   відповідями: ховати два рядки за плюсом немає сенсу.
-   ──────────────────────────────────────────────────────────────── */
+   Сторінка лишається документом: рубрика заголовком, під
+   нею рядки питань. Але відповідь тепер розгортається по кліку
+   (2026-09-22): стіна з розкритих відповідей не давала знайти своє
+   питання очима. Згорнута відповідь залишається в розмітці (висота
+   0fr, а не display:none), тож пошуковик бачить весь текст.
+   Ідіома та сама, що в QaCard на сторінках модулів.
+   ──────────────────────────────────────────────────────────── */
+
+/* Один рядок: питання і плюс, відповідь виїжджає знизу. */
+function Row({ question, answer, defaultOpen = false }: { question: string; answer: string; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <button
+      type="button"
+      onClick={() => setOpen((v) => !v)}
+      aria-expanded={open}
+      className="group w-full text-left border-b border-hairline py-5 md:py-6 flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:rounded-[10px]"
+    >
+      <div className="flex items-start justify-between gap-4">
+        <h3 className="text-[16.5px] md:text-[18px] font-semibold text-ink leading-[1.35] tracking-[-0.25px] group-hover:text-brand transition-colors duration-150">
+          {question}
+        </h3>
+        <span
+          className="shrink-0 w-6 h-6 rounded-full bg-surface-3 border border-hairline flex items-center justify-center text-ink-2 mt-[1px] transition-transform duration-200"
+          style={{ transform: open ? "rotate(45deg)" : "none" }}
+        >
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden>
+            <path d="M10 4v12M4 10h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          </svg>
+        </span>
+      </div>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateRows: open ? "1fr" : "0fr",
+          transition: "grid-template-rows 0.24s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        }}
+      >
+        <div style={{ overflow: "hidden" }}>
+          <p className="mt-3 text-[15.5px] md:text-[16.5px] text-ink-2 leading-[1.6] max-w-[620px]">{answer}</p>
+        </div>
+      </div>
+    </button>
+  );
+}
 
 export default function Faq() {
   const t = useT().faq;
@@ -55,23 +95,17 @@ export default function Faq() {
               </h2>
             </FadeIn>
 
-            {/* Питання ліворуч, відповідь праворуч — нічого не ховаємо за
-                плюсом: відповіді короткі, а сховане не потрапляє на очі
-                тому, хто гортає, і гірше читається пошуковиками. */}
+            {/* Відповідь схована за плюсом — список питань читається
+                одним поглядом. Перше питання першої рубрики відкрите:
+                показує, що рядки розгортаються. */}
             <div className="flex flex-col border-t border-hairline">
               {category.items.map((item, i) => (
-                <FadeIn
-                  key={item.id}
-                  delay={i}
-                  className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-1.5 md:gap-10 border-b border-hairline py-5 md:py-6"
-                >
-                  <h3 className="text-[16.5px] md:text-[18px] font-semibold text-ink leading-[1.35] tracking-[-0.25px]">
-                    {item.question}
-                  </h3>
-                  <p className="text-[15.5px] md:text-[16.5px] text-ink-2 leading-[1.6]">{item.answer}</p>
+                <FadeIn key={item.id} delay={i}>
+                  <Row question={item.question} answer={item.answer} defaultOpen={ci === 0 && i === 0} />
                 </FadeIn>
               ))}
             </div>
+
           </section>
         ))}
 

@@ -7,6 +7,7 @@ import { MODULE_ICONS, moduleAccent } from "@/components/shared/module-icons";
 import { BUILDER_GROUPS, CORE_MODULES, ALL_GOALS, findGoal } from "@/content/builder";
 import { track } from "@/lib/analytics/client";
 import { useBuilder } from "@/context/builder-context";
+import { useDemoModal } from "@/context/demo-modal-context";
 import { useLang, useT } from "@/lib/lang";
 import { cn } from "@/lib/utils";
 import type { Dict, Lang } from "@/lib/i18n";
@@ -107,6 +108,7 @@ export default function ModuleBuilder() {
   const sp = b.space;
   const index = useModuleIndex(t);
   const { goals, toggle, reset, set } = useBuilder();
+  const { openWith } = useDemoModal();
   const [hover, setHover] = useState<string | null>(null);
 
   const empty = goals.length === 0;
@@ -124,10 +126,12 @@ export default function ModuleBuilder() {
 
   const scrollToSet = () => document.getElementById("builder-set")?.scrollIntoView({ behavior: "smooth", block: "center" });
 
-  /* The set has to land somewhere: the brief right under the constructor. */
+  /* Набір має десь приземлитись. Досі це був бриф під конструктором, але
+     форму звідти прибрано (2026-09-22), тож обрані бажання їдуть одразу
+     у вікно демо — тим самим полем `goals`, яким вони їхали в лід. */
   const takeSet = () => {
     track("builder_cta", { place: "modules", picked: goals.length });
-    document.getElementById("brief")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    openWith(goals);
   };
 
   const rowState = (id: string): "on" | "lit" | "dim" => (!hovered ? "on" : hovered.has(id) ? "lit" : "dim");

@@ -19,7 +19,7 @@ interface Props {
   name: string;
   phone: string;
   /** Звідки саме не доїхало — для аналітики. */
-  source: "demo" | "brief";
+  source: "demo" | "callback" | "material";
   className?: string;
 }
 

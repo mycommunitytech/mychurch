@@ -4,7 +4,7 @@ export const post: BlogPost = {
   slug: "vid-vidviduvacha-do-lidera",
   category: "people",
   date: "2026-09-19",
-  minutes: 10,
+  updated: "2026-09-30",
   related: ["stavte-tsili", "yak-nalashtuvaty-ai-ahenta", "piat-pytan-pro-systemu"],
   copy: {
     ua: {
@@ -12,7 +12,7 @@ export const post: BlogPost = {
       seoDescription:
         "Шість етапів шляху в церкві: відвідувач, покаяння, мала група, хрещення, служіння, лідер. Що має статись на кожному і як не загубити людину між ними.",
       title: "Від першого візиту до лідера: шість етапів шляху",
-      lead: "Людина приходить у церкву один раз, а лишається — через десятки маленьких кроків. Ось шість етапів цього шляху і те, що на кожному має зробити хтось конкретний, а не «церква загалом».",
+      lead: "Людина приходить у церкву один раз, а лишається через десятки маленьких кроків. Ось шість етапів цього шляху: що потрібно людині на кожному і хто за це відповідає.",
       keywords: [
         "шлях учнівства в церкві",
         "етапи духовного зростання",
@@ -23,7 +23,7 @@ export const post: BlogPost = {
       ],
       problem: {
         title: "Між покаянням і служінням — порожнеча",
-        text: "Людина покаялась на служінні в лютому. Далі не сталось нічого: у групу її ніхто не запросив, про хрещення ніхто не поговорив, у команду не покликали. До літа вона просто перестала приходити — і формально ніхто не зробив нічого поганого.",
+        text: "Людина покаялась на служінні в лютому. Далі не сталось нічого: у групу її ніхто не запросив, про хрещення ніхто не поговорив, у команду не покликали. До літа вона перестала приходити, і формально ніхто не зробив нічого поганого.",
       },
       sections: [
         {
@@ -31,7 +31,7 @@ export const post: BlogPost = {
           blocks: [
             {
               kind: "text",
-              text: "Церква майже ніколи не має проблеми з першим кроком. Люди приходять: із другом, у кризу, після запрошення, просто повз. Проблема починається там, де перший крок мав перетворитись на другий, а ніхто не назвав, який саме крок другий і хто за нього відповідає.",
+              text: "З першим кроком у церкви рідко бувають проблеми: люди приходять із другом, у кризу, після запрошення чи проходячи повз. Проблема там, де за першим кроком мав іти другий, а ніхто не назвав ні цього кроку, ні того, хто за нього відповідає.",
             },
             {
               kind: "quote",
@@ -39,50 +39,46 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "Доручення говорить не «зберіть», а «навчіть». Це означає рух: людина має кудись іти від того місця, де вона вперше сіла в залі. Шлях нижче — це не церковна ієрархія і не рівні святості. Це просто перелік моментів, у які людині потрібен хтось поруч.",
+              text: "Доручення каже «навчіть», а за одну неділю не навчиш: людина має йти далі від місця, де вперше сіла в залі. Етапи нижче — це моменти, коли людині потрібен хтось поруч. Ієрархії чи рівнів святості вони не означають.",
             },
           ],
         },
         {
-          heading: "Шість етапів шляху в церкві",
+          heading: "Шість етапів і що потрібно людині на кожному",
           blocks: [
             {
               kind: "steps",
               items: [
                 {
                   title: "Відвідувач",
-                  text: "Перший візит. Завдання етапу — щоб у людини з'явилось ім'я в системі, контакт і жива людина, яка написала їй протягом тижня. Анкета через QR на вході займає хвилину, привітання того ж дня коштує ще п'ять.",
+                  text: "Перший візит. Гостя мають запам'ятати на ім'я, і протягом тижня хтось із церкви має написати йому особисто.",
                 },
                 {
                   title: "Покаяння",
-                  text: "Рішення ухвалене — і саме тут воно найчастіше губиться. Рішення має мати наслідок у календарі: розмова, перша зустріч, молитовна підтримка, конкретна дата. Не «ми за вас молимось», а «у четвер о сьомій зустрічаємось з Андрієм».",
+                  text: "Людині потрібна наступна зустріч з іменем і датою. Не «ми за вас молимось», а «у четвер о сьомій зустрічаємось з Андрієм».",
                 },
                 {
                   title: "Мала група",
-                  text: "Місце, де людину помітять наступного тижня. Це найсильніший запобіжник від тихого зникнення: у залі можна не прийти непоміченим, у групі з дванадцяти — ні. Запрошення має бути в конкретну групу поруч, з іменем лідера, а не посиланням на загальний список.",
+                  text: "Місце, де відсутність людини помітять наступного тижня. Із залу можна зникнути непоміченим, із групи на дванадцять людей — ні.",
                 },
                 {
                   title: "Хрещення",
-                  text: "Свідомий крок і перша публічна відповідальність. Навколо нього — підготовка, курс, розмова з пастором, реєстрація, дата. Уся ця історія має лишитись у картці людини, а не в пам'яті того, хто готував групу хрещення позаминулого року.",
+                  text: "Свідомий крок і перша публічна відповідальність. Перед ним потрібні підготовка, розмова з пастором і конкретна дата.",
                 },
                 {
                   title: "Служіння",
-                  text: "Людина переходить з тих, хто отримує, до тих, хто дає. Потрібні роль у команді, графік, підтвердження участі й матеріали в одному місці. І одразу — межа навантаження, бо саме звідси починається вигорання.",
+                  text: "Людина переходить з тих, хто отримує, до тих, хто дає. Їй потрібні зрозуміла роль у команді й межа навантаження з першого дня, бо вигорання починається тут.",
                 },
                 {
                   title: "Лідер",
-                  text: "Своя група чи служіння, відповідальність за інших людей, доступ до аналітики своєї ділянки. І головне — можливість передати справу без втрат, коли прийде час.",
+                  text: "Своя група чи служіння і відповідальність за інших людей. Лідеру потрібно бачити свою ділянку цілком і знати, кому передасть справу, коли прийде час.",
                 },
               ],
             },
             {
-              kind: "text",
-              text: "Назвіть етапи так, як звично вашій церкві: у когось між групою і хрещенням стоїть курс, у когось членство оформлюється окремо. Важлива не термінологія, а те, що етапи існують явно й про кожну людину можна сказати, де вона зараз.",
-            },
-            {
               kind: "visual",
               caption:
-                "Числа — приклад для громади, у якій за рік побувало сто двадцять гостей, а не статистика. Дивіться на форму: найвужче місце тут між першим візитом і малою групою, і саме в нього треба ставити відповідального. У вашій церкві воно може бути іншим — тому шлях і варто побачити цілком.",
+                "Числа — приклад: зі 120 гостей за рік до малої групи дійшли 33. Тому відповідальний потрібен насамперед між першим візитом і групою, хоча у вашій церкві вузьке місце може бути іншим.",
               visual: {
                 type: "path",
                 title: "Дорога від першого візиту до лідера",
@@ -104,25 +100,25 @@ export const post: BlogPost = {
           blocks: [
             {
               kind: "table",
-              columns: ["Етап", "Що має статись", "Що бере на себе система"],
+              columns: ["Етап", "Що бере на себе система"],
               rows: [
-                ["Відвідувач", "Контакт і привітання протягом тижня", "Анкета через QR створює картку, відповідальний отримує нагадування того ж дня"],
-                ["Покаяння", "Наступний крок із датою", "Статус у картці, завдання відповідальному, запис у календарі"],
-                ["Мала група", "Знайомство з лідером конкретної групи", "Список тих, хто ходить понад місяць і досі без групи"],
-                ["Хрещення", "Підготовка й дата", "Реєстрація на курс, нагадування учасникам, історія в картці"],
-                ["Служіння", "Роль, графік і межа навантаження", "Графік із підтвердженнями і сигнал про тих, хто служить без перерви"],
-                ["Лідер", "Відповідальність і передача справ", "Аналітика по своїй групі й передача без втрати історії"],
+                ["Відвідувач", "Анкета через QR створює картку, відповідальний отримує нагадування того ж дня"],
+                ["Покаяння", "Статус у картці, завдання відповідальному, запис у календарі"],
+                ["Мала група", "Список тих, хто ходить понад місяць і досі без групи"],
+                ["Хрещення", "Реєстрація на курс, нагадування учасникам, історія в картці"],
+                ["Служіння", "Графік із підтвердженнями і сигнал про тих, хто служить без перерви"],
+                ["Лідер", "Аналітика своєї групи й передача справ без втрати історії"],
               ],
             },
             {
               kind: "text",
-              text: "Жоден рядок у правій колонці не замінює розмову. Система лише прибирає причину, через яку розмова не відбувається: «я не знав», «я забув», «це було в іншому чаті».",
+              text: "Жоден рядок таблиці не замінює розмови. Система прибирає лише причини, через які розмова не стається: «я не знав», «я забув», «це було в іншому чаті».",
             },
             {
               kind: "solution",
-              title: "Шлях видно дошкою",
+              title: "Шлях на одній дошці",
               text:
-                "Кожен новий стоїть на своєму етапі, у кожного переходу є відповідальний — і видно, хто застряг між етапами другий тиждень.",
+                "Кожен новий стоїть на своєму етапі, у кожного переходу є відповідальний, і видно, хто застряг між етапами другий тиждень.",
               spec: {
                 kind: "board",
                 title: "Онбординг",
@@ -160,18 +156,17 @@ export const post: BlogPost = {
           blocks: [
             {
               kind: "list",
-              title: "Чотири місця, у яких люди зупиняються",
               items: [
                 "Після першого візиту: анкета лишилась на папері, і другий крок залежить від того, чи не загубився аркуш.",
-                "Після покаяння: рішення записали в блокнот служіння, але наступної дії за ним не стоїть.",
-                "Перед групою: людину запросили «в малі групи» взагалі, а не в конкретну групу до конкретного лідера.",
-                "У служінні: людина стоїть у графіку щонеділі півтора року, і ніхто не бачить цього навантаження цілісно.",
+                "Після покаяння: ім'я записали в блокнот служіння, і на цьому все.",
+                "Перед групою: людину запросили «в малі групи» взагалі, без назви групи й імені лідера.",
+                "У служінні: людина стоїть у графіку щонеділі півтора року, і цього ніхто не помічає.",
               ],
             },
             {
               kind: "callout",
               title: "Відповідальний за перехід, а не за етап",
-              text: "Найчастіша помилка — закріпити людей за етапами: служіння зустрічі за гостей, координатора за групи. Між етапами утворюється нічия зона, і саме в ній губляться люди. Відповідальний потрібен за перехід: хто саме веде людину від покаяння до групи.",
+              text: "Найчастіша помилка — закріпити людей за етапами: служіння зустрічі за гостей, координатора за групи. Тоді між етапами лишається нічия зона, і від покаяння до групи людину не веде ніхто.",
             },
           ],
         },
@@ -180,11 +175,11 @@ export const post: BlogPost = {
           blocks: [
             {
               kind: "text",
-              text: "Шлях виглядає завершеним на шостому етапі, але насправді він там починається заново: лідер веде свою групу, і в ній сидить людина, яка вперше прийшла минулої неділі. Церква росте не тому, що більше людей увійшло, а тому, що більше людей дійшли до кінця шляху і повели наступних.",
+              text: "На шостому етапі шлях починається заново: лідер веде свою групу, а в ній сидить людина, яка вперше прийшла минулої неділі. Церква росте, коли люди доходять до кінця шляху й ведуть наступних.",
             },
             {
               kind: "text",
-              text: "Тому найкращий показник здоров'я громади — не кількість на служінні, а кількість людей, які за рік перейшли хоча б на один етап далі. Цю цифру видно тільки тоді, коли етап зафіксований у картці людини, а не в чиїйсь пам'яті.",
+              text: "Тому найкращий показник здоров'я громади — скільки людей за рік перейшли хоча б на один етап далі. Явка на служінні цього не покаже: цифра з'являється, лише коли етап відмічено в картці людини. Ще чотири такі показники і як поставити на них ціль — у статті [«Як виміряти зростання церкви»](/blog/stavte-tsili).",
             },
           ],
         },
@@ -194,38 +189,38 @@ export const post: BlogPost = {
             {
               kind: "list",
               items: [
-                "Випишіть свої етапи — рівно тими словами, якими користується ваша церква.",
-                "Проти кожного переходу впишіть одне ім'я. Порожньо — значить, цей перехід не працює.",
+                "Випишіть етапи словами, якими говорить ваша церква.",
+                "Біля кожного переходу впишіть одне ім'я. Де порожньо, там перехід не працює.",
                 "Перевірте останніх десять людей, які покаялись: скільки з них зараз у групі?",
-                "Почніть фіксувати етап у картці людини. Далі буде видно, де черга зупиняється.",
+                "Відмічайте етап у картці людини, і стане видно, де шлях зупиняється.",
               ],
             },
             {
               kind: "text",
-              text: "Не запускайте всі шість етапів одночасно. Візьміть той перехід, на якому зараз втрачаєте найбільше, і доведіть його до звички. Наступний додасте через три місяці.",
+              text: "Не беріться за все одразу: почніть із переходу, на якому втрачаєте найбільше, доведіть його до звички, а за три місяці додайте наступний.",
             },
           ],
         },
       ],
       takeaways: [
-        "Люди губляться не на етапах, а на переходах між ними.",
-        "За кожен перехід має відповідати конкретна людина, а не служіння загалом.",
-        "Покаяння без наступного кроку з датою залишається подією, а не початком шляху.",
-        "Етап людини має бути видимий у картці, інакше його не видно нікому.",
-        "Лідер — не кінець шляху: з нього шлях починається для наступних людей.",
+        "Люди губляться на переходах між етапами.",
+        "На кожен перехід потрібне одне ім'я відповідального.",
+        "Покаяння без наступної зустрічі з датою так і лишається подією.",
+        "Етап, якого немає в картці, не бачить ніхто.",
+        "На шостому етапі лідер починає шлях для наступних.",
       ],
       faq: [
         {
           q: "А якщо в нашій церкві інші етапи?",
-          a: "Так і має бути. Етапи — це опис вашої практики, а не чужий шаблон. У системі їх налаштовують під церкву: додають курс, членство чи випробувальний період у служінні й прибирають те, чого у вас немає.",
+          a: "Так і має бути, бо етапи описують практику вашої церкви. У системі їх налаштовують: додають курс, членство чи випробувальний період у служінні й прибирають те, чого у вас немає.",
         },
         {
           q: "Хто має відмічати перехід людини на наступний етап?",
-          a: "Той, хто його супроводжував: лідер групи, керівник служіння, відповідальний за гостей. Якщо відмічає один адміністратор за всіх, дані швидко перестають відповідати дійсності.",
+          a: "Той, хто супроводжував людину: лідер групи, керівник служіння, відповідальний за гостей. Якщо відмічає один адміністратор за всіх, дані швидко застарівають.",
         },
         {
           q: "Чи не перетворює це людей на позиції у воронці?",
-          a: "Різниця в тому, що робиться далі. Якщо етап потрібен для звіту — так, перетворює. Якщо зміна етапу породжує дзвінок, знайомство чи запрошення — це просто спосіб не забути про людину.",
+          a: "Ні, якщо зміна етапу породжує дзвінок, знайомство чи запрошення: тоді це спосіб не забути про людину. Якщо етап потрібен лише для звіту, то так.",
         },
       ],
       cta: {
@@ -240,7 +235,7 @@ export const post: BlogPost = {
       seoDescription:
         "Six stages of the path through a church: visitor, repentance, small group, baptism, ministry, leader. What has to happen at each one and where people slip away.",
       title: "From first visit to leader: the six stages",
-      lead: "People arrive once, but they stay through dozens of small steps. Here are the six stages of that path, and what a specific person — not the church in general — has to do at each of them.",
+      lead: "People arrive once, but they stay through dozens of small steps. Here are the six stages of that path: what a person needs at each one, and who is responsible for it.",
       keywords: [
         "discipleship path in church",
         "stages of spiritual growth",
@@ -251,7 +246,7 @@ export const post: BlogPost = {
       ],
       problem: {
         title: "The gap between a decision and a ministry",
-        text: "Someone makes a decision at a February service. Then nothing happens: no invitation to a group, no conversation about baptism, no place on a team. By summer they have stopped coming — and formally nobody did anything wrong.",
+        text: "Someone makes a decision at a February service. Then nothing happens: no invitation to a group, no conversation about baptism, no place on a team. By summer they have stopped coming, and formally nobody did anything wrong.",
       },
       sections: [
         {
@@ -259,7 +254,7 @@ export const post: BlogPost = {
           blocks: [
             {
               kind: "text",
-              text: "Churches rarely struggle with the first step. People come: with a friend, in a crisis, after an invitation, or simply passing by. The trouble starts where that first step should have become a second one, and nobody named what the second step is or who owns it.",
+              text: "Churches rarely struggle with the first step: people come with a friend, in a crisis, after an invitation or while passing by. The trouble starts where a second step should have followed, and nobody named that step or who owns it.",
             },
             {
               kind: "quote",
@@ -267,50 +262,46 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "The commission does not say gather, it says make disciples. That implies movement: a person has to go somewhere from the seat they first sat in. The path below is not a hierarchy or a ladder of holiness. It is simply a list of the moments when someone needs another person beside them.",
+              text: "The commission says “make disciples”, and nobody is discipled in one Sunday: a person has to move on from the seat they first sat in. The stages below are moments when someone needs another person beside them. They are not a hierarchy or levels of holiness.",
             },
           ],
         },
         {
-          heading: "The six stages of the path",
+          heading: "Six stages, and what a person needs at each",
           blocks: [
             {
               kind: "steps",
               items: [
                 {
                   title: "Visitor",
-                  text: "The first visit. The job of this stage is a name in the system, a contact and a real person who writes within the week. A QR form at the door takes a minute; a same-day welcome costs five more.",
+                  text: "The first visit. The guest needs to be remembered by name and to hear from someone at church personally within the week.",
                 },
                 {
                   title: "Repentance",
-                  text: "The decision is made — and this is exactly where it usually gets lost. A decision needs a consequence in the calendar: a conversation, a first meeting, prayer support, a date. Not we are praying for you, but Thursday at seven with Andrii.",
+                  text: "The person needs a next meeting with a name and a date. Not “we are praying for you”, but “Thursday at seven with Andrii”.",
                 },
                 {
                   title: "Small group",
-                  text: "A place where someone notices them next week. It is the strongest protection against a quiet disappearance: you can miss a service unnoticed, you cannot miss a group of twelve. The invitation has to be to one specific group nearby, with the leader's name, not to a list.",
+                  text: "A place where their absence is noticed next week. You can vanish from a congregation unnoticed; you cannot vanish from a group of twelve.",
                 },
                 {
                   title: "Baptism",
-                  text: "A deliberate step and the first public commitment. Around it sit preparation, a course, a conversation with the pastor, registration and a date. All of that history belongs on the person's record, not in the memory of whoever ran the class two years ago.",
+                  text: "A deliberate step and the first public commitment. It needs preparation, a conversation with the pastor and a set date.",
                 },
                 {
                   title: "Ministry",
-                  text: "The person moves from receiving to giving. They need a role on a team, a rota, confirmations and materials in one place — and, from day one, a limit on the load, because this is where burnout begins.",
+                  text: "The person moves from receiving to giving. They need a clear role on a team and a limit on the load from day one, because burnout starts here.",
                 },
                 {
                   title: "Leader",
-                  text: "Their own group or ministry, responsibility for other people, analytics for their own patch — and the ability to hand it all over without loss when the time comes.",
+                  text: "Their own group or ministry, and responsibility for other people. A leader needs to see their whole patch and to know who they will hand it to when the time comes.",
                 },
               ],
             },
             {
-              kind: "text",
-              text: "Name the stages the way your church already speaks. Some put a course between group and baptism, some handle membership separately. The terminology does not matter; what matters is that the stages exist explicitly and you can say where any given person is right now.",
-            },
-            {
               kind: "visual",
               caption:
-                "Example numbers for a church that saw a hundred and twenty guests in a year, not statistics. Watch the shape: the narrowest step here is between a first visit and a small group, and that is where the transition needs an owner. In your church it may sit elsewhere — which is why the whole path is worth seeing at once.",
+                "The numbers are an example: of 120 guests in a year, 33 reached a small group. So an owner is needed first of all between a first visit and a group, though in your church the narrow point may be elsewhere.",
               visual: {
                 type: "path",
                 title: "The road from a first visit to leading",
@@ -332,25 +323,25 @@ export const post: BlogPost = {
           blocks: [
             {
               kind: "table",
-              columns: ["Stage", "What has to happen", "What the system carries"],
+              columns: ["Stage", "What the system carries"],
               rows: [
-                ["Visitor", "Contact and a welcome within the week", "The QR form creates the record; the owner is reminded the same day"],
-                ["Repentance", "A next step with a date", "A status on the record, a task for the owner, an entry in the calendar"],
-                ["Small group", "An introduction to one specific leader", "The list of people attending over a month with no group"],
-                ["Baptism", "Preparation and a date", "Course registration, reminders, the history on the record"],
-                ["Ministry", "A role, a rota and a load limit", "A rota with confirmations and a flag for anyone serving without a break"],
-                ["Leader", "Responsibility and a clean handover", "Analytics for their own group and a handover that keeps the history"],
+                ["Visitor", "The QR form creates the record; the owner is reminded the same day"],
+                ["Repentance", "A status on the record, a task for the owner, an entry in the calendar"],
+                ["Small group", "The list of people attending over a month with no group"],
+                ["Baptism", "Course registration, reminders, the history on the record"],
+                ["Ministry", "A rota with confirmations and a flag for anyone serving without a break"],
+                ["Leader", "Analytics for their own group and a handover that keeps the history"],
               ],
             },
             {
               kind: "text",
-              text: "Nothing in the right-hand column replaces a conversation. The system only removes the reasons the conversation never happens: I did not know, I forgot, it was in another chat.",
+              text: "No row in this table replaces a conversation. The system only removes the reasons it never happens: “I did not know”, “I forgot”, “it was in another chat”.",
             },
             {
               kind: "solution",
-              title: "The path as a board",
+              title: "The path on one board",
               text:
-                "Every newcomer sits at their stage, every transition has an owner — and it is visible who has been stuck between two stages for a second week.",
+                "Every newcomer sits at their stage, every transition has an owner, and you can see who has been stuck between stages for a second week.",
               spec: {
                 kind: "board",
                 title: "Onboarding",
@@ -388,18 +379,17 @@ export const post: BlogPost = {
           blocks: [
             {
               kind: "list",
-              title: "Four places where people stop",
               items: [
                 "After the first visit: the card stays on paper, so the second step depends on whether the sheet survives the week.",
-                "After a decision: it was written in a ministry notebook, with no action behind it.",
-                "Before a group: the person was invited to small groups in general, not to one group and one leader.",
-                "In ministry: eighteen months on the rota every Sunday, with nobody seeing the load as a whole.",
+                "After a decision: the name went into a ministry notebook, and that was it.",
+                "Before a group: the person was invited to “small groups” in general, with no group name and no leader's name.",
+                "In ministry: eighteen months on the rota every Sunday, and nobody notices.",
               ],
             },
             {
               kind: "callout",
               title: "Own the transition, not the stage",
-              text: "The common mistake is assigning people to stages: the welcome team to guests, a coordinator to groups. That leaves an unowned gap between stages, and the gap is where people are lost. Someone has to own the transition itself: who walks a person from a decision into a group.",
+              text: "The common mistake is assigning people to stages: the welcome team to guests, a coordinator to groups. That leaves an unowned gap between stages, and nobody walks a person from a decision into a group.",
             },
           ],
         },
@@ -408,11 +398,11 @@ export const post: BlogPost = {
           blocks: [
             {
               kind: "text",
-              text: "The path looks finished at stage six, but that is where it starts again: the leader runs a group, and in that group sits someone who came for the first time last Sunday. A church grows not because more people walked in, but because more people reached the end of the path and took the next ones along.",
+              text: "At stage six the path starts again: the leader runs a group, and in that group sits someone who came for the first time last Sunday. A church grows when people reach the end of the path and take the next ones along.",
             },
             {
               kind: "text",
-              text: "So the healthiest measure is not attendance but the number of people who moved at least one stage further this year. That number only exists when the stage lives on the person's record rather than in somebody's memory.",
+              text: "So the best measure of a church's health is how many people moved at least one stage further this year. Attendance will not show it: the number only appears when the stage is marked on the person's record. Four more measures like it, and how to set a goal on them, are in [How to measure church growth](/blog/stavte-tsili).",
             },
           ],
         },
@@ -422,38 +412,38 @@ export const post: BlogPost = {
             {
               kind: "list",
               items: [
-                "Write down your stages, in the words your church actually uses.",
-                "Put one name against each transition. An empty line means that transition does not work.",
+                "Write down your stages in the words your church actually uses.",
+                "Put one name against each transition. Where the line is empty, the transition does not work.",
                 "Check the last ten people who made a decision: how many are in a group now?",
-                "Start recording the stage on the person's record, and the queue will show you where it stalls.",
+                "Mark the stage on each person's record, and you will see where the path stalls.",
               ],
             },
             {
               kind: "text",
-              text: "Do not launch all six at once. Take the transition where you lose the most right now and turn it into a habit. Add the next one in three months.",
+              text: "Do not take on everything at once: start with the transition where you lose the most, turn it into a habit, and add the next one in three months.",
             },
           ],
         },
       ],
       takeaways: [
-        "People are lost between stages, not on them.",
-        "Every transition needs a named owner, not a ministry in general.",
-        "A decision without a dated next step stays an event instead of a beginning.",
-        "A person's stage must be visible on their record, or it is visible to nobody.",
-        "Leader is not the end: the path starts there for the next people.",
+        "People are lost on the transitions between stages.",
+        "Every transition needs one named owner.",
+        "A decision without a dated next meeting stays an event.",
+        "A stage that is not on the record is visible to nobody.",
+        "At stage six, the leader starts the path for the next people.",
       ],
       faq: [
         {
           q: "What if our church has different stages?",
-          a: "It should. The stages describe your practice, not someone else's template. In the system they are configurable: add a course, membership or a trial period in ministry, and remove whatever you do not have.",
+          a: "It should, because the stages describe your church's own practice. In the system you configure them: add a course, membership or a trial period in ministry, and remove whatever you do not have.",
         },
         {
           q: "Who marks the move to the next stage?",
-          a: "Whoever walked with the person: the group leader, the ministry lead, the person responsible for guests. If one administrator marks it for everyone, the data stops matching reality within weeks.",
+          a: "Whoever walked with the person: the group leader, the ministry lead, the person responsible for guests. If one administrator marks it for everyone, the data goes stale within weeks.",
         },
         {
           q: "Does this turn people into positions in a funnel?",
-          a: "It depends on what happens next. If the stage exists for a report, then yes. If a change of stage produces a call, an introduction or an invitation, it is simply a way of not forgetting a person.",
+          a: "Not if a change of stage produces a call, an introduction or an invitation: then it is a way of not forgetting a person. If the stage exists only for a report, then yes.",
         },
       ],
       cta: {

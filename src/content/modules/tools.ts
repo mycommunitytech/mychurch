@@ -4,11 +4,11 @@ import type { ModuleDetail } from "./types";
 export const toolsModules: ModuleDetail[] = [
   {
     id: "forms",
-    group: "outreach",
+    group: "tools",
     related: ["people", "onboarding", "events", "automations"],
     copy: {
       ua: {
-        seoTitle: "Форми — модуль «Моя Церква»",
+        seoTitle: "Форми для церкви замість Google Форм | Моя Церква",
         seoDescription: "Анкети, реєстрації та опитування замість Google Форм: відповіді одразу потрапляють у картку людини, а не в окрему таблицю, яку потім треба зводити вручну.",
         title: "Анкети, які самі потрапляють у базу",
         lead: "Модуль «Форми» замінює Google Форми й паперові анкети. Реєстрація на подію, анкета новенького, опитування після курсу — відповіді одразу стають картками людей, а не рядками в чужій таблиці.",
@@ -133,7 +133,7 @@ export const toolsModules: ModuleDetail[] = [
   },
   {
     id: "applications",
-    group: "outreach",
+    group: "tools",
     related: ["forms", "telegram-bot", "automations", "people"],
     copy: {
       ua: {
@@ -168,7 +168,7 @@ export const toolsModules: ModuleDetail[] = [
           { role: "visitor", text: "Пише в бот «хочу зустрітися з пастором» і за кілька хвилин отримує відповідь, хто і коли з ним зв'яжеться." },
         ],
         faq: [
-          { q: "Чим «Заявки» відрізняються від «Запитів» у HR?", a: "«Запити» — внутрішні: відпустки, заміни, кошти для команди. «Заявки» — звернення людей до церкви: молитва, зустріч, хрещення, допомога. Різні дошки, різні відповідальні." },
+          { q: "Чим «Заявки» відрізняються від «Запитів» адміністрації?", a: "«Запити» — внутрішні: відпустки, заміни, кошти для команди. «Заявки» — звернення людей до церкви: молитва, зустріч, хрещення, допомога. Різні дошки, різні відповідальні." },
           { q: "Чи бачить людина, на якому етапі її заявка?", a: "Так, якщо ви цього хочете. На кожному переході картка може надсилати повідомлення: «Ваша заявка взята в роботу, з вами зв'яжеться Андрій до середи»." },
           { q: "Що з конфіденційними зверненнями?", a: "Тип заявки має список тих, хто її бачить. Молитовні потреби або прохання про допомогу може бачити лише пастор і призначений служитель — решта не бачить навіть заголовка." },
           { q: "Чи можна зробити свої стовпці?", a: "Так. Для кожного типу — свій набір етапів. Наприклад, для хрещення: Нова → Співбесіда → Курс → Дата призначена → Охрещений." },
@@ -245,7 +245,7 @@ export const toolsModules: ModuleDetail[] = [
           { role: "visitor", text: "Writes \"I'd like to meet the pastor\" to the bot and within minutes hears who will get in touch and when." },
         ],
         faq: [
-          { q: "How are Requests different from Staff requests in HR?", a: "Staff requests are internal: time off, cover, funds for the team. Requests are what people ask of the church: prayer, a meeting, baptism, help. Different boards, different owners." },
+          { q: "How are Requests different from Staff requests in administration?", a: "Staff requests are internal: time off, cover, funds for the team. Requests are what people ask of the church: prayer, a meeting, baptism, help. Different boards, different owners." },
           { q: "Can the person see which stage their request is at?", a: "Yes, if you want. On every transition the card can send a message: \"Your request has been picked up, Andrii will contact you by Wednesday\"." },
           { q: "What about confidential requests?", a: "Each request type has a list of who can see it. Prayer needs or requests for help can be visible only to the pastor and the assigned minister — nobody else sees even the title." },
           { q: "Can we make our own columns?", a: "Yes. Each type has its own set of stages. For baptism, for example: New → Interview → Course → Date set → Baptised." },
@@ -294,7 +294,7 @@ export const toolsModules: ModuleDetail[] = [
   },
   {
     id: "links",
-    group: "outreach",
+    group: "tools",
     related: ["forms", "events", "campaigns", "telegram-bot"],
     copy: {
       ua: {
@@ -309,7 +309,7 @@ export const toolsModules: ModuleDetail[] = [
           "Посилання на форму, подію чи бот — за один клік",
         ],
         features: [
-          { icon: "Link2", title: "Короткі посилання", text: "Довга адреса форми чи події перетворюється на коротку й зрозумілу: /альфа, /табір, /неділя. Її можна продиктувати з кафедри." },
+          { icon: "Link2", title: "Короткі посилання", text: "Довга адреса форми чи події перетворюється на коротку й зрозумілу: /основи, /табір, /неділя. Її можна продиктувати з кафедри." },
           { icon: "QrCode", title: "Живі QR-коди", text: "Надрукували банер із QR на рік — а куди він веде, змінюєте в системі: сьогодні на реєстрацію, завтра на розклад." },
           { icon: "BarChart3", title: "Статистика переходів", text: "Скільки перейшли, з якого каналу, у який день і що зробили далі — заповнили форму чи пішли. Видно, які оголошення працюють." },
           { icon: "Share2", title: "Для кожного каналу окремо", text: "Одна подія — різні посилання для Instagram, Telegram, екрана в залі та флаєра. Порівнюйте, звідки приходять люди." },
@@ -344,7 +344,7 @@ export const toolsModules: ModuleDetail[] = [
           ],
           barsTitle: "Переходи за тиждень",
           bars: [
-            { label: "/альфа", value: 92 },
+            { label: "/основи", value: 92 },
             { label: "/табір", value: 74 },
             { label: "/неділя", value: 68 },
             { label: "/молодь", value: 55 },
@@ -376,7 +376,7 @@ export const toolsModules: ModuleDetail[] = [
           "Link to a form, event or bot in one click",
         ],
         features: [
-          { icon: "Link2", title: "Short links", text: "A long form or event address becomes short and readable: /alpha, /camp, /sunday. You can read it out from the pulpit." },
+          { icon: "Link2", title: "Short links", text: "A long form or event address becomes short and readable: /basics, /camp, /sunday. You can read it out from the pulpit." },
           { icon: "QrCode", title: "Live QR codes", text: "Print a banner with a QR code for the year — and change where it leads in the system: sign-up today, the schedule tomorrow." },
           { icon: "BarChart3", title: "Click statistics", text: "How many clicked, from which channel, on which day, and what they did next — filled in the form or left. You see which announcements work." },
           { icon: "Share2", title: "One link per channel", text: "One event — separate links for Instagram, Telegram, the hall screen and the flyer. Compare where people come from." },
@@ -411,7 +411,7 @@ export const toolsModules: ModuleDetail[] = [
           ],
           barsTitle: "Clicks this week",
           bars: [
-            { label: "/alpha", value: 92 },
+            { label: "/basics", value: 92 },
             { label: "/camp", value: 74 },
             { label: "/sunday", value: 68 },
             { label: "/youth", value: 55 },
@@ -439,7 +439,7 @@ export const toolsModules: ModuleDetail[] = [
     related: ["onboarding", "campaigns", "people", "telegram-bot"],
     copy: {
       ua: {
-        seoTitle: "Автоматизації — модуль «Моя Церква»",
+        seoTitle: "Автоматизації для церкви — сценарії «якщо — то» | Моя Церква",
         seoDescription: "Сценарії «якщо — то» для церкви: привітання новенького, нагадування лідеру, зміна статусу, задача відповідальному — система робить це сама, без Zapier і чатів.",
         title: "Сценарії, які не дають загубити людину",
         lead: "Модуль «Автоматизації» — це правила «якщо — то» на даних вашої церкви. Новенький заповнив анкету → привітання в Telegram і задача лідеру. Людина пропустила три неділі → пастор бачить її у списку. Без Zapier і без нагадувань самому собі.",
@@ -453,7 +453,7 @@ export const toolsModules: ModuleDetail[] = [
           { icon: "Workflow", title: "Конструктор сценаріїв", text: "Тригер, умови, дії — складаєте ланцюжок мишкою. «Якщо новенький і без групи через 7 днів — задача лідеру найближчої групи»." },
           { icon: "Bell", title: "Нагадування, які не губляться", text: "Лідеру — про людину, що пропускає. Служителю — за день до служіння. Пастору — про день народження члена церкви." },
           { icon: "MessageCircle", title: "Повідомлення в потрібний канал", text: "Telegram, Viber, SMS чи пошта — сценарій пише туди, де людина справді читає, і від імені церкви, а не робота." },
-          { icon: "Tags", title: "Статуси й теги оновлюються самі", text: "Пройшов Альфа-курс — тег «Альфа». Три місяці в групі та курс завершено — статус «член церкви». Ручної роботи нуль." },
+          { icon: "Tags", title: "Статуси й теги оновлюються самі", text: "Пройшов «Основи віри» — тег «Основи віри». Три місяці в групі та курс завершено — статус «член церкви». Ручної роботи нуль." },
           { icon: "Timer", title: "Затримки й розклад", text: "«Через 2 дні», «в суботу о 10:00», «за тиждень до події» — сценарій чекає стільки, скільки потрібно, і не забуває." },
           { icon: "History", title: "Журнал запусків", text: "Кожен запуск записано: що спрацювало, кому пішло повідомлення, де сценарій зупинився. Помилку видно одразу." },
         ],
@@ -514,7 +514,7 @@ export const toolsModules: ModuleDetail[] = [
           { icon: "Workflow", title: "Scenario builder", text: "Trigger, conditions, actions — build the chain with your mouse. \"If newcomer and no group after 7 days — task for the nearest group's leader\"." },
           { icon: "Bell", title: "Reminders that don't get lost", text: "The leader — about a person who's missing meetings. A volunteer — the day before a service. The pastor — about a member's birthday." },
           { icon: "MessageCircle", title: "The right channel", text: "Telegram, Viber, SMS or email — a scenario writes where the person actually reads, and in the church's name, not a robot's." },
-          { icon: "Tags", title: "Statuses and tags update themselves", text: "Finished the Alpha course — tag \"Alpha\". Three months in a group and a course completed — status \"member\". Zero manual work." },
+          { icon: "Tags", title: "Statuses and tags update themselves", text: "Finished Foundations of Faith — tag \"Foundations of Faith\". Three months in a group and a course completed — status \"member\". Zero manual work." },
           { icon: "Timer", title: "Delays and schedules", text: "\"In 2 days\", \"Saturday at 10:00\", \"a week before the event\" — a scenario waits as long as it needs to and doesn't forget." },
           { icon: "History", title: "Run log", text: "Every run is recorded: what fired, who got a message, where the scenario stopped. Mistakes are visible straight away." },
         ],
@@ -564,11 +564,11 @@ export const toolsModules: ModuleDetail[] = [
   },
   {
     id: "campaigns",
-    group: "outreach",
+    group: "tools",
     related: ["telegram", "viber", "turbosms", "people"],
     copy: {
       ua: {
-        seoTitle: "Розсилки — модуль «Моя Церква»",
+        seoTitle: "Розсилки для церкви — Telegram, Viber, SMS | Моя Церква",
         seoDescription: "Розсилки для церкви в Telegram, Viber, SMS та на пошту за групами й фільтрами: персональні повідомлення, статистика доставки й відповіді — замість п'яти чатів.",
         title: "Повідомлення, яке дійде до кожного",
         lead: "Модуль «Розсилки» надсилає повідомлення тим, кому вони справді адресовані: домашній групі, волонтерам молодіжки, тим, хто не був три тижні. У той канал, де людина читає, — і ви бачите, хто отримав.",
@@ -671,7 +671,7 @@ export const toolsModules: ModuleDetail[] = [
   },
   {
     id: "knowledge",
-    group: "team",
+    group: "tools",
     related: ["learning", "ministries", "notion", "org"],
     copy: {
       ua: {
@@ -778,7 +778,7 @@ export const toolsModules: ModuleDetail[] = [
   },
   {
     id: "tables",
-    group: "team",
+    group: "tools",
     related: ["analytics", "inventory", "accounting", "forms"],
     copy: {
       ua: {
@@ -885,7 +885,7 @@ export const toolsModules: ModuleDetail[] = [
   },
   {
     id: "projects",
-    group: "team",
+    group: "planning",
     related: ["events", "ministries", "tables", "requests"],
     copy: {
       ua: {

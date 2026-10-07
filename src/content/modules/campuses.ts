@@ -4,7 +4,7 @@ import type { ModuleDetail } from "./types";
 export const campusesModules: ModuleDetail[] = [
   {
     id: "campuses",
-    group: "property",
+    group: "structure",
     related: ["analytics", "calendar", "ministries", "rooms"],
     copy: {
       ua: {

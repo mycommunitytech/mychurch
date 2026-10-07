@@ -8,7 +8,7 @@ export const platformModules: ModuleDetail[] = [
     related: ["people", "automations", "org", "tables"],
     copy: {
       ua: {
-        seoTitle: "Кастомізація — модуль «Моя Церква»",
+        seoTitle: "Налаштування системи під свою церкву | Моя Церква",
         seoDescription: "Налаштуйте «Мою Церкву» під свою церкву: свої поля будь-якого типу, статуси й етапи, ролі з точними правами, процеси, термінологія та брендування — без програміста.",
         title: "Система підлаштовується під вашу церкву, а не навпаки",
         lead: "Кожна церква веде людей по-своєму. Кастомізація дає змогу додати свої поля, статуси, ролі та етапи процесів — без програміста і без очікування оновлень.",
@@ -181,7 +181,7 @@ export const platformModules: ModuleDetail[] = [
               title: "Форми",
               cards: [
                 { title: "Анкета новенького", sub: "8 полів · одразу в картку", tag: { label: "Популярний", tone: "brand" } },
-                { title: "Реєстрація на курс", sub: "Альфа, Основи віри" },
+                { title: "Реєстрація на курс", sub: "Основи віри, Школа лідерів" },
                 { title: "Відгук після події", sub: "5 запитань" },
               ],
             },
@@ -259,7 +259,7 @@ export const platformModules: ModuleDetail[] = [
               title: "Forms",
               cards: [
                 { title: "Newcomer form", sub: "8 fields · straight to profile", tag: { label: "Popular", tone: "brand" } },
-                { title: "Course registration", sub: "Alpha, Foundations" },
+                { title: "Course registration", sub: "Foundations, Leaders' school" },
                 { title: "Post-event feedback", sub: "5 questions" },
               ],
             },
@@ -296,11 +296,11 @@ export const platformModules: ModuleDetail[] = [
   },
   {
     id: "telegram-bot",
-    group: "outreach",
+    group: "tools",
     related: ["telegram", "events", "forms", "onboarding"],
     copy: {
       ua: {
-        seoTitle: "Telegram-бот — модуль «Моя Церква»",
+        seoTitle: "Telegram-бот для церкви — розклад і реєстрації | Моя Церква",
         seoDescription: "Telegram-бот церкви з вашою назвою й логотипом: розклад, реєстрації на події, відмітка приходу за QR, відповіді на типові запитання і перший контакт з новеньким.",
         title: "Церква відповідає людям будь-якої години",
         lead: "Власний Telegram-бот з назвою і логотипом вашої церкви. Розклад служінь, реєстрація на події, відмітка приходу на вході й відповіді на типові запитання — людина отримує все у звичному месенджері, а команда — менше повідомлень «а коли?».",

@@ -4,11 +4,11 @@ import type { ModuleDetail } from "./types";
 export const activitiesModules: ModuleDetail[] = [
   {
     id: "ministries",
-    group: "serving",
+    group: "activities",
     related: ["service-planning", "people", "groups", "telegram-bot"],
     copy: {
       ua: {
-        seoTitle: "Служіння — модуль «Моя Церква»",
+        seoTitle: "Облік служінь у церкві — команди й графіки | Моя Церква",
         seoDescription: "Команди, ролі, графіки, підтвердження участі та явка кожного служіння церкви. Служителі бачать свій графік у телефоні, лідер — хто підтвердив.",
         title: "Кожне служіння має команду, ролі й графік",
         lead: "Модуль «Служіння» збирає кожну команду церкви — прославлення, звук, зустріч гостей, дитяче — в одному місці: хто в складі, хто за що відповідає, хто служить цієї неділі й хто вже підтвердив.",
@@ -113,11 +113,11 @@ export const activitiesModules: ModuleDetail[] = [
   },
   {
     id: "service-planning",
-    group: "serving",
+    group: "planning",
     related: ["ministries", "calendar", "templates", "knowledge"],
     copy: {
       ua: {
-        seoTitle: "Планування служіння — модуль «Моя Церква»",
+        seoTitle: "Планування недільного служіння — порядок дня | Моя Церква",
         seoDescription: "Порядок служіння з таймінгом, команда, матеріали до кожного блоку й підтвердження участі. План за шаблоном за 5 хвилин, нагадування служителям — самі.",
         title: "Порядок служіння, команда й таймінг — в одному плані",
         lead: "Модуль «Планування служіння» — це порядок, команда й матеріали кожного служіння в одному місці. Служителі бачать свої блоки, пастор — повну картину, і ніхто не питає «а о котрій я?».",
@@ -260,11 +260,11 @@ export const activitiesModules: ModuleDetail[] = [
   },
   {
     id: "groups",
-    group: "serving",
+    group: "activities",
     related: ["people", "onboarding", "analytics", "telegram-bot"],
     copy: {
       ua: {
-        seoTitle: "Малі групи — модуль «Моя Церква»",
+        seoTitle: "Облік малих груп у церкві — склад і явка | Моя Церква",
         seoDescription: "Склад, лідери, розклад зустрічей і явка малих груп. Лідер відмічає з телефону, пастор бачить, які групи ростуть і хто пропустив три зустрічі поспіль.",
         title: "Кожна група живе далі — навіть коли лідер змінюється",
         lead: "Модуль «Малі групи» — це склад, лідери, розклад зустрічей і явка кожної групи в одному місці. Лідер відмічає з телефону, пастор бачить, які групи ростуть, а які згасають.",
@@ -367,14 +367,14 @@ export const activitiesModules: ModuleDetail[] = [
   },
   {
     id: "learning",
-    group: "serving",
+    group: "activities",
     related: ["onboarding", "knowledge", "people", "ministries"],
     copy: {
       ua: {
         seoTitle: "Навчання — модуль «Моя Церква»",
-        seoDescription: "Курси, потоки, уроки, явка, домашні завдання й сертифікати. Прогрес кожного учасника видно в його картці — від Альфа-курсу до Школи лідерів.",
+        seoDescription: "Курси, потоки, уроки, явка, домашні завдання й сертифікати. Прогрес кожного учасника видно в його картці — від Основ віри до Школи лідерів.",
         title: "Навчання в церкві, де видно прогрес кожного",
-        lead: "Модуль «Навчання» — це Альфа-курс, Основи віри, Школа лідерів і будь-які інші курси церкви: потоки, уроки, явка, домашні завдання й сертифікати. Ви бачите, хто дійшов до кінця, а хто застряг на третьому уроці.",
+        lead: "Модуль «Навчання» — це Основи віри, Школа лідерів і будь-які інші курси церкви: потоки, уроки, явка, домашні завдання й сертифікати. Ви бачите, хто дійшов до кінця, а хто застряг на третьому уроці.",
         highlights: [
           "Курси з уроками, потоками й розкладом",
           "Прогрес кожного учасника",
@@ -382,12 +382,12 @@ export const activitiesModules: ModuleDetail[] = [
           "Сертифікати після завершення",
         ],
         features: [
-          { icon: "GraduationCap", title: "Курси й потоки", text: "Один курс — багато потоків: весняний Альфа-курс, осінній, потік для молоді. У кожного свій розклад, викладач і група учасників." },
+          { icon: "GraduationCap", title: "Курси й потоки", text: "Один курс — багато потоків: весняні «Основи віри», осінні, потік для молоді. У кожного свій розклад, викладач і група учасників." },
           { icon: "BookOpen", title: "Уроки й матеріали", text: "Тема, конспект, відео, домашнє завдання до кожного уроку. Учасник відкриває матеріали в телефоні, викладач — план заняття." },
           { icon: "TrendingUp", title: "Прогрес кожного", text: "8 з 10 уроків, домашнє здано, тест пройдено — прогрес видно в картці людини й у списку потоку. Хто відстає — підсвічено." },
           { icon: "ClipboardCheck", title: "Явка на заняттях", text: "Викладач відмічає присутніх після уроку. Пропустив два заняття поспіль — куратор бачить і пише людині." },
           { icon: "Award", title: "Сертифікати", text: "Завершив курс — сертифікат формується сам за шаблоном церкви й додається в історію людини. Для Школи лідерів це ще й підстава для нової ролі." },
-          { icon: "Route", title: "Навчальні шляхи", text: "Альфа-курс → Основи віри → Школа служіння. Система підказує людині наступний крок і запрошує на найближчий потік." },
+          { icon: "Route", title: "Навчальні шляхи", text: "Основи віри → Школа служіння → Школа лідерів. Система підказує людині наступний крок і запрошує на найближчий потік." },
         ],
         steps: [
           { title: "Створіть курс", text: "Назва, уроки, матеріали, домашні завдання — один раз. Далі кожен потік запускається з готової структури." },
@@ -402,10 +402,10 @@ export const activitiesModules: ModuleDetail[] = [
           { role: "hr", text: "Планує навчання команди: обов'язкові курси для нових служителів, Школа лідерів, хто що пройшов." },
         ],
         faq: [
-          { q: "Чи підходить модуль для Альфа-курсу?", a: "Так, це один з типових сценаріїв: 10–12 зустрічей, потік навесні й восени, реєстрація гостей через форму, явка на кожній зустрічі й запрошення в групу після завершення." },
+          { q: "Чи підходить модуль для «Основ віри»?", a: "Так, це один з типових сценаріїв: 10–12 зустрічей, потік навесні й восени, реєстрація гостей через форму, явка на кожній зустрічі й запрошення в групу після завершення." },
           { q: "Чи можна вести курс онлайн?", a: "Матеріали, відео й домашні завдання доступні учасникам у застосунку та боті. Заняття можна проводити де завгодно — система веде облік, а не транслює відео." },
           { q: "Що бачить учасник курсу?", a: "Свій потік: розклад, пройдені й наступні уроки, матеріали, домашні завдання та прогрес. Дані інших учасників він не бачить." },
-          { q: "Чи пов'язане навчання з картками людей?", a: "Так. Кожен пройдений курс, явка й сертифікат записуються в історію людини. Пастор відкриває картку й бачить: Альфа-курс завершила, Школа лідерів — 6 з 10 уроків." },
+          { q: "Чи пов'язане навчання з картками людей?", a: "Так. Кожен пройдений курс, явка й сертифікат записуються в історію людини. Пастор відкриває картку й бачить: «Основи віри» завершила, Школа лідерів — 6 з 10 уроків." },
         ],
         mock: {
           kind: "stats",
@@ -418,7 +418,7 @@ export const activitiesModules: ModuleDetail[] = [
           ],
           barsTitle: "Прогрес потоків",
           bars: [
-            { label: "Альфа-курс", value: 80 },
+            { label: "Для новеньких", value: 80 },
             { label: "Основи віри", value: 70 },
             { label: "Школа лідерів", value: 60 },
             { label: "Школа служіння", value: 50 },
@@ -429,21 +429,21 @@ export const activitiesModules: ModuleDetail[] = [
         },
         pipeline: {
           title: "Шлях учасника курсу",
-          text: "Приклад весняного Альфа-курсу. Етапи однакові для будь-якого курсу церкви.",
+          text: "Приклад весняного потоку «Основ віри». Етапи однакові для будь-якого курсу церкви.",
           stages: [
             { title: "Запис", tone: "neutral", text: "Людина залишила заявку через форму чи бот, або її додав куратор із бази церкви.", auto: "Підтверджує місце в потоці й надсилає дати, адресу та ім'я викладача." },
             { title: "Навчається", tone: "brand", text: "Учасник ходить на заняття, відкриває матеріали в телефоні й здає домашні.", auto: "Нагадує про заняття напередодні й оновлює прогрес після кожного уроку." },
             { title: "Відстає", tone: "amber", text: "Дві пропущені зустрічі поспіль або нездане домашнє. Куратор бачить це в списку потоку.", auto: "Ставить куратору задачу «зв'язатися» і надсилає учаснику матеріали пропущеного уроку." },
             { title: "Завершив", tone: "green", text: "Усі уроки пройдені, домашні здані — викладач закриває потік.", auto: "Формує сертифікат за шаблоном церкви й додає курс в історію людини." },
-            { title: "Наступний крок", tone: "violet", text: "Після Альфа-курсу — Основи віри, мала група або служіння. Куратор бачить, кого куди запросити.", auto: "Пропонує людині найближчий потік наступного курсу її навчального шляху." },
+            { title: "Наступний крок", tone: "violet", text: "Після «Основ віри» — Школа лідерів, мала група або служіння. Куратор бачить, кого куди запросити.", auto: "Пропонує людині найближчий потік наступного курсу її навчального шляху." },
           ],
         },
       },
       en: {
         seoTitle: "Learning — My Church module",
-        seoDescription: "Courses, cohorts, lessons, attendance, homework and certificates. Every participant's progress shows in their profile, from Alpha to the leaders' school.",
+        seoDescription: "Courses, cohorts, lessons, attendance, homework and certificates. Every participant's progress shows in their profile, from Foundations of Faith to the leaders' school.",
         title: "Church learning where everyone's progress is visible",
-        lead: "The Learning module runs the Alpha course, Foundations of Faith, the leaders' school and any other church course: cohorts, lessons, attendance, homework and certificates. You see who reached the end and who got stuck on lesson three.",
+        lead: "The Learning module runs Foundations of Faith, the leaders' school and any other church course: cohorts, lessons, attendance, homework and certificates. You see who reached the end and who got stuck on lesson three.",
         highlights: [
           "Courses with lessons, cohorts and a schedule",
           "Progress for every participant",
@@ -451,12 +451,12 @@ export const activitiesModules: ModuleDetail[] = [
           "Certificates on completion",
         ],
         features: [
-          { icon: "GraduationCap", title: "Courses and cohorts", text: "One course, many cohorts: a spring Alpha, an autumn one, a youth cohort. Each has its own schedule, teacher and participants." },
+          { icon: "GraduationCap", title: "Courses and cohorts", text: "One course, many cohorts: a spring Foundations of Faith, an autumn one, a youth cohort. Each has its own schedule, teacher and participants." },
           { icon: "BookOpen", title: "Lessons and materials", text: "Topic, notes, video, homework for every lesson. A participant opens the materials on their phone, the teacher opens the lesson plan." },
           { icon: "TrendingUp", title: "Everyone's progress", text: "8 of 10 lessons, homework handed in, test passed — progress shows in the person's profile and in the cohort list. Anyone falling behind is highlighted." },
           { icon: "ClipboardCheck", title: "Class attendance", text: "The teacher ticks who was there after the lesson. Two classes missed in a row — the coordinator sees it and writes to the person." },
           { icon: "Award", title: "Certificates", text: "Finish the course and a certificate is generated from the church's template and added to the person's history. For the leaders' school it is also the basis for a new role." },
-          { icon: "Route", title: "Learning paths", text: "Alpha → Foundations of Faith → School of Ministry. The system suggests the next step and invites the person to the nearest cohort." },
+          { icon: "Route", title: "Learning paths", text: "Foundations of Faith → School of Ministry → Leaders' school. The system suggests the next step and invites the person to the nearest cohort." },
         ],
         steps: [
           { title: "Create the course", text: "Name, lessons, materials, homework — once. Every cohort after that starts from the ready structure." },
@@ -471,10 +471,10 @@ export const activitiesModules: ModuleDetail[] = [
           { role: "hr", text: "Plans the team's training: required courses for new volunteers, the leaders' school, who has completed what." },
         ],
         faq: [
-          { q: "Does the module suit the Alpha course?", a: "Yes, it's one of the typical cases: 10–12 sessions, a spring and an autumn cohort, guest sign-up through a form, attendance at every session and a group invitation on completion." },
+          { q: "Does the module suit Foundations of Faith?", a: "Yes, it's one of the typical cases: 10–12 sessions, a spring and an autumn cohort, guest sign-up through a form, attendance at every session and a group invitation on completion." },
           { q: "Can a course run online?", a: "Materials, video and homework are available to participants in the app and the bot. Classes can happen anywhere — the system keeps the records, it doesn't stream video." },
           { q: "What does a participant see?", a: "Their cohort: the schedule, completed and upcoming lessons, materials, homework and progress. They don't see other participants' data." },
-          { q: "Is learning linked to people's profiles?", a: "Yes. Every completed course, attendance record and certificate is written into the person's history. The pastor opens a profile and sees: Alpha completed, leaders' school 6 of 10 lessons." },
+          { q: "Is learning linked to people's profiles?", a: "Yes. Every completed course, attendance record and certificate is written into the person's history. The pastor opens a profile and sees: Foundations of Faith completed, leaders' school 6 of 10 lessons." },
         ],
         mock: {
           kind: "stats",
@@ -487,7 +487,7 @@ export const activitiesModules: ModuleDetail[] = [
           ],
           barsTitle: "Cohort progress",
           bars: [
-            { label: "Alpha course", value: 80 },
+            { label: "Newcomers", value: 80 },
             { label: "Foundations", value: 70 },
             { label: "Leaders' school", value: 60 },
             { label: "School of Ministry", value: 50 },
@@ -498,13 +498,13 @@ export const activitiesModules: ModuleDetail[] = [
         },
         pipeline: {
           title: "A participant's path through a course",
-          text: "Example of the spring Alpha course. The stages are the same for any course the church runs.",
+          text: "Example of a spring Foundations of Faith cohort. The stages are the same for any course the church runs.",
           stages: [
             { title: "Signed up", tone: "neutral", text: "The person applied through a form or the bot, or the coordinator added them from the church database.", auto: "Confirms their place in the cohort and sends the dates, the venue and the teacher's name." },
             { title: "Studying", tone: "brand", text: "The participant comes to the classes, opens the materials on their phone and hands in homework.", auto: "Reminds about the class the day before and updates progress after every lesson." },
             { title: "Falling behind", tone: "amber", text: "Two sessions missed in a row, or homework not handed in. The coordinator sees it in the cohort list.", auto: "Creates a \"get in touch\" task for the coordinator and sends the missed lesson's materials." },
             { title: "Completed", tone: "green", text: "All lessons done and homework handed in — the teacher closes the cohort.", auto: "Generates the certificate from the church template and adds the course to the person's history." },
-            { title: "Next step", tone: "violet", text: "After Alpha come Foundations of Faith, a small group or ministry. The coordinator sees who to invite where.", auto: "Offers the person the nearest cohort of the next course on their learning path." },
+            { title: "Next step", tone: "violet", text: "After Foundations of Faith come the leaders' school, a small group or ministry. The coordinator sees who to invite where.", auto: "Offers the person the nearest cohort of the next course on their learning path." },
           ],
         },
       },
@@ -516,7 +516,7 @@ export const activitiesModules: ModuleDetail[] = [
     related: ["people", "forms", "automations", "groups"],
     copy: {
       ua: {
-        seoTitle: "Онбординг — модуль «Моя Церква»",
+        seoTitle: "Шлях новенького в церкві — онбординг | Моя Церква",
         seoDescription: "Шлях новенького від анкети на вході до членства: кроки, відповідальна людина, автоматичні привітання й нагадування. Хто застряг на кроці — підсвічено.",
         title: "Жоден новенький не загубиться після першої неділі",
         lead: "Модуль «Онбординг» перетворює першу неділю на шлях: анкета на вході, привітання того ж дня, відповідальна людина, запрошення в групу й на курс. Кожен крок видно, кожен пропущений крок — підсвічено.",
@@ -528,9 +528,9 @@ export const activitiesModules: ModuleDetail[] = [
         ],
         features: [
           { icon: "QrCode", title: "Реєстрація за 30 секунд", text: "QR-код на вході або коротка форма на рецепції — ім'я, телефон, як дізнались про церкву. Картка людини створюється одразу зі статусом «гість»." },
-          { icon: "Kanban", title: "Кроки шляху", text: "Перший візит → дзвінок → знайомство з пастором → група → Альфа-курс → членство. Кроки й порядок налаштовуєте під вашу церкву." },
+          { icon: "Kanban", title: "Кроки шляху", text: "Перший візит → дзвінок → знайомство з пастором → група → Основи віри → членство. Кроки й порядок налаштовуєте під вашу церкву." },
           { icon: "UserCheck", title: "Відповідальна людина", text: "Кожен новенький отримує людину, яка його супроводжує: дзвонить, запрошує, знайомить. Хто за кого відповідає — видно пастору." },
-          { icon: "Zap", title: "Автоматичні дотики", text: "Привітання в Telegram того ж дня, нагадування відповідальному через три дні, запрошення на найближчий Альфа-курс — за сценарієм, без ручної роботи." },
+          { icon: "Zap", title: "Автоматичні дотики", text: "Привітання в Telegram того ж дня, нагадування відповідальному через три дні, запрошення на найближчий потік «Основ віри» — за сценарієм, без ручної роботи." },
           { icon: "Flag", title: "Хто застряг", text: "Новенький два тижні на одному кроці або не прийшов удруге — підсвічений у пастора й у відповідального. Дзвінок робиться вчасно." },
           { icon: "Milestone", title: "Від гостя до члена церкви", text: "Пройшов усі кроки — статус змінюється на «член церкви» сам, а шлях лишається в історії людини." },
         ],
@@ -575,7 +575,7 @@ export const activitiesModules: ModuleDetail[] = [
               title: "У групі",
               cards: [
                 { title: "Тетяна Бондар", sub: "Домашня група · 3 зустрічі", tag: { label: "Членство", tone: "green" } },
-                { title: "Роман Гнатюк", sub: "Група «Центр» · Альфа-курс", tag: { label: "Крок 4 з 5", tone: "brand" } },
+                { title: "Роман Гнатюк", sub: "Група «Центр» · Основи віри", tag: { label: "Крок 4 з 5", tone: "brand" } },
               ],
             },
           ],
@@ -587,7 +587,7 @@ export const activitiesModules: ModuleDetail[] = [
             { title: "Перший візит", tone: "neutral", text: "Гість сканує QR на вході й залишає ім'я, телефон і як дізнався про церкву.", auto: "Створює картку зі статусом «гість» і надсилає привітання в Telegram того ж дня." },
             { title: "Знайомство", tone: "brand", text: "Відповідальний дзвонить протягом трьох днів і знайомить гостя з пастором після служіння.", auto: "Ставить задачу відповідальному й нагадує йому, якщо дзвінка не було." },
             { title: "Без руху", tone: "amber", text: "Два тижні на тому самому кроці або людина не прийшла вдруге.", auto: "Підсвічує картку в пастора й пропонує змінити відповідального." },
-            { title: "У групі", tone: "violet", text: "Новенький ходить у малу групу свого району й записаний на Альфа-курс.", auto: "Передає лідеру групи контакт і нотатки відповідального." },
+            { title: "У групі", tone: "violet", text: "Новенький ходить у малу групу свого району й записаний на «Основи віри».", auto: "Передає лідеру групи контакт і нотатки відповідального." },
             { title: "Член церкви", tone: "green", text: "Пройдені всі кроки: група, курс і розмова з пастором.", auto: "Змінює статус на «член церкви», а весь шлях лишається в історії людини." },
           ],
         },
@@ -605,9 +605,9 @@ export const activitiesModules: ModuleDetail[] = [
         ],
         features: [
           { icon: "QrCode", title: "Sign-up in 30 seconds", text: "A QR code at the door or a short form at reception — name, phone, how they heard about the church. The profile is created at once with the status \"guest\"." },
-          { icon: "Kanban", title: "Steps of the path", text: "First visit → call → meeting the pastor → group → Alpha → membership. You set the steps and their order for your church." },
+          { icon: "Kanban", title: "Steps of the path", text: "First visit → call → meeting the pastor → group → Foundations of Faith → membership. You set the steps and their order for your church." },
           { icon: "UserCheck", title: "A named person", text: "Every newcomer gets someone who walks with them: calls, invites, introduces. Who is responsible for whom is visible to the pastor." },
-          { icon: "Zap", title: "Automatic touches", text: "A Telegram welcome the same day, a nudge to the responsible person after three days, an invitation to the nearest Alpha — by scenario, no manual work." },
+          { icon: "Zap", title: "Automatic touches", text: "A Telegram welcome the same day, a nudge to the responsible person after three days, an invitation to the nearest Foundations of Faith cohort — by scenario, no manual work." },
           { icon: "Flag", title: "Who got stuck", text: "A newcomer two weeks on the same step, or who didn't come a second time — highlighted for the pastor and the responsible person. The call happens in time." },
           { icon: "Milestone", title: "From guest to member", text: "All steps completed — the status changes to \"member\" by itself, and the path stays in the person's history." },
         ],
@@ -652,7 +652,7 @@ export const activitiesModules: ModuleDetail[] = [
               title: "In a group",
               cards: [
                 { title: "Tetiana Bondar", sub: "Obolon group · 3 meetings", tag: { label: "Membership", tone: "green" } },
-                { title: "Roman Hnatiuk", sub: "Centre group · Alpha course", tag: { label: "Step 4 of 5", tone: "brand" } },
+                { title: "Roman Hnatiuk", sub: "Centre group · Foundations of Faith", tag: { label: "Step 4 of 5", tone: "brand" } },
               ],
             },
           ],
@@ -664,7 +664,7 @@ export const activitiesModules: ModuleDetail[] = [
             { title: "First visit", tone: "neutral", text: "The guest scans the QR at the door and leaves a name, a phone number and how they heard about the church.", auto: "Creates a profile with the status \"guest\" and sends a Telegram welcome the same day." },
             { title: "Getting to know", tone: "brand", text: "The responsible person calls within three days and introduces the guest to the pastor after a service.", auto: "Creates the task for the responsible person and nudges them if the call hasn't happened." },
             { title: "No movement", tone: "amber", text: "Two weeks on the same step, or the person didn't come a second time.", auto: "Highlights the card for the pastor and suggests handing it to someone else." },
-            { title: "In a group", tone: "violet", text: "The newcomer attends the small group in their district and is signed up for Alpha.", auto: "Passes the contact and the responsible person's notes to the group leader." },
+            { title: "In a group", tone: "violet", text: "The newcomer attends the small group in their district and is signed up for Foundations of Faith.", auto: "Passes the contact and the responsible person's notes to the group leader." },
             { title: "Member", tone: "green", text: "Every step is done: the group, the course and the conversation with the pastor.", auto: "Changes the status to \"member\", and the whole path stays in the person's history." },
           ],
         },
@@ -673,7 +673,7 @@ export const activitiesModules: ModuleDetail[] = [
   },
   {
     id: "camps",
-    group: "serving",
+    group: "activities",
     related: ["events", "forms", "accounting", "family"],
     copy: {
       ua: {

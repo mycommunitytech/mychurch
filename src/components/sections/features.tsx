@@ -30,7 +30,7 @@ const tint = (accent: string) =>
 export default function Features() {
   const t = useT().features;
   return (
-    <section id="product" className="w-full flex flex-col items-center pt-16 md:pt-24 pb-5 md:pb-6 scroll-mt-24">
+    <section id="product" className="w-full flex flex-col items-center pt-16 md:pt-24 pb-2.5 md:pb-3 scroll-mt-24">
       <div className="w-full max-w-[1120px] px-5 md:px-8 flex flex-col gap-10 md:gap-16">
         {/* Заголовок огляду — вивіска: два слова великими літерами й на всю
             ширину. Рядок у словнику лишається звичайним, великі літери дає

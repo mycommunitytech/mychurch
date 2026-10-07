@@ -1,4 +1,5 @@
 import type { Lang } from "@/lib/i18n";
+import { NAV_LABELS } from "../nav";
 import type { BlogCategoryId, BlogPost } from "./types";
 
 import { post as piatPytan } from "./posts/piat-pytan-pro-systemu";
@@ -98,6 +99,14 @@ export function starterPosts(lang: Lang): { post: BlogPost; why: string }[] {
   return out;
 }
 
+/** Решта статей, найновіші зверху. Без цього списку стаття поза «З чого
+    почати» не мала жодного посилання з /blog — так було з обома статтями
+    про СРМ. */
+export function morePosts(lang: Lang): BlogPost[] {
+  const inStarter = new Set(BLOG_STARTER[lang].map((item) => item.slug));
+  return BLOG_POSTS.filter((post) => !inStarter.has(post.slug));
+}
+
 export interface BlogCategory {
   id: BlogCategoryId;
   title: string;
@@ -132,6 +141,8 @@ export interface BlogChrome {
   stats: { posts: string; topics: string };
   starterTitle: string;
   starterText: string;
+  /** Статті поза «З чого почати» — щоб до кожної вело посилання з /blog. */
+  moreTitle: string;
   readLabel: string;
   minutes: string;
   post: {
@@ -143,8 +154,6 @@ export interface BlogChrome {
     updated: string;
     contents: string;
     problemLabel: string;
-    keywordsTitle: string;
-    keywordsText: string;
     takeaways: string;
     faqTitle: string;
     relatedTitle: string;
@@ -160,7 +169,7 @@ export interface BlogChrome {
 
 export const BLOG_COPY: Record<Lang, BlogChrome> = {
   ua: {
-    navLabel: "Блог",
+    navLabel: NAV_LABELS.blog.ua,
     seoTitle: "Блог про організацію церковних процесів — Моя Церква",
     seoDescription:
       "Практичні статті для пасторів, лідерів і адміністраторів: облік людей, малі групи, відвідуваність, служіння, аналітика, дані та вибір системи для церкви.",
@@ -179,6 +188,7 @@ export const BLOG_COPY: Record<Lang, BlogChrome> = {
     stats: { posts: "статей", topics: "тем" },
     starterTitle: "З чого почати",
     starterText: "У порядку, в якому їх варто читати.",
+    moreTitle: "Ще в блозі",
     readLabel: "Читати",
     minutes: "хв",
     post: {
@@ -190,12 +200,10 @@ export const BLOG_COPY: Record<Lang, BlogChrome> = {
       updated: "Оновлено",
       contents: "У статті",
       problemLabel: "Проблема",
-      keywordsTitle: "Шукають так",
-      keywordsText: "Запити, за якими знаходять цю тему.",
       takeaways: "Коротко",
       faqTitle: "Питання та відповіді",
       relatedTitle: "Читати далі",
-      demoLabel: "Замовити демо",
+      demoLabel: "Запланувати зустріч",
       solutionLabel: "У «Моїй Церкві»",
       midTitle: "Побачити це на своїх даних",
       midText: "Тридцять хвилин на ваших процесах: показуємо живий простір, а не презентацію.",
@@ -203,7 +211,7 @@ export const BLOG_COPY: Record<Lang, BlogChrome> = {
     },
   },
   en: {
-    navLabel: "Blog",
+    navLabel: NAV_LABELS.blog.en,
     seoTitle: "Blog on running church processes — My Church",
     seoDescription:
       "Practical articles for pastors, leaders and administrators: people records, small groups, attendance, ministries, analytics, data and choosing church software.",
@@ -222,6 +230,7 @@ export const BLOG_COPY: Record<Lang, BlogChrome> = {
     stats: { posts: "articles", topics: "topics" },
     starterTitle: "Start here",
     starterText: "In the order worth reading them.",
+    moreTitle: "More from the blog",
     readLabel: "Read",
     minutes: "min",
     post: {
@@ -233,8 +242,6 @@ export const BLOG_COPY: Record<Lang, BlogChrome> = {
       updated: "Updated",
       contents: "In this article",
       problemLabel: "The problem",
-      keywordsTitle: "Searched as",
-      keywordsText: "Queries that lead people to this topic.",
       takeaways: "In short",
       faqTitle: "Questions and answers",
       relatedTitle: "Read next",
@@ -247,7 +254,37 @@ export const BLOG_COPY: Record<Lang, BlogChrome> = {
   },
 };
 
-/** Приблизна кількість слів статті — для розмітки BlogPosting. */
+/** Розмітка посилання `[слова](/адреса)` → самі слова. */
+const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+
+export function stripLinks(text: string): string {
+  return text.replace(LINK, "$1");
+}
+
+/** Текст, розрізаний на шматки: рядок або посилання. Для рендера. */
+export function splitLinks(text: string): (string | { label: string; href: string })[] {
+  const out: (string | { label: string; href: string })[] = [];
+  let last = 0;
+  for (const match of text.matchAll(LINK)) {
+    const at = match.index ?? 0;
+    if (at > last) out.push(text.slice(last, at));
+    out.push({ label: match[1], href: match[2] });
+    last = at + match[0].length;
+  }
+  if (last < text.length) out.push(text.slice(last));
+  return out;
+}
+
+/* Хвилини читання рахуємо, а не вписуємо руками: вписані розходились
+   із текстом удвічі. 170 слів на хвилину — українська з таблицями й
+   картинками, а не суцільна проза. */
+const WORDS_PER_MINUTE = 170;
+
+export function readingMinutes(post: BlogPost, lang: Lang): number {
+  return Math.max(2, Math.ceil(postWordCount(post, lang) / WORDS_PER_MINUTE));
+}
+
+/** Приблизна кількість слів статті — для розмітки BlogPosting і часу читання. */
 export function postWordCount(post: BlogPost, lang: Lang): number {
   const copy = post.copy[lang];
   const parts: string[] = [copy.title, copy.lead, copy.problem.title, copy.problem.text, ...copy.takeaways];
@@ -274,9 +311,12 @@ export function postWordCount(post: BlogPost, lang: Lang): number {
         case "visual":
           parts.push(block.visual.type === "screen" ? block.visual.spec.title : block.visual.title, block.caption ?? "");
           break;
+        case "solution":
+          parts.push(block.title, block.text);
+          break;
       }
     }
   }
   for (const item of copy.faq) parts.push(item.q, item.a);
-  return parts.join(" ").split(/\s+/).filter(Boolean).length;
+  return stripLinks(parts.join(" ")).split(/\s+/).filter(Boolean).length;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown, Send } from "lucide-react";
+import { ArrowRight, ChevronDown, Send } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -11,9 +11,8 @@ import PreferenceToggles from "@/components/shared/preference-toggles";
 import { useLang, useT } from "@/lib/lang";
 import { useDemoModal } from "@/context/demo-modal-context";
 import { LEAD_AMBASSADOR_HREF } from "@/content/ambassadors";
-import { TELEGRAM_COPY } from "@/content/telegram";
 import { SITE_TELEGRAM } from "@/lib/seo";
-import { BLOG_COPY } from "@/content/blog";
+import { NAV_LABELS, PLAN_LIVE } from "@/content/nav";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -21,6 +20,9 @@ export default function Navbar() {
   const [more, setMore] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
+  /* Панель лежить уже не в кнопці, а в самій шапці — на всю її ширину, тож
+     і клік повз меню, і наведення мусять знати про два вузли, не про один. */
+  const morePanelRef = useRef<HTMLDivElement>(null);
   const moreTimer = useRef<number | null>(null);
   const { open: openModal } = useDemoModal();
   const t = useT();
@@ -31,7 +33,11 @@ export default function Navbar() {
      розділ про можливості. Решта живе у згортці «Більше», щоб рядок меню
      не перетворювався на список: «Блог» і «Питання» — розділи, куди йдуть
      свідомо і з пошуку, а не проходячи меню зверху вниз, тож вони не мусять
-     займати місце в головному ряду.
+     займати місце в головному ряду. «Модулі» поверталися у верхній ряд
+     («не видно модулів»), але ввечері 2026-09-22 власник переніс їх назад
+     у згортку — верхній ряд лишається на три пункти: головна, для кого,
+     амбасадор. У самій згортці каталог стоїть першим. «ШІ-помічник» того ж дня
+     поїхав у згортку — його читають після того, як зрозуміли продукт.
      «Вартості» в меню поки немає: сторінка жива за /pricing, але сум там
      ще не названо, тож ми не ведемо на неї з навігації.
      «Головна» веде на «/», а не на якір огляду: з іншої сторінки якір
@@ -42,7 +48,6 @@ export default function Navbar() {
   const NAV_LINKS = [
     { label: t.nav.product, href: "/", match: "/" },
     { label: t.nav.audience, href: "/for-whom", match: "/for-whom" },
-    { label: t.nav.ai, href: "/ai", match: "/ai" },
     { label: t.nav.ambassadors, href: LEAD_AMBASSADOR_HREF, match: LEAD_AMBASSADOR_HREF },
   ];
 
@@ -50,20 +55,38 @@ export default function Navbar() {
      усе, по що приходять уже після нього — почитати, спитати, написати. «Про
      нас» замикає ряд свідомо: компанію читають, коли продукт уже зрозумілий,
      тож у меню вона стоїть останньою, як і в підвалі. */
-  const MORE_GROUPS: { label: string; href: string; match: string }[][] = [
-    [
-      { label: t.nav.modules, href: "/modules", match: "/modules" },
-      { label: TELEGRAM_COPY[lang].navLabel, href: "/telegram", match: "/telegram" },
-    ],
-    [
-      { label: BLOG_COPY[lang].navLabel, href: "/blog", match: "/blog" },
-      { label: t.nav.faq, href: "/faq", match: "/faq" },
-      { label: t.nav.support, href: "/support", match: "/support" },
-      { label: t.nav.about, href: "/about", match: "/about" },
-    ],
+  type MoreLink = { label: string; href: string; match: string; hint: string };
+  const hint = t.nav.moreHints;
+  const MORE_GROUPS: { title: string; items: MoreLink[] }[] = [
+    {
+      title: t.nav.moreGroups.product,
+      items: [
+        { label: t.nav.modules, href: "/modules", match: "/modules", hint: hint.modules },
+        { label: t.nav.ai, href: "/ai", match: "/ai", hint: hint.ai },
+        { label: NAV_LABELS.telegram[lang], href: "/telegram", match: "/telegram", hint: hint.telegram },
+      ],
+    },
+    {
+      title: t.nav.moreGroups.read,
+      items: [
+        { label: NAV_LABELS.blog[lang], href: "/blog", match: "/blog", hint: hint.blog },
+        ...(PLAN_LIVE
+          ? [{ label: NAV_LABELS.plan[lang], href: "/plan", match: "/plan", hint: hint.plan }]
+          : []),
+      ],
+    },
+    {
+      title: t.nav.moreGroups.help,
+      items: [
+        { label: t.nav.faq, href: "/faq", match: "/faq", hint: hint.faq },
+        { label: t.nav.support, href: "/support", match: "/support", hint: hint.support },
+        { label: t.nav.about, href: "/about", match: "/about", hint: hint.about },
+        { label: NAV_LABELS.cooperation[lang], href: "/cooperation", match: "/cooperation", hint: hint.cooperation },
+      ],
+    },
   ];
 
-  const moreActive = MORE_GROUPS.some((group) => group.some((link) => pathname === link.match));
+  const moreActive = MORE_GROUPS.some((group) => group.items.some((link) => pathname === link.match));
 
   /* «Контакти» — це якір на головну, а не розділ: на широкому екрані він
      живе іконкою поруч з перемикачами, щоб рядок меню лишався читабельним.
@@ -121,7 +144,9 @@ export default function Navbar() {
   useEffect(() => {
     if (!more) return;
     const onDown = (e: MouseEvent) => {
-      if (!moreRef.current?.contains(e.target as Node)) setMore(false);
+      const target = e.target as Node;
+      if (moreRef.current?.contains(target) || morePanelRef.current?.contains(target)) return;
+      setMore(false);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMore(false);
@@ -201,7 +226,7 @@ export default function Navbar() {
     <>
       <header
         className={cn(
-          "w-full h-16 md:h-20 flex items-center justify-between px-5 md:px-8 lg:px-12 py-4 md:py-5 sticky top-0 z-50 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
+          "w-full h-16 md:h-20 flex items-center justify-between px-5 md:px-8 lg:px-12 py-4 md:py-5 glass-fixed sticky top-0 z-50 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300",
           scrolled
             ? "bg-surface/85 border-hairline shadow-[0_6px_24px_-18px_rgba(0,0,0,0.5)]"
             : "bg-surface/70 border-transparent"
@@ -216,14 +241,14 @@ export default function Navbar() {
         </div>
 
         {/* Desktop navigation */}
-        <nav aria-label={t.nav.primary} className="hidden min-[1260px]:flex items-center justify-center gap-0.5 min-[1320px]:gap-1 shrink-0">
+        <nav aria-label={t.nav.primary} className="hidden min-[1100px]:flex items-center justify-center gap-0.5 min-[1260px]:gap-1 shrink-0">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={navClick(link.href)}
               className={cn(
-                "px-2 min-[1320px]:px-2.5 py-2 rounded-full text-[14px] min-[1320px]:text-[15px] leading-[1.2] tracking-[-0.16px] transition-colors duration-200 whitespace-nowrap",
+                "px-2 min-[1260px]:px-2.5 py-2 rounded-full text-[14px] min-[1260px]:text-[15px] leading-[1.2] tracking-[-0.16px] transition-colors duration-200 whitespace-nowrap",
                 link.match && pathname === link.match
                   ? "bg-surface-3 text-ink"
                   : "text-ink-2 hover:bg-surface-3 hover:text-ink"
@@ -261,7 +286,7 @@ export default function Navbar() {
               aria-expanded={more}
               aria-haspopup="menu"
               className={cn(
-                "flex items-center gap-1 px-2 min-[1320px]:px-2.5 py-2 rounded-full text-[14px] min-[1320px]:text-[15px] leading-[1.2] tracking-[-0.16px] transition-colors duration-200 whitespace-nowrap",
+                "flex items-center gap-1 px-2 min-[1260px]:px-2.5 py-2 rounded-full text-[14px] min-[1260px]:text-[15px] leading-[1.2] tracking-[-0.16px] transition-colors duration-200 whitespace-nowrap",
                 more || moreActive
                   ? "bg-surface-3 text-ink"
                   : "text-ink-2 hover:bg-surface-3 hover:text-ink"
@@ -273,57 +298,11 @@ export default function Navbar() {
                 strokeWidth={2}
               />
             </button>
-
-            {/* Відступ між кнопкою і карткою — це padding самої обгортки, а не
-               порожнеча: інакше курсор на шляху вниз виходив би з меню. */}
-            <div
-              className={cn(
-                "absolute right-0 top-full pt-2",
-                more ? "pointer-events-auto" : "pointer-events-none"
-              )}
-            >
-            <div
-              role="menu"
-              className={cn(
-                "min-w-[220px] p-1.5 rounded-2xl border border-hairline bg-surface shadow-[0_18px_40px_-24px_rgba(0,0,0,0.55)] origin-top-right transition-all duration-200",
-                more
-                  ? "opacity-100 scale-100 translate-y-0"
-                  : "opacity-0 scale-95 -translate-y-1"
-              )}
-            >
-              {MORE_GROUPS.map((group, i) => (
-                /* Волосяна лінія замість підписів: груп усього дві, і назва
-                   над кожною важила б більше за самі пункти. */
-                <div key={i} className={i > 0 ? "mt-1.5 pt-1.5 border-t border-hairline" : undefined}>
-                  {group.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      role="menuitem"
-                      tabIndex={more ? 0 : -1}
-                      onClick={() => {
-                        cancelMoreClose();
-                        setMore(false);
-                      }}
-                      className={cn(
-                        "block px-3 py-2 rounded-xl text-[14.5px] leading-[1.2] tracking-[-0.16px] transition-colors",
-                        pathname === link.match
-                          ? "bg-surface-3 text-ink font-medium"
-                          : "text-ink-2 hover:bg-surface-3 hover:text-ink"
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              ))}
-            </div>
-            </div>
           </div>
         </nav>
 
         {/* Desktop: preferences + CTA */}
-        <div className="hidden min-[1260px]:flex flex-1 items-center gap-2 min-[1320px]:gap-3 justify-end">
+        <div className="hidden min-[1100px]:flex flex-1 items-center gap-2 min-[1260px]:gap-3 justify-end">
           {/* За комп'ютером набирати номер нічим — там швидша дія написати.
              Кружечок той самий, що в перемикача теми і в контактів футера:
              36 px, тонкий обідок, bg-surface-2. Був на 4 px більший і з
@@ -345,7 +324,7 @@ export default function Navbar() {
             onClick={openModal}
             data-track="cta"
             data-place="меню"
-            className="btn-primary btn-brand group relative flex items-center justify-center h-10 px-4 min-[1320px]:px-5 rounded-full overflow-hidden shrink-0"
+            className="btn-primary btn-brand group relative flex items-center justify-center h-10 px-4 min-[1260px]:px-5 rounded-full overflow-hidden shrink-0"
           >
             <span className="relative text-white font-semibold text-[15px] tracking-[-0.32px] leading-[1.4] whitespace-nowrap">
               {t.common.bookDemo}
@@ -353,8 +332,88 @@ export default function Navbar() {
           </button>
         </div>
 
+        {/* Повноширока панель «Більше»: лежить під шапкою від краю до краю,
+           тож у кожного пункту є місце на рядок про те, що там усередині.
+           Вузька картка в кутку давала лише стовпчик назв (2026-09-22).
+           Вона дитина шапки, а не кнопки: інакше ширину обмежував би сам
+           пункт меню. Наведення слухає окремо — курсор на шляху з кнопки
+           вниз виходить з обгортки кнопки, і без цього меню гасло б. */}
+        <div
+          ref={morePanelRef}
+          onPointerEnter={(e) => {
+            if (e.pointerType !== "mouse") return;
+            cancelMoreClose();
+            /* Курсор уже в панелі — тримаємо її відкритою навіть тоді, коли
+               він забарився в проміжку між кнопкою і нею. Закрита панель
+               подій не отримує (pointer-events-none), тож само собою вона
+               від цього не відкриється. */
+            setMore(true);
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType !== "mouse") return;
+            scheduleMoreClose();
+          }}
+          className={cn(
+            "absolute left-0 right-0 top-full hidden min-[1100px]:block",
+            more ? "pointer-events-auto" : "pointer-events-none"
+          )}
+        >
+          <div
+            role="menu"
+            aria-hidden={!more}
+            className={cn(
+              "w-full border-b border-hairline bg-surface shadow-[0_26px_50px_-34px_rgba(0,0,0,0.6)] transition-all duration-200",
+              more ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+            )}
+          >
+            {/* Відступи ті самі, що в шапки, і без обмеження ширини: перша
+               колонка стоїть рівно під логотипом, остання — під кнопкою.
+               «-ml-3» з'їдає власний padding рядка, інакше назви стояли б
+               на 12 px правіше за логотип. */}
+            <div className="w-full px-5 md:px-8 lg:px-12 py-8 grid grid-cols-3 gap-x-10">
+              {MORE_GROUPS.map((group) => (
+                <div key={group.title} className="flex flex-col -ml-3">
+                  <span className="px-3 pb-2 text-[12px] font-semibold uppercase tracking-[0.12em] text-ink-3 leading-none">
+                    {group.title}
+                  </span>
+                  {group.items.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      role="menuitem"
+                      tabIndex={more ? 0 : -1}
+                      onClick={() => {
+                        cancelMoreClose();
+                        setMore(false);
+                      }}
+                      className={cn(
+                        "group/item flex flex-col gap-1 w-full max-w-[380px] px-3 py-2.5 rounded-xl transition-colors",
+                        pathname === link.match ? "bg-surface-3" : "hover:bg-surface-3"
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "flex items-center gap-1.5 text-[15.5px] leading-[1.2] tracking-[-0.16px] transition-colors",
+                          pathname === link.match ? "text-ink font-medium" : "text-ink-2 group-hover/item:text-ink"
+                        )}
+                      >
+                        {link.label}
+                        <ArrowRight
+                          className="w-[15px] h-[15px] opacity-0 -translate-x-1 transition-all duration-200 group-hover/item:opacity-100 group-hover/item:translate-x-0"
+                          strokeWidth={2.2}
+                        />
+                      </span>
+                      <span className="text-[13px] text-ink-3 leading-[1.35]">{link.hint}</span>
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Mobile: toggles + hamburger */}
-        <div className="flex min-[1260px]:hidden items-center justify-end gap-2">
+        <div className="flex min-[1100px]:hidden items-center justify-end gap-2">
           {/* Той самий швидкий контакт, що й на широкому екрані: написати в
              Telegram. Дзвінок тут стояв до 2026-09-21 — церкви пишуть, а не
              набирають; номер лишився в розмітці сайту й у запасному екрані
@@ -405,7 +464,7 @@ export default function Navbar() {
              під ним лежить окремим шаром. Chrome такий фон змилює, Safari —
              ні, і синя кнопка «Замовити демо» просвічувала поверх логотипа на
              кожному екрані. Рамка її просто відрізає. */
-          "fixed inset-0 top-16 md:top-20 z-40 overflow-hidden min-[1260px]:hidden transition-all duration-300",
+          "fixed inset-0 top-16 md:top-20 z-40 overflow-hidden min-[1100px]:hidden transition-all duration-300",
           open ? "pointer-events-auto" : "pointer-events-none"
         )}
       >
@@ -428,15 +487,17 @@ export default function Navbar() {
 
             {/* У шухляді «Більше» не ховає нічого за другим тапом — воно просто
                підписує, де закінчується головний шлях і починається решта. */}
-            <span className="px-4 pt-4 pb-1 text-[12.5px] font-semibold uppercase tracking-[0.12em] text-ink-3">
-              {t.nav.more}
-            </span>
             {MORE_GROUPS.map((group, i) => (
               <div
-                key={i}
-                className={cn("flex flex-col gap-1", i > 0 && "mt-2 pt-2 border-t border-hairline")}
+                key={group.title}
+                /* Лінія стоїть і перед першою групою: вона відрізає головний
+                   шлях згори від решти розділів. */
+                className={cn("flex flex-col gap-1 mt-2 pt-2 border-t border-hairline", i === 0 && "mt-3")}
               >
-                {group.map((link) => drawerLink(link))}
+                <span className="px-4 pt-3 pb-1 text-[12.5px] font-semibold uppercase tracking-[0.12em] text-ink-3">
+                  {group.title}
+                </span>
+                {group.items.map((link) => drawerLink(link))}
               </div>
             ))}
 

@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState, useCallback, useId } from "react";
 import Link from "next/link";
+import { CalendarDays } from "lucide-react";
 import { useDemoModal } from "@/context/demo-modal-context";
+import { useCalendly } from "@/context/calendly-context";
+import { HAS_CALENDLY } from "@/lib/calendly";
+import { useBodyScrollLock } from "@/components/shared/use-body-scroll-lock";
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/lang";
 import { Field } from "@/components/shared/form-field";
@@ -17,7 +21,10 @@ import LeadFallback from "@/components/shared/lead-fallback";
 export default function DemoModal() {
   const dict = useT();
   const t = dict.modal;
-  const { isOpen, goals, close } = useDemoModal();
+  const { isOpen, goals, context, close } = useDemoModal();
+  /* Після заявки людина може сама обрати час зустрічі — вікно календаря
+     відкривається замість цього, вже з її ім'ям. */
+  const { open: openCalendly } = useCalendly();
   /* Що відвідувач позначив у фінальному блоці — показуємо, щоб він бачив,
      з чим саме надсилає заявку. */
   const goalLabels = dict.builder.goals as Record<string, { label: string }>;
@@ -43,7 +50,6 @@ export default function DemoModal() {
 
   const windowRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
-  const scrollbarWidthRef = useRef(0);
   const titleId = useId();
 
   /* Фокус переходить у діалог і повертається на кнопку, що його відкрила. */
@@ -93,22 +99,10 @@ export default function DemoModal() {
     return () => document.removeEventListener("keydown", onKey);
   }, [isOpen, close]);
 
-  // Body scroll lock with scrollbar compensation to prevent layout shift
-  useEffect(() => {
-    if (isOpen) {
-      scrollbarWidthRef.current = window.innerWidth - document.documentElement.clientWidth;
-      // overflowY only: the shorthand would drop the body's own overflow-x: clip
-      document.body.style.overflowY = "hidden";
-      document.body.style.paddingRight = `${scrollbarWidthRef.current}px`;
-    } else {
-      document.body.style.overflowY = "";
-      document.body.style.paddingRight = "";
-    }
-    return () => {
-      document.body.style.overflowY = "";
-      document.body.style.paddingRight = "";
-    };
-  }, [isOpen]);
+  /* Сторінка під вікном не гортається. Замок спільний із вікном календаря,
+     яке відкривається з цього ж вікна після заявки, — тому лічильник, а
+     не свій прапорець (use-body-scroll-lock.ts). */
+  useBodyScrollLock(isOpen);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -134,6 +128,7 @@ export default function DemoModal() {
           phone,
           company,
           goals,
+          about: context?.note,
           source: "demo",
         });
         track(ok ? "lead" : "lead_failed", { source: "demo", goals: goals.join(",") });
@@ -143,7 +138,7 @@ export default function DemoModal() {
         sendingRef.current = false;
       }
     },
-    [name, church, phone, company, goals, state, t.errors]
+    [name, church, phone, company, goals, context, state, t.errors]
   );
 
   const handleBackdropClick = useCallback(
@@ -214,17 +209,42 @@ export default function DemoModal() {
                 {t.successTitle}
               </h2>
               <p className="text-base text-ink-2 leading-[1.5]">
-                {t.successText}
+                {HAS_CALENDLY ? t.successTextCalendly : t.successText}
               </p>
             </div>
-            <button
-              onClick={close}
-              className="mt-2 btn-primary btn-brand group relative flex items-center justify-center h-12 px-9 rounded-full overflow-hidden"
-            >
-              <span className="relative text-white font-semibold text-base tracking-[-0.32px] leading-[1.4]">
-                {t.close}
-              </span>
-            </button>
+            {HAS_CALENDLY ? (
+              /* Є календар: головна дія — обрати час самому, «Закрити» стає
+                 тихим рядком під нею. Ім'я з заявки їде в календар. */
+              <div className="mt-2 flex flex-col items-center gap-3">
+                <button
+                  onClick={() => {
+                    close();
+                    openCalendly({ source: "demo", name });
+                  }}
+                  className="btn-primary btn-brand group relative flex items-center justify-center gap-2 h-12 px-9 rounded-full overflow-hidden"
+                >
+                  <CalendarDays className="relative w-[17px] h-[17px] text-white" strokeWidth={2} />
+                  <span className="relative text-white font-semibold text-base tracking-[-0.32px] leading-[1.4]">
+                    {t.pickTime}
+                  </span>
+                </button>
+                <button
+                  onClick={close}
+                  className="px-3 py-1.5 rounded-full text-[14px] font-medium text-ink-2 hover:text-ink hover:bg-surface-3 transition-colors"
+                >
+                  {t.close}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={close}
+                className="mt-2 btn-primary btn-brand group relative flex items-center justify-center h-12 px-9 rounded-full overflow-hidden"
+              >
+                <span className="relative text-white font-semibold text-base tracking-[-0.32px] leading-[1.4]">
+                  {t.close}
+                </span>
+              </button>
+            )}
           </div>
         ) : (
           <>
@@ -268,7 +288,7 @@ export default function DemoModal() {
                 />
                 <Field
                   kind="church"
-                  placeholder={t.churchPlaceholder}
+                  placeholder={context?.orgPlaceholder ?? t.churchPlaceholder}
                   value={church}
                   error={null}
                   onChange={(v) => {
@@ -281,16 +301,20 @@ export default function DemoModal() {
                   placeholder={t.phonePlaceholder}
                   value={phone}
                   error={phoneError}
+                  required
+                  requiredLabel={t.required}
                   onChange={(v) => {
                     setPhone(v);
                     markStart("телефон");
                     if (phoneError) setPhoneError(validatePhone(v, t.errors));
                   }}
                 />
-                {/* Honeypot: поза потоком і поза табом, людина його не бачить. */}
+                {/* Honeypot: поза потоком і поза табом, людина його не бачить.
+                    Ім'я поля нейтральне: «company» браузер автозаповнював
+                    назвою організації, і справжня заявка тихо йшла як бот. */}
                 <input
                   type="text"
-                  name="company"
+                  name="hp_extra"
                   tabIndex={-1}
                   autoComplete="off"
                   aria-hidden

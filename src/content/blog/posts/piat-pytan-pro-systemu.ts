@@ -4,7 +4,7 @@ export const post: BlogPost = {
   slug: "piat-pytan-pro-systemu",
   category: "process",
   date: "2026-09-19",
-  minutes: 6,
+  updated: "2026-09-30",
   related: ["vasha-tserkva-unikalna", "dani-v-riznykh-mistsiakh", "yak-obraty-systemu-dlia-tserkvy"],
   copy: {
     ua: {
@@ -12,45 +12,40 @@ export const post: BlogPost = {
       seoDescription:
         "Простий тест для церкви: п'ять звичайних питань тижня. Якщо відповідь на кожне доводиться шукати в людях і таблицях — системи немає, а є пам'ять кількох людей.",
       title: "П'ять питань, які показують, чи є у вас система",
-      lead: "Не про програми й не про бюджет. Спробуйте відповісти на п'ять звичайних питань тижня — і подивіться, звідки ви берете відповіді.",
+      lead: "Щоб перевірити, чи є в церкві система, не потрібні ні програма, ні бюджет. Спробуйте відповісти на п'ять звичайних питань тижня і подивіться, звідки беруться відповіді.",
       keywords: [
         "система управління церквою",
         "облік у церкві",
         "як перевірити облік церкви",
         "де зберігати дані церкви",
         "облік відвідуваності в церкві",
-        "передача служіння в церкві",
       ],
       problem: {
         title: "«Зараз у Наталі спитаю»",
-        text: "Це нормальна відповідь у церкві на п'ятдесят людей. У церкві на триста вона означає, що вся картина тримається на кількох людях — і зникає разом з їхньою відпусткою, втомою або переїздом.",
+        text: "Це нормальна відповідь у церкві на п'ятдесят людей. У церкві на триста вона означає, що вся картина тримається на кількох людях і зникає разом з їхньою відпусткою, втомою чи переїздом.",
       },
       sections: [
         {
-          heading: "Як влаштований цей тест",
+          heading: "Правила тесту: хвилина на питання, без дзвінків",
           blocks: [
             {
-              kind: "text",
-              text: "Правила прості: відповідь має бути точною — з іменами й датами, а не «здається, хтось не ходить». Шукати треба самому, не питаючи людину, яка «в темі». І вкластися треба в хвилину на питання.",
-            },
-            {
               kind: "list",
-              title: "Що рахується відповіддю",
+              title: "Відповідь рахується, якщо вона:",
               items: [
-                "Точна: імена, дати, цифри — не враження.",
-                "Своя: ви знайшли її самі, не через дзвінок лідеру.",
-                "Швидка: до хвилини, а не «подивлюсь увечері».",
+                "Точна: з іменами й датами. «Здається, хтось перестав ходити» не рахується.",
+                "Своя: ви знайшли її самі, без дзвінка лідеру.",
+                "Швидка: хвилина на питання, без «подивлюсь увечері».",
                 "Стала: за тиждень її можна знайти там само.",
               ],
             },
           ],
         },
         {
-          heading: "П'ять питань",
+          heading: "П'ять питань і де зазвичай шукають відповідь",
           blocks: [
             {
               kind: "text",
-              text: "Все тримається на людях, а не на процесах — і видно це не з графіків, а з того, звідки ви берете відповідь на кожне з цих питань.",
+              text: "Біля кожного питання позначте, звідки взяли відповідь. Якщо з пам'яті, таблиці чи телефону конкретної людини, облік тримається на ній.",
             },
             {
               kind: "table",
@@ -67,12 +62,12 @@ export const post: BlogPost = {
                   "Цифру знає одна людина, і вона застаріла",
                 ],
                 [
-                  "Хто служить цієї неділі — і чи всі підтвердили?",
+                  "Хто служить цієї неділі і чи всі підтвердили?",
                   "У чаті та дзвінках",
                   "Хто випав, з'ясовується вранці в неділю",
                 ],
                 [
-                  "Що люди просили минулого тижня — і хто це закрив?",
+                  "Що люди просили минулого тижня і хто це закрив?",
                   "В особистих повідомленнях",
                   "Половина прохань не має відповідального",
                 ],
@@ -85,17 +80,17 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "Жодне з цих питань не складне. Складно те, що відповідь на кожне лежить в іншому місці — і жодне з цих місць не належить церкві.",
+              text: "Жодне з питань не складне. Складно те, що відповіді лежать у п'яти різних місцях, і жодне з них не належить церкві.",
             },
           ],
         },
         {
-          heading: "Що показує результат",
+          heading: "Нуль, два чи п'ять: що означає ваш рахунок",
           blocks: [
             {
               kind: "visual",
               caption:
-                "Так виглядає найчастіший результат: облік живе у двох служіннях із п'яти. Це не погана церква — це церква, у якій домовились не про все. Порахуйте свої: важлива не оцінка, а те, які саме питання лишились сірими.",
+                "Типовий приклад: відповідь є на два питання з п'яти, про молодіжку і про неділю. Порахуйте свої: сірі питання показують, де облік досі тримається на одній людині.",
               visual: {
                 type: "score",
                 title: "На скільки питань відповідь уже є в системі",
@@ -112,14 +107,10 @@ export const post: BlogPost = {
             {
               kind: "list",
               items: [
-                "Чотири-п'ять відповідей за хвилину — у вас справді є система, і питання лише в тому, щоб нею користувалися всі.",
-                "Дві-три — система є в окремих служіннях, але вони не бачать одне одного.",
-                "Нуль-одна — процесів немає, є кілька відповідальних людей, які тримають усе на собі.",
+                "Чотири-п'ять: система є, тепер нею мають користуватися всі.",
+                "Дві-три: система є в окремих служіннях, але вони не бачать одне одного.",
+                "Нуль-одна: усе тримають на собі кілька людей. Так виглядає церква, яка виросла швидше, ніж домовилась, де що записувати.",
               ],
-            },
-            {
-              kind: "text",
-              text: "Останній варіант — не про недбалість. Так виглядає церква, яка виросла швидше, ніж встигла домовитись, де що записувати.",
             },
           ],
         },
@@ -128,17 +119,17 @@ export const post: BlogPost = {
           blocks: [
             {
               kind: "text",
-              text: "Пам'ять лідера — найшвидше сховище, поки лідер поруч. Але воно не витримує трьох речей: відпустки, зростання й передачі. Щойно людей стає більше, ніж один лідер здатен тримати в голові, церква починає втрачати не дані, а людей.",
+              text: "Пам'ять лідера — найшвидше сховище, поки лідер поруч. Але воно не витримує трьох речей: відпустки, зростання й передачі.",
             },
             {
               kind: "quote",
-              text: "Поки система в чиїйсь голові — вона зникає разом з людиною.",
+              text: "Коли людей більше, ніж лідер може тримати в голові, церква втрачає не дані, а людей.",
             },
             {
               kind: "solution",
-              title: "Групи — не в голові, а в списку",
+              title: "Малі групи одним списком",
               text:
-                "Той самий перелік, який зазвичай тримає лідер: коли була зустріч, скільки людей прийшло і де явка падає другий місяць.",
+                "Те, що лідер зазвичай тримає в голові: коли була зустріч, скільки людей прийшло і де явка падає другий місяць.",
               spec: {
                 kind: "table",
                 title: "Малі групи",
@@ -155,8 +146,8 @@ export const post: BlogPost = {
             },
             {
               kind: "callout",
-              title: "Це не про контроль",
-              text: "Облік потрібен не для того, щоб перевіряти лідерів. Він потрібен, щоб лідер не мусив пам'ятати двадцять чотири людини одночасно — і міг спокійно піти у відпустку.",
+              title: "Навіщо облік самому лідерові",
+              text: "Щоб не тримати в голові двадцять чотири людини одночасно і спокійно піти у відпустку.",
             },
           ],
         },
@@ -168,11 +159,11 @@ export const post: BlogPost = {
               items: [
                 {
                   title: "Люди",
-                  text: "Один реєстр людей і сімей. До нього чіпляється все інше — без нього решта модулів не має за що триматися.",
+                  text: "Один реєстр людей і сімей. До нього чіпляється все інше.",
                 },
                 {
                   title: "Відвідуваність",
-                  text: "Відмітки з груп і служінь, прив'язані до людини. Саме звідси береться відповідь на перше питання.",
+                  text: "Відмітки з груп і служінь, прив'язані до людини. Звідси береться відповідь на перше питання: хто не був три тижні.",
                 },
                 {
                   title: "Служіння й розклад",
@@ -180,17 +171,17 @@ export const post: BlogPost = {
                 },
                 {
                   title: "Заявки",
-                  text: "Усі звернення в один список зі статусом і відповідальним — замість особистих повідомлень.",
+                  text: "Усі звернення в одному списку зі статусом і відповідальним замість особистих повідомлень.",
                 },
                 {
                   title: "Ролі й доступи",
-                  text: "Коли лідер міняється, міняється роль, а не власник бази.",
+                  text: "Коли лідер міняється, новий отримує його роль, а база лишається в церкві.",
                 },
               ],
             },
             {
               kind: "text",
-              text: "Порядок важливіший за швидкість. Церква, яка вмикає все одразу, зазвичай за місяць повертається до таблиць — бо ніхто не встиг звикнути.",
+              text: "Порядок важливіший за швидкість. Церква, яка вмикає все одразу, зазвичай за місяць повертається до таблиць: ніхто не встиг звикнути. Як переносити кожне джерело без двох копій, ми розклали по кроках у статті [«Дані церкви в п'яти місцях»](/blog/dani-v-riznykh-mistsiakh).",
             },
           ],
         },
@@ -200,25 +191,25 @@ export const post: BlogPost = {
             {
               kind: "list",
               items: [
-                "Пройдіть ті самі п'ять питань — тим самим способом, самі й з годинником.",
-                "Подивіться, чи не з'явилась нова тіньова таблиця: якщо з'явилась, у системі чогось бракує.",
+                "Пройдіть ті самі п'ять питань так само: самі й з годинником.",
+                "Порахуйте, скільки прохань за квартал лишились без відповідального. Ціль — нуль, і вона досяжна.",
                 "Спитайте лідерів, що вони досі роблять вручну щотижня.",
-                "Перевірте найпростіше: чи зможе новий лідер групи почати роботу без дзвінка попередньому.",
+                "Перевірте, чи зможе новий лідер групи почати роботу без дзвінка попередньому.",
               ],
             },
           ],
         },
       ],
       takeaways: [
-        "Система — це не програма, а здатність церкви відповісти на свої звичайні питання без дзвінка «людині, яка в темі».",
-        "Питання прості, складна лише розкиданість: кожна відповідь лежить в іншому місці.",
-        "Починати варто з реєстру людей: без нього відвідуваність, служіння й заявки нема до чого чіпляти.",
-        "Мета обліку — не контроль лідерів, а те, щоб вони могли не тримати все в голові.",
+        "Система — це коли на звичайні питання тижня відповідають без дзвінка «людині в темі».",
+        "Відповідь рахується, лише якщо вона точна, знайдена самостійно й за хвилину.",
+        "Починайте з реєстру людей: відвідуваність, служіння й заявки чіпляються до нього.",
+        "Через квартал пройдіть тест так само: сірих питань має стати менше.",
       ],
       faq: [
         {
           q: "У нас невелика церква. Нам справді потрібна система?",
-          a: "Поки людей до п'ятдесяти, пам'яті лідерів вистачає. Система стає потрібною тоді, коли з'являється другий лідер, який має знати те саме, — або коли перший іде у відпустку.",
+          a: "Поки людей до п'ятдесяти, зазвичай вистачає пам'яті лідерів. Система потрібна, коли з'являється другий лідер, який має знати те саме, або коли перший іде у відпустку.",
         },
         {
           q: "З чого почати, якщо жодної відповіді немає?",
@@ -226,12 +217,12 @@ export const post: BlogPost = {
         },
         {
           q: "Чи не буде це виглядати як недовіра до лідерів?",
-          a: "Навпаки: облік знімає з лідера обов'язок пам'ятати все самому. Найчастіше саме лідери першими просять не вести список у зошиті.",
+          a: "Зазвичай ні: лідери самі першими просять прибрати зошит зі списком групи, бо вести його доводиться їм.",
         },
       ],
       cta: {
         title: "Зберіть систему під свою церкву",
-        text: "Оберіть, що хочете спростити першим, — і подивіться, які модулі це закривають.",
+        text: "Оберіть, що хочете спростити першим, і подивіться, які модулі це закривають.",
         label: "Конструктор модулів",
         href: "/modules",
       },
@@ -241,45 +232,40 @@ export const post: BlogPost = {
       seoDescription:
         "A simple test for a church: five ordinary questions of the week. If every answer has to be hunted down in people and spreadsheets, there is no system — only a few people's memory.",
       title: "Five questions that show whether you have a system",
-      lead: "Not about software and not about budget. Try answering five ordinary questions of the week — and watch where your answers come from.",
+      lead: "You need neither software nor a budget to check whether your church has a system. Try answering five ordinary questions of the week and watch where the answers come from.",
       keywords: [
         "church management system",
         "church record keeping",
         "how to check church records",
         "where to keep church data",
         "church attendance tracking",
-        "ministry handover",
       ],
       problem: {
         title: "“Let me ask Natalia”",
-        text: "That is a fine answer in a church of fifty. In a church of three hundred it means the whole picture rests on a few people — and leaves with their holiday, their tiredness or their move to another city.",
+        text: "That is a fine answer in a church of fifty. In a church of three hundred it means the whole picture rests on a few people and leaves with their holiday, their tiredness or their move to another city.",
       },
       sections: [
         {
-          heading: "How the test works",
+          heading: "The rules: a minute per question, no phone calls",
           blocks: [
             {
-              kind: "text",
-              text: "The rules are simple: the answer has to be precise — names and dates, not “I think someone stopped coming”. You have to find it yourself, without calling the person who knows. And you have a minute per question.",
-            },
-            {
               kind: "list",
-              title: "What counts as an answer",
+              title: "An answer counts if it is:",
               items: [
-                "Precise: names, dates, numbers — not impressions.",
-                "Yours: you found it, not a leader on the phone.",
-                "Fast: under a minute, not “I'll check tonight”.",
+                "Precise: names and dates. “I think someone stopped coming” does not count.",
+                "Yours: you found it yourself, without calling a leader.",
+                "Fast: a minute per question, no “I'll check tonight”.",
                 "Stable: next week it is still in the same place.",
               ],
             },
           ],
         },
         {
-          heading: "The five questions",
+          heading: "Five questions and where the answers usually live",
           blocks: [
             {
               kind: "text",
-              text: "Everything rests on people, not on processes — and you see it not in charts but in where each of these answers comes from.",
+              text: "Next to each question, note where you got the answer. If it came from one person's memory, spreadsheet or phone, your records rest on that person.",
             },
             {
               kind: "table",
@@ -296,12 +282,12 @@ export const post: BlogPost = {
                   "One person knows the number, and it is out of date",
                 ],
                 [
-                  "Who is serving this Sunday — and has everyone confirmed?",
+                  "Who is serving this Sunday, and has everyone confirmed?",
                   "In chats and phone calls",
                   "Who dropped out becomes clear on Sunday morning",
                 ],
                 [
-                  "What did people ask for last week — and who closed it?",
+                  "What did people ask for last week, and who closed it?",
                   "In private messages",
                   "Half of the requests have no owner",
                 ],
@@ -314,24 +300,24 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "None of these questions is hard. What is hard is that every answer sits somewhere else — and none of those places belongs to the church.",
+              text: "None of these questions is hard. What is hard is that the answers sit in five different places, and none of them belongs to the church.",
             },
           ],
         },
         {
-          heading: "What the result tells you",
+          heading: "Zero, two or five: what your score means",
           blocks: [
             {
               kind: "visual",
               caption:
-                "This is the most common result: records live in two ministries out of five. That is not a bad church — it is a church that has agreed on some things and not others. Count yours: the score matters less than which questions stayed grey.",
+                "A typical example: two questions out of five have an answer, youth and Sunday. Count yours: the grey questions show where your records still rest on one person.",
               visual: {
                 type: "score",
                 title: "How many questions the system already answers",
                 totalLabel: "out of five",
                 items: [
                   { label: "Who has been missing three weeks", ok: false },
-                  { label: "How many came to youth night", ok: true },
+                  { label: "How many are in the youth group", ok: true },
                   { label: "Who serves this Sunday", ok: true },
                   { label: "Who closed each request", ok: false },
                   { label: "What stays when a leader leaves", ok: false },
@@ -341,14 +327,10 @@ export const post: BlogPost = {
             {
               kind: "list",
               items: [
-                "Four or five answers in a minute — you do have a system, and the only question is whether everyone uses it.",
-                "Two or three — single ministries have a system, but they cannot see each other.",
-                "None or one — there are no processes, only a few people carrying everything.",
+                "Four or five: you have a system; now everyone needs to use it.",
+                "Two or three: single ministries have a system, but they cannot see each other.",
+                "None or one: a few people carry everything. This is what a church looks like when it grew faster than it agreed on where things get written down.",
               ],
-            },
-            {
-              kind: "text",
-              text: "The last case is not carelessness. It is what a church looks like when it grew faster than it managed to agree on where things are written down.",
             },
           ],
         },
@@ -357,17 +339,17 @@ export const post: BlogPost = {
           blocks: [
             {
               kind: "text",
-              text: "A leader's memory is the fastest storage there is, as long as the leader is around. It fails at three things: holidays, growth and handover. Once there are more people than one leader can hold in mind, a church starts losing not data but people.",
+              text: "A leader's memory is the fastest storage there is, as long as the leader is around. It fails at three things: holidays, growth and handover.",
             },
             {
               kind: "quote",
-              text: "While the system lives in someone's head, it leaves when they do.",
+              text: "Once there are more people than a leader can hold in mind, a church loses not data but people.",
             },
             {
               kind: "solution",
-              title: "Groups in a list, not in a head",
+              title: "Small groups in one list",
               text:
-                "The same overview a leader usually carries: when the group last met, how many came, and where attendance has been sliding for a second month.",
+                "What a leader usually keeps in their head: when the group last met, how many came, and where attendance has been sliding for a second month.",
               spec: {
                 kind: "table",
                 title: "Small groups",
@@ -384,8 +366,8 @@ export const post: BlogPost = {
             },
             {
               kind: "callout",
-              title: "This is not about control",
-              text: "Records are not there to check up on leaders. They are there so a leader does not have to remember twenty-four people at once — and can take a holiday in peace.",
+              title: "Why the leader needs it",
+              text: "So they don't have to hold twenty-four people in their head at once, and can take a holiday in peace.",
             },
           ],
         },
@@ -397,11 +379,11 @@ export const post: BlogPost = {
               items: [
                 {
                   title: "People",
-                  text: "One register of people and families. Everything else attaches to it; without it the other modules have nothing to hold on to.",
+                  text: "One register of people and families. Everything else attaches to it.",
                 },
                 {
                   title: "Attendance",
-                  text: "Check-ins from groups and ministries, tied to the person. This is where the answer to the first question comes from.",
+                  text: "Check-ins from groups and ministries, tied to the person. This answers the first question: who hasn't been for three weeks.",
                 },
                 {
                   title: "Ministries and the rota",
@@ -409,17 +391,17 @@ export const post: BlogPost = {
                 },
                 {
                   title: "Requests",
-                  text: "Every request in one list with a status and an owner — instead of private messages.",
+                  text: "Every request in one list with a status and an owner, instead of private messages.",
                 },
                 {
                   title: "Roles and access",
-                  text: "When a leader changes, what changes is a role, not the owner of the database.",
+                  text: "When a leader changes, the new one gets the role, and the database stays with the church.",
                 },
               ],
             },
             {
               kind: "text",
-              text: "Order matters more than speed. A church that switches everything on at once is usually back in spreadsheets within a month, because nobody had time to get used to it.",
+              text: "Order matters more than speed. A church that switches everything on at once is usually back in spreadsheets within a month: nobody had time to get used to it. How to move each source without ending up with two copies is laid out step by step in [Church data in five places](/blog/dani-v-riznykh-mistsiakh).",
             },
           ],
         },
@@ -429,25 +411,25 @@ export const post: BlogPost = {
             {
               kind: "list",
               items: [
-                "Run the same five questions the same way — on your own, with a clock.",
-                "Look for a new shadow spreadsheet: if one appeared, something is missing in the system.",
+                "Run the same five questions the same way: on your own, with a clock.",
+                "Count how many requests this quarter were left without an owner. The target is zero, and it is reachable.",
                 "Ask leaders what they still do by hand every week.",
-                "Check the simplest thing: could a new group leader start without calling the previous one?",
+                "Check whether a new group leader could start without calling the previous one.",
               ],
             },
           ],
         },
       ],
       takeaways: [
-        "A system is not software — it is a church's ability to answer its ordinary questions without calling “the person who knows”.",
-        "The questions are simple; what is hard is that every answer lives somewhere else.",
-        "Start with the register of people: attendance, ministries and requests have nothing to attach to without it.",
-        "The point of record keeping is not to check leaders, but to free them from holding everything in mind.",
+        "A system means the ordinary questions of the week get answered without calling “the person who knows”.",
+        "An answer counts only if it is precise, found by you, and found within a minute.",
+        "Start with the register of people: attendance, ministries and requests attach to it.",
+        "In a quarter, run the test the same way: fewer questions should stay grey.",
       ],
       faq: [
         {
           q: "Our church is small. Do we really need a system?",
-          a: "Up to about fifty people, the leaders' memory is enough. A system becomes necessary when a second leader has to know the same things — or when the first one goes on holiday.",
+          a: "Up to about fifty people, the leaders' memory is usually enough. A system becomes necessary when a second leader has to know the same things, or when the first one goes on holiday.",
         },
         {
           q: "Where do we start if we have none of the answers?",
@@ -455,12 +437,12 @@ export const post: BlogPost = {
         },
         {
           q: "Won't this look like distrust of our leaders?",
-          a: "It is the opposite: records take away the duty to remember everything alone. More often than not, leaders are the first to ask to stop keeping the list in a notebook.",
+          a: "Usually not: leaders tend to be the first to ask to get rid of the notebook with the group list, because they are the ones keeping it.",
         },
       ],
       cta: {
         title: "Build the system around your church",
-        text: "Pick what you want to simplify first — and see which modules cover it.",
+        text: "Pick what you want to simplify first and see which modules cover it.",
         label: "Module builder",
         href: "/modules",
       },

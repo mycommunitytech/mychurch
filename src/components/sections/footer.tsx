@@ -2,19 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Mail, Phone, Send } from "lucide-react";
+import { CalendarDays, Mail, Phone, Send } from "lucide-react";
 import LogoLink from "@/components/shared/logo-link";
 import PreferenceToggles from "@/components/shared/preference-toggles";
 import { useLang, useT } from "@/lib/lang";
+import { useCalendly } from "@/context/calendly-context";
 import { LEAD_AMBASSADOR_HREF } from "@/content/ambassadors";
 import { homeClick } from "@/lib/scroll";
 import { cn } from "@/lib/utils";
-import { SITE_TELEGRAM, SITE_TELEGRAM_HANDLE } from "@/lib/seo";
-import { TELEGRAM_COPY } from "@/content/telegram";
-import { BLOG_COPY } from "@/content/blog";
+import { SITE_CALENDLY, SITE_PHONE, SITE_PHONE_LABEL, SITE_TELEGRAM, SITE_TELEGRAM_HANDLE } from "@/lib/seo";
+import { NAV_LABELS, PLAN_LIVE } from "@/content/nav";
 
 const EMAIL = "team@mychurch.com.ua";
-const PHONE = { label: "+380 96 529 73 75", href: "tel:+380965297375" };
+const PHONE = { label: SITE_PHONE_LABEL, href: `tel:${SITE_PHONE}` };
 const TELEGRAM = { label: `@${SITE_TELEGRAM_HANDLE}`, href: SITE_TELEGRAM };
 
 /* Column captions: small caps so the links themselves stay the loudest thing
@@ -47,6 +47,7 @@ function Contact({
   children,
   external,
   className,
+  onClick,
 }: {
   href: string;
   icon: typeof Mail;
@@ -54,10 +55,13 @@ function Contact({
   children: React.ReactNode;
   external?: boolean;
   className?: string;
+  /** Перехопити клік (наприклад, відкрити вікно замість переходу). */
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }) {
   return (
     <a
       href={href}
+      onClick={onClick}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={cn(
         "group -mx-2 flex items-center gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-surface-3",
@@ -83,12 +87,13 @@ export default function Footer() {
   const t = useT();
   const { lang } = useLang();
   const pathname = usePathname();
+  const { open: openCalendly } = useCalendly();
 
   const PRODUCT = [
     { label: t.nav.product, href: "/" },
     { label: t.nav.modules, href: "/modules" },
     { label: t.nav.ai, href: "/ai" },
-    { label: TELEGRAM_COPY[lang].navLabel, href: "/telegram" },
+    { label: NAV_LABELS.telegram[lang], href: "/telegram" },
     { label: t.nav.import, href: "/import" },
   ];
 
@@ -96,7 +101,9 @@ export default function Footer() {
     { label: t.nav.about, href: "/about" },
     { label: t.nav.ambassadors, href: LEAD_AMBASSADOR_HREF },
     { label: t.nav.consulting, href: "/consulting" },
-    { label: BLOG_COPY[lang].navLabel, href: "/blog" },
+    { label: NAV_LABELS.cooperation[lang], href: "/cooperation" },
+    { label: NAV_LABELS.blog[lang], href: "/blog" },
+    ...(PLAN_LIVE ? [{ label: NAV_LABELS.plan[lang], href: "/plan" }] : []),
   ];
 
   const HELP = [
@@ -135,6 +142,24 @@ export default function Footer() {
                 >
                   {TELEGRAM.label}
                 </Contact>
+                {/* Четвертий спосіб зв'язку — обрати час зустрічі в календарі.
+                    Рядок є лише з адресою в NEXT_PUBLIC_CALENDLY_URL. Клік
+                    відкриває календар у нашому вікні, середня кнопка миші —
+                    сам Calendly у новій вкладці. */}
+                {SITE_CALENDLY && (
+                  <Contact
+                    href={SITE_CALENDLY}
+                    icon={CalendarDays}
+                    action={t.footer.schedule}
+                    external
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openCalendly({ source: "footer" });
+                    }}
+                  >
+                    {t.footer.scheduleSub}
+                  </Contact>
+                )}
               </div>
             </div>
 

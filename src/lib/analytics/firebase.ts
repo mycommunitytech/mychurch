@@ -41,8 +41,23 @@ async function init(): Promise<Analytics | null> {
   return analyticsModule.getAnalytics(app);
 }
 
+/* Перша подія летить ще під час завантаження, а SDK разом із gtag — це
+   ~180 КБ скриптів. На телефоні вони відбирали мережу й процесор у самої
+   сторінки, тож стартуємо тільки після `load`, коли браузер вільний.
+   Події тим часом просто чекають у промісі. */
+function whenIdle() {
+  return new Promise<void>((resolve) => {
+    const idle = () =>
+      "requestIdleCallback" in window
+        ? window.requestIdleCallback(() => resolve(), { timeout: 3000 })
+        : setTimeout(resolve, 1500);
+    if (document.readyState === "complete") idle();
+    else window.addEventListener("load", idle, { once: true });
+  });
+}
+
 function ready() {
-  if (!pending) pending = init().catch(() => null);
+  if (!pending) pending = whenIdle().then(init).catch(() => null);
   return pending;
 }
 

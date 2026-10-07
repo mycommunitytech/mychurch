@@ -1,0 +1,50 @@
+# Моя Церква (My Church)
+
+> «Моя Церква» — українська система обліку й організації церкви (CRM для церкви, система управління церквою): люди й сім'ї, малі групи, служіння й графіки, події, відвідуваність, дитяче служіння, облік пожертв і аналітика в одному місці, з Telegram-ботом для лідерів. Сайт — https://mychurch.com.ua. Не плутати з мобільним застосунком «Моя Церква» Православної церкви України: це інший продукт.
+
+Коротко про систему:
+
+- Для кого: церкви в Україні, де лідери груп спілкуються в Telegram, а списки людей живуть у таблицях.
+- Мова: інтерфейс, підтримка й навчання — українською.
+- Telegram-бот: лідер відмічає явку з телефона, нагадування й повідомлення йдуть у Telegram; SMS і Viber — за бажанням церкви.
+- Впровадження: налаштування до 7 днів разом із нашою командою, перенесення бази з Excel і Google Таблиць, навчання пасторів, лідерів і адміністрації.
+- Вартість: зараз діє програма безкоштовного підключення (підключення, перенесення бази й навчання безкоштовні); далі чотири щаблі — Старт, База, Ріст, Преміум; суму в гривнях називаємо до початку робіт.
+- Дані: сервери в Європейському Союзі, шифрування AES-256, передача через TLS, доступ за ролями, щоденні резервні копії.
+- Чого поки немає: окремого застосунку для iOS та Android (у розробці) — система працює в браузері телефона й через Telegram-бот.
+- Будується понад рік разом із церквою «Нове Життя» (Черкаси).
+
+## Головне
+
+- [Головна](https://mychurch.com.ua/): що таке «Моя Церква» і для кого
+- [Модулі](https://mychurch.com.ua/modules/): усі модулі системи, від обліку людей до бухгалтерії
+- [Вартість](https://mychurch.com.ua/pricing/): щаблі й програма безкоштовного підключення
+- [Telegram-бот](https://mychurch.com.ua/telegram/): що лідери й служителі роблять у Telegram
+- [Перенесення даних](https://mychurch.com.ua/import/): як переносимо списки з Excel і Google Таблиць
+- [Для кого](https://mychurch.com.ua/for-whom/): пастор, лідер групи, диякон, служитель, бухгалтер, рецепція
+- [Питання та відповіді](https://mychurch.com.ua/faq/): відповіді на часті питання про систему
+
+## Порівняння й вибір системи
+
+- [Як обрати систему для церкви](https://mychurch.com.ua/blog/yak-obraty-systemu-dlia-tserkvy/): питання, які варто поставити будь-якій системі
+
+## Модулі
+
+- [Люди](https://mychurch.com.ua/modules/people/): картка людини, статуси, історія участі
+- [Малі групи](https://mychurch.com.ua/modules/groups/): склад, явка, звіт лідера
+- [Служіння](https://mychurch.com.ua/modules/ministries/): команди, графіки, підтвердження участі
+- [Планування служіння](https://mychurch.com.ua/modules/service-planning/): порядок недільного служіння
+- [Події](https://mychurch.com.ua/modules/events/): реєстрація й відмітка приходу
+- [Дитяче містечко](https://mychurch.com.ua/modules/kids-town/): облік дітей і безпека на служінні
+- [Бухгалтерія](https://mychurch.com.ua/modules/accounting/): пожертви, витрати, звіти
+- [Аналітика](https://mychurch.com.ua/modules/analytics/): відвідуваність і ріст церкви
+- [Автоматизації](https://mychurch.com.ua/modules/automations/): нагадування й сценарії без ручної роботи
+
+## Optional
+
+- [Блог](https://mychurch.com.ua/blog/): статті про облік, малі групи, служіння й вибір системи
+- [Про нас](https://mychurch.com.ua/about/): місія «Моєї Церкви»
+- [Підтримка](https://mychurch.com.ua/support/): канали зв'язку й години роботи
+
+## In English
+
+My Church (Ukrainian: «Моя Церква») is Ukrainian church management software (ChMS / church CRM) at https://mychurch.com.ua: people and families, small groups, ministries and rotas, events, attendance, children's ministry, giving records and analytics, with a Telegram bot for group leaders. The interface, support and onboarding are in Ukrainian; data is hosted in the EU. It is not the Orthodox Church of Ukraine's mobile app of the same name.

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import FadeIn from "@/components/shared/fade-in";
 import TgPhone from "@/components/shared/tg-phone";
 import { TgMark } from "@/components/shared/tg-screen";
@@ -39,39 +38,18 @@ export default function TelegramHero() {
             <span className="text-[13px] font-medium text-ink-2 leading-none">{t.eyebrow}</span>
           </span>
 
-          <h1 className="font-semibold text-ink leading-[1.06] tracking-[-1.2px] md:tracking-[-2px] text-[38px] sm:text-[46px] md:text-[54px] max-w-[620px]">
+          <h1 className="font-semibold text-ink leading-[1.02] tracking-[-1.4px] md:tracking-[-2.8px] text-[42px] sm:text-[56px] md:text-[72px] max-w-[620px]">
             {t.title}
           </h1>
 
           <p className="text-[17px] md:text-[19px] text-ink-2 leading-[1.55] max-w-[560px]">{t.lead}</p>
 
-          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto pt-1">
-            <button
-              onClick={open}
-              className="btn-primary btn-brand flex items-center justify-center h-[52px] w-full sm:w-auto px-8 rounded-full"
-            >
-              <span className="text-white font-semibold text-[16px] tracking-[-0.32px] leading-[1.4] whitespace-nowrap">{t.cta}</span>
-            </button>
-            <Link
-              href="/modules"
-              className="btn-secondary relative flex items-center justify-center h-[52px] w-full sm:w-auto px-7 rounded-full overflow-hidden border border-hairline-strong"
-            >
-              <span className="btn-secondary-bg absolute inset-0 bg-surface rounded-full transition-colors duration-150" />
-              <span className="relative text-ink-2 font-medium text-[16px] tracking-[-0.32px] leading-[1.4] whitespace-nowrap">
-                {t.ctaSecondary}
-              </span>
-            </Link>
-          </div>
-
-          {/* Факти — рядком, без карток: це підпис під заголовком, а не блок. */}
-          <dl className="flex flex-wrap items-start gap-x-10 gap-y-5 pt-5 border-t border-hairline w-full max-w-[600px]">
-            {t.facts.map((f) => (
-              <div key={f.label} className="flex flex-col gap-1">
-                <dt className="text-[22px] md:text-[24px] font-semibold text-ink leading-none tracking-[-0.6px]">{f.value}</dt>
-                <dd className="text-[13px] text-ink-3 leading-[1.35] max-w-[150px]">{f.label}</dd>
-              </div>
-            ))}
-          </dl>
+          <button
+            onClick={open}
+            className="btn-primary btn-brand flex items-center justify-center h-[52px] w-full sm:w-auto px-8 rounded-full mt-2"
+          >
+            <span className="text-white font-semibold text-[16px] tracking-[-0.32px] leading-[1.4] whitespace-nowrap">{t.cta}</span>
+          </button>
         </FadeIn>
 
         <FadeIn variant="scale" delay={2} className="min-w-0 flex flex-col items-center">

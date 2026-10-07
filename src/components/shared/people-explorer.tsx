@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Heart, UsersRound, HeartHandshake, GraduationCap, NotebookPen, History, Cake, Church, Phone, User, Check, Sparkles, Plus, X } from "lucide-react";
+import { Heart, UsersRound, HeartHandshake, GraduationCap, NotebookPen, History, Cake, Church, Phone, User, Check, Sparkles, Plus, X, MousePointerClick } from "lucide-react";
 import PersonAvatar, { AVATAR_LOOKS } from "@/components/shared/person-avatar";
 import ClickHere from "@/components/shared/click-here";
 import { useT } from "@/lib/lang";
@@ -88,9 +88,19 @@ export default function PeopleExplorer() {
 
   return (
     <div className="w-full max-w-[560px] mx-auto flex flex-col gap-3">
-      {/* Підказка «натисніть на профіль» прибрана 2026-09-21: у блоці
-          огляду лишаються тільки екран і сама дія — курсор-привид уже
-          показує, куди тиснути. */}
+      {/* Підказка словами — курсор-привид показує, куди тиснути, але не
+          каже, що з того буде. Рядок лишається в потоці й коли профіль
+          відкрито: якби він зникав, ряд карток стрибав би вгору просто
+          під час кліку. Плашкою, а не сірим рядком: 13px на 60% по
+          кольоровій половині картки майже не читались (2026-09-30). */}
+      <p
+        aria-hidden={selected !== null}
+        className="self-center inline-flex items-center gap-2 rounded-full bg-surface border border-hairline-strong px-3.5 py-1.5 text-[14px] font-medium text-ink leading-[1.3] shadow-[0_6px_18px_-10px_rgba(0,50,120,0.35)] transition-opacity duration-300"
+        style={{ opacity: selected === null ? 1 : 0 }}
+      >
+        <MousePointerClick className="w-4 h-4 shrink-0 text-brand" strokeWidth={2.2} />
+        {t.hint}
+      </p>
 
       {/* Avatar strip */}
       <div ref={stripRef} className="relative grid grid-cols-3 gap-2 md:gap-3">

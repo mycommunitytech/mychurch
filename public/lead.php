@@ -1,5 +1,6 @@
 <?php
-/* Приймач заявок із форми демо і брифу на /modules.
+/* Приймач заявок: форма демо, бриф на /modules, слухавка «перетелефонуємо»
+   і форма матеріалу на /plan.
 
    Сайт збирається в статику (output: export у next.config.ts) — ані свого
    сервера, ані роуту /api/lead у нього немає, а токен бота в браузер класти
@@ -31,7 +32,10 @@
        'crm_key'        => '',  // X-API-KEY з налаштувань CRM
        'crm_business'   => '',  // businessId
        'crm_funnel'     => '',  // funnelId — воронка, куди падають ліди
-       'crm_source'     => '',  // id джерела ліда (CRM → Джерела), напр. «Сайт»
+       // id джерела ліда (CRM → Джерела). У картці видно сам напис, тож
+       // називайте джерело адресою сайту — «Сайт mychurch.com.ua»: менеджер
+       // одразу бачить, звідки заявка, а не здогадується з «Сайт».
+       'crm_source'     => '',
        'crm_url'        => '',  // порожньо = https://api.my-community.pp.ua/api/api-lead/create
 
        // Пошта: з ключем Resend лист іде через їхній API, без нього — mail().
@@ -190,6 +194,31 @@ const GOAL_LABELS = [
     'routine' => 'Щоб нагадування йшли самі',
     'numbers' => 'Бачити церкву в цифрах',
     'campuses' => 'Вести кілька локацій разом',
+    'families' => 'Бачити сім\'ї, а не список імен',
+    'birthdays' => 'Не пропускати дні народження',
+    'membership' => 'Вести членство і хрещення',
+    'planning' => 'Порядок служіння за шаблоном',
+    'camps' => 'Табори з реєстрацією і списками',
+    'calendar' => 'Один календар на всю церкву',
+    'projects' => 'Задачі команди не губляться',
+    'knowledge' => 'Матеріали й проповіді в одному місці',
+    'inventory' => 'Майно й техніка на обліку',
+    'assistant' => 'Питати систему звичайними словами',
+    'custom' => 'Свої поля під нашу церкву',
+    'goals' => 'Ставити цілі й бачити рух',
+];
+
+/* Роль того, хто лишив заявку: ті самі ідентифікатори, що в каталозі
+   «Для кого». Форма брифу, яка це поле надсилала, прибрана з сайту
+   2026-09-22 — розбір лишаємо на випадок, коли роль знову почне
+   приїжджати (і заради заявок зі сторінок, що висять у кеші). */
+const ROLE_LABELS = [
+    'pastor' => 'Пастор',
+    'leader' => 'Лідер',
+    'deacon' => 'Диякон',
+    'volunteer' => 'Служитель',
+    'accountant' => 'Бухгалтер',
+    'reception' => 'Адміністратор',
 ];
 
 function goal_labels($value): array
@@ -199,8 +228,21 @@ function goal_labels($value): array
     }
     $out = [];
     foreach (array_slice($value, 0, 16) as $id) {
-        if (is_string($id) && array_key_exists($id, GOAL_LABELS)) {
+        if (!is_string($id)) {
+            continue;
+        }
+        if (array_key_exists($id, GOAL_LABELS)) {
             $out[] = GOAL_LABELS[$id];
+            continue;
+        }
+        /* Бажання, вписане своїми словами: воно приходить із префіксом
+           own: і є єдиним місцем у цьому списку, де текст чужий, — тож
+           обрізаємо його, як звичайне поле. */
+        if (strpos($id, 'own:') === 0) {
+            $own = line_value(substr($id, 4), 80);
+            if ($own !== '') {
+                $out[] = $own;
+            }
         }
     }
     return $out;
@@ -219,7 +261,9 @@ function goal_labels($value): array
       Це головне проти дублів: подвійний клік, повтор після обриву мережі
       чи перезаслана форма більше не перетворюються на N повідомлень. */
 const WINDOW = 600;
-const LIMIT_IP = 5;
+/* 15, а не 5 (2026-10-07): на конференції з QR-кодом на банері десятки
+   людей пишуть з одного Wi-Fi чи однієї адреси мобільного оператора. */
+const LIMIT_IP = 15;
 const LIMIT_ALL = 40;
 const DEDUPE_TTL = 900;
 
@@ -308,6 +352,31 @@ function gate(string $ip, string $dedupeKey): string
     }
     fclose($fh);
     return $verdict;
+}
+
+/* Журнал заявок, які не дійшли до CRM: заслінка, пастка, збій каналу.
+   Лежить поруч зі станом заслінок, щоб менеджер міг знайти людину й
+   передзвонити. Розмір обмежений — флуд не має з'їсти диск хостингу. */
+function journal(string $file, string $line): void
+{
+    $path = state_dir() . '/' . $file;
+    if (is_file($path) && (int) filesize($path) > 2000000) {
+        return;
+    }
+    @file_put_contents($path, gmdate('c') . ' ' . str_replace("\n", ' | ', $line) . "\n", FILE_APPEND | LOCK_EX);
+}
+
+/** Коротко про заявку для журналу — до того, як зібрано повідомлення. */
+function brief_line(array $body): string
+{
+    $parts = [];
+    foreach (['source', 'name', 'church', 'phone', 'page', 'company'] as $key) {
+        $value = line_value(isset($body[$key]) ? $body[$key] : '', 120);
+        if ($value !== '') {
+            $parts[] = $key . '=' . $value;
+        }
+    }
+    return implode(' ', $parts);
 }
 
 /* Жоден канал не відпрацював — знімаємо позначку дубля, щоб повтор
@@ -441,6 +510,7 @@ const CRM_SECTION_INSTRUCTION = '1ca9a8aa-a91b-44c1-9c9c-6a76c0b13463'; // basic
 /* Поле «Коментар» у CRM більше не заповнюємо (усе розкладено по полях), але id
    лишаємо: воно знадобиться, якщо колись доведеться писати туди знову. */
 const CRM_FIELD_COMMENT = '6c2375ed-b132-47da-9e31-6de620a17f18';
+const CRM_FIELD_NAME = 'e441e1d8-ce3a-4672-bedb-d9fa7ab9f352';
 const CRM_FIELD_PHONE = '52d3e7c3-8aab-4fed-814d-5b976d9766ce';
 const CRM_FIELD_SOURCE = '42defd61-1472-4b5d-86e6-b9158f302ef9';
 
@@ -529,15 +599,6 @@ function send_crm(string $title, string $name, string $church, string $phone, ar
     $who = $name !== '' ? $name : ($church !== '' ? $church : $phone);
     $phone = crm_phone($phone);
 
-    $fields = [];
-    if ($phone !== '') {
-        $fields[] = crm_field('phone', 'phone', CRM_FIELD_PHONE, $phone, 'Номер телефону');
-    }
-    /* «Джерело Ліда» зберігає id джерела, а не його назву, — і проставляє його
-       сама CRM, коли в запиті є sourceId (api-lead.service.ts). Тому текст сюди
-       не пишемо: інакше в картці був би рядок, який ніде не шукається
-       фільтрами й не бачать автоматизації «за джерелом ліда». */
-
     /* Назва картки в CRM: церква попереду — у списку воронки менеджер бачить,
        від кого заявка, не відкриваючи її. Без назви церкви лишається ім'я,
        а коли людина не назвалась — сам номер. */
@@ -545,8 +606,26 @@ function send_crm(string $title, string $name, string $church, string $phone, ar
         ? $title . ' — ' . $church . ' · ' . $name
         : $title . ' — ' . $who;
 
-    /* Без коментаря в «ПРО ЛІД» лишається тільки телефон — а коли людина його не
-       лишила, блок порожній, і слати його нема сенсу. */
+    /* Поле «Назва» — той самий рядок, що й заголовок картки. Окремим ключем
+       payload title лягає в колонку ліда, але НЕ в поле блоку: lead.service.ts
+       вписує його лише в поле, яке вже є в присланих блоках. Без цього рядка
+       перший рядок «ПРО ЛІД» у картці лишався порожнім. */
+    $fields = [crm_field('lead_name', 'text', CRM_FIELD_NAME, $cardTitle, 'Назва')];
+
+    /* «Джерело Ліда» зберігає id джерела, а не його назву: назву показує сама
+       CRM із довідника «Джерела». Поле мусить БУТИ в блоці — після створення
+       api-lead.service.ts шукає його по fieldSlug і, не знайшовши, мовчки
+       пропускає привʼязку (саме тому джерело в картках лишалось порожнім).
+       Значення кладемо одразу самі, щоб картка не залежала від того кроку. */
+    $source = setting('crm_source');
+    if ($source !== '') {
+        $fields[] = crm_field('lead_source', 'text', CRM_FIELD_SOURCE, $source, 'Джерело Ліда');
+    }
+
+    if ($phone !== '') {
+        $fields[] = crm_field('phone', 'phone', CRM_FIELD_PHONE, $phone, 'Номер телефону');
+    }
+
     $blocks = [];
     if ($fields) {
         $blocks[] = [
@@ -601,11 +680,10 @@ function send_crm(string $title, string $name, string $church, string $phone, ar
         'blocks' => $blocks,
     ];
 
-    /* Джерело задане — CRM сама привʼяже до нього лід (api-lead.service.ts
-       перезапише поле «Джерело Ліда» його ідентифікатором). Ключ додаємо лише
-       непорожнім: порожній рядок CRM відкине як неіснуюче джерело, і заявка
-       загубиться цілком. */
-    $source = setting('crm_source');
+    /* Те саме джерело — ще й окремим ключем: із ним CRM звіряє лід із довідником
+       і вмикає автоматизації «за джерелом ліда». Ключ додаємо лише непорожнім:
+       порожній рядок CRM відкине як неіснуюче джерело, і заявка загубиться
+       цілком. */
     if ($source !== '') {
         $payload['sourceId'] = $source;
     }
@@ -725,6 +803,39 @@ function field(string $label, string $value, string $kind = 'text', string $disp
     ];
 }
 
+/* Сторінка приходить шляхом («/modules»): із нього не видно, ЧИЙ це сайт —
+   ні в картці CRM, ні в Telegram, ні в листі. Приймач лежить у корені того
+   самого сайту, тож його власний хост і є адресою, звідки прийшла заявка.
+   Заразом «Сторінка» в листі стає посиланням: email_html робить лінк лише
+   з http(s). */
+function page_url(string $path): string
+{
+    if ($path === '' || preg_match('#^https?://#i', $path)) {
+        return $path;
+    }
+    $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+    if ($host === '' && isset($_SERVER['SERVER_NAME'])) {
+        $host = $_SERVER['SERVER_NAME'];
+    }
+    /* Хост приходить із запиту, тож лишаємо тільки те, з чого складається
+       доменне ім'я: інакше підроблений заголовок дописав би в картку що
+       завгодно. Дзеркало www прибираємо — адреса сайту одна. */
+    $host = preg_replace('/[^A-Za-z0-9.\-:]/', '', (string) $host);
+    $host = preg_replace('/^www\./i', '', (string) $host);
+    if ($host === '') {
+        return $path;
+    }
+    /* Схема — https, якщо сервер прямо не сказав інше: сайт живе тільки на
+       https (усі редиректи в .htaccess ведуть туди), а за проксі, що знімає
+       TLS, $_SERVER['HTTPS'] часто взагалі не доходить. */
+    $forwarded = isset($_SERVER['HTTP_X_FORWARDED_PROTO'])
+        ? strtolower((string) $_SERVER['HTTP_X_FORWARDED_PROTO'])
+        : '';
+    $plain = $forwarded === 'http'
+        || ($forwarded === '' && isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === '' || $_SERVER['HTTPS'] === 'off'));
+    return ($plain ? 'http://' : 'https://') . $host . (strpos($path, '/') === 0 ? $path : '/' . $path);
+}
+
 /* Час заявки по-київськи: «21.09.2026, 22:00». У CRM і Telegram лишається
    машинний ISO, а в пошті людина читає звичну дату. */
 function local_time(): string
@@ -823,8 +934,11 @@ if (!is_array($body)) {
     respond(400, ['ok' => false, 'error' => 'bad_json']);
 }
 
-/* Бот заповнив приховане поле — тихо відповідаємо «ок», нікуди не шлемо. */
+/* Бот заповнив приховане поле — тихо відповідаємо «ок», у канали не шлемо.
+   Але в журнал кладемо: так само поле могло заповнити автозаповнення
+   браузера, і тоді це жива людина, якій треба передзвонити. */
 if (clean(isset($body['company']) ? $body['company'] : '', 100) !== '') {
+    journal('lead-trap.log', brief_line($body));
     respond(200, ['ok' => true]);
 }
 
@@ -837,7 +951,15 @@ if (strlen((string) $digits) < 9) {
     respond(422, ['ok' => false, 'error' => 'invalid']);
 }
 
-$source = (isset($body['source']) && $body['source'] === 'brief') ? 'brief' : 'demo';
+/* Джерела заявок: демо, «передзвоніть» і план «30 днів». `brief` лишається
+   у списку навмисне — форму прибрано з сайту 2026-09-22, але сторінка,
+   що висить у кеші браузера, ще може надіслати саме його, і такий лід
+   має доїхати підписаним, а не загубитись. Невідоме значення вважаємо
+   заявкою на демо: краще зайвий раз підписати повідомлення звичним
+   заголовком, ніж загубити лід через одруківку на фронті. */
+$source = isset($body['source']) && in_array($body['source'], ['brief', 'callback', 'material'], true)
+    ? $body['source']
+    : 'demo';
 $dedupeKey = $source . '|' . $digits;
 
 /* Заслінки — до збирання повідомлення: флуд не має коштувати нам роботи. */
@@ -846,6 +968,8 @@ if ($verdict === 'rate_limited' || $verdict === 'rate_limited_all') {
     if ($verdict === 'rate_limited_all') {
         error_log('[lead] спрацювала загальна заслінка — схоже на ботнет');
     }
+    /* Форма покаже запасні контакти, але й сама заявка не має зникнути. */
+    journal('lead-failed.log', $verdict . ' ' . brief_line($body));
     respond(429, ['ok' => false, 'error' => 'rate_limited']);
 }
 /* Дубль: той самий телефон із тієї самої форми. Відповідаємо «ок» —
@@ -855,12 +979,22 @@ if ($verdict === 'duplicate') {
     respond(200, ['ok' => true, 'duplicate' => true]);
 }
 
-$title = $source === 'brief' ? '🧩 Бриф із /modules' : '📞 Заявка на демо';
+/* Заголовок повідомлення: менеджер має з першого рядка бачити, чого
+   від нього чекають — показати систему чи просто передзвонити. */
+$titles = [
+    'brief' => '🧩 Бриф із /modules',        /* застаріле джерело: форми на сайті вже немає */
+    'callback' => '📲 Просять передзвонити',
+    'material' => '📘 Забрали план «30 днів до порядку»',
+    'demo' => '📞 Заявка на демо',
+];
+$title = $titles[$source];
 $size = line_value(isset($body['size']) ? $body['size'] : '', 60);
 $about = clean(isset($body['about']) ? $body['about'] : '', 2000);
-$page = line_value(isset($body['page']) ? $body['page'] : '', 200);
+$page = page_url(line_value(isset($body['page']) ? $body['page'] : '', 200));
 $utm = line_value(isset($body['utm']) ? $body['utm'] : '', 300);
 $goals = goal_labels(isset($body['goals']) ? $body['goals'] : null);
+$roleId = isset($body['role']) && is_string($body['role']) ? $body['role'] : '';
+$role = array_key_exists($roleId, ROLE_LABELS) ? ROLE_LABELS[$roleId] : '';
 
 $tools = [];
 if (isset($body['tools']) && is_array($body['tools'])) {
@@ -878,6 +1012,15 @@ $church = line_value(isset($body['church']) ? $body['church'] : '', 120);
    ім'я, інакше назва церкви, а без неї — номер. */
 $who = $name !== '' ? $name : ($church !== '' ? $church : $phone);
 $rows = [field("Ім'я", $name, 'name', $who), field('Телефон', $phone, 'phone')];
+/* Матеріал із /plan: файл людина вже завантажила сама, але ми обіцяли
+   копію в телеграм — тож у повідомленні стоїть рядок із дією, а не
+   просто позначка джерела. Дзвонити з цього приводу не треба. */
+if ($source === 'material') {
+    $rows[] = field('Що зробити', 'Надіслати в телеграм файл «30 днів до порядку» (mychurch.com.ua/plan-30-dniv.pdf). Не дзвонити.');
+}
+if ($role !== '') {
+    $rows[] = field('Роль', $role);
+}
 if ($church !== '') {
     $rows[] = field('Церква', $church);
 }
@@ -925,17 +1068,32 @@ $letter = email_html($title, $rows);
 $delivered = [];
 if (send_crm($title, $name, $church, $phone, $rows)) {
     $delivered[] = 'crm';
+} else {
+    /* CRM — головний канал. Якщо впала лише вона, людина бачить «дякуємо»,
+       а картки у воронці немає. Тож менеджер дізнається про це з тієї ж
+       заявки в Telegram і в листі, а журнал тримає її до ручного внесення. */
+    $html .= "\n\n⚠️ <b>У CRM не потрапило — внесіть вручну</b>";
+    $text .= "\n\n⚠️ У CRM не потрапило — внесіть вручну";
 }
 if (send_telegram($html)) {
     $delivered[] = 'telegram';
 }
 /* Тема з телефоном: у списку листів видно, кому дзвонити, не відкриваючи. */
-$subject = ($source === 'brief' ? 'Бриф з сайту' : 'Заявка на демо') . ' — ' . $who;
+$subjects = [
+    'brief' => 'Бриф з сайту',
+    'callback' => 'Просять передзвонити',
+    'material' => 'Забрали план «30 днів»',
+    'demo' => 'Заявка на демо',
+];
+$subject = $subjects[$source] . ' — ' . $who;
 if ($phone !== '' && $who !== $phone) {
     $subject .= ', ' . $phone;
 }
 if (send_email($subject, $text, $letter)) {
     $delivered[] = 'email';
+}
+if ($delivered && !in_array('crm', $delivered, true)) {
+    journal('lead-failed.log', 'crm_failed ' . $text);
 }
 
 if (!$delivered) {

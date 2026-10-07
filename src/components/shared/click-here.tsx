@@ -15,8 +15,9 @@ type XY = { x: number; y: number };
 
    Заходить жива рука — системний курсор ховається (`cursor: none` на зоні),
    а великий їде за мишею з плавним наздоганянням, кадр за кадром. Руки немає —
-   той самий курсор сам обходить усе, що позначене `data-click-here`, підсвічує
-   картку і натискає на ній, тож видно, куди клацати.
+   той самий курсор один раз обходить усе, що позначене `data-click-here`,
+   підсвічує картку й натискає на ній, тож видно, куди клацати, — і лишається
+   на останній. Обхід повторюється, лише коли зона знову з'являється на екрані.
 
    Кліків не перехоплює (pointer-events: none) — рука проходить крізь нього до
    самої кнопки. На тачскрині системного курсора немає, тож там лишається
@@ -157,11 +158,13 @@ export default function ClickHere({
         aim.current = { ...pos.current };
       }
       setLive(true);
-      let i = 0;
       await sleep(420);
 
-      while (!cancelled) {
-        const target = targets[i % targets.length];
+      /* Один прохід, а не карусель: курсор показує кожну картку по разу
+         й лишається на останній. Нескінченне коло крутилось на екрані
+         саме собою і перетягувало увагу на себе (2026-09-22). */
+      for (const target of targets) {
+        if (cancelled) return;
         aim.current = aimAt(target);
         await sleep(620);
         if (cancelled) return;
@@ -175,7 +178,6 @@ export default function ClickHere({
         target.removeAttribute("data-demo-hot");
         if (cancelled) return;
         await sleep(180);
-        i++;
       }
     })();
 

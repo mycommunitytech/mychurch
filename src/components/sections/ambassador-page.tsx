@@ -3,12 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
-import { ArrowUpRight, ChevronRight, Clock, LayoutGrid, MapPin, Quote } from "lucide-react";
+import { ArrowUpRight, ChevronRight, LayoutGrid, Quote } from "lucide-react";
 import AmbassadorCard from "@/components/shared/ambassador-card";
+import ChurchScene from "@/components/shared/church-scene";
 import FadeIn from "@/components/shared/fade-in";
 import { MODULE_ACCENTS, MODULE_ICONS } from "@/components/shared/module-icons";
 import { getAmbassador } from "@/content/ambassadors";
-import { getModuleClip, getModuleVideoPoster } from "@/content/modules/videos";
+import { getModuleVideo, getModuleVideoPoster } from "@/content/modules/videos";
 import ClipPlayer from "@/components/shared/clip-player";
 import type { AmbassadorCopy, AmbassadorDetail } from "@/content/ambassadors";
 import { useLang, useT } from "@/lib/lang";
@@ -17,7 +18,8 @@ import { cn } from "@/lib/utils";
 /* ────────────────────────────────────────────────────────────────
    Сторінка церкви-амбасадора — чотири екрани:
 
-     хто це            — заголовок, факти і кадр із життя церкви;
+     хто це            — заголовок і сцена церкви: петля з їхнього
+                         промо, кнопка фільму, візитівка (church-scene);
      цитата            — рядок із їхнього сайту над фотографією;
      було і стало      — чотири пари й запис із їхньої системи;
      як вмикали        — чотири кроки, кожен називає свої модулі.
@@ -32,29 +34,16 @@ interface Ctx {
   accent: string;
 }
 
-function Logo({ church, accent }: { church: AmbassadorDetail; accent: string }) {
-  const box = "w-14 h-14 rounded-[18px] flex items-center justify-center shrink-0 overflow-hidden border border-hairline";
-  if (church.logo) {
-    return (
-      <span className={box} style={{ background: `color-mix(in oklab, ${accent} 12%, var(--surface))` }}>
-        <Image src={church.logo} alt={church.name} width={48} height={39} className="w-10 h-auto" />
-      </span>
-    );
-  }
-  return (
-    <span
-      className={`${box} font-semibold text-[19px] tracking-[-0.5px]`}
-      style={{ background: `color-mix(in oklab, ${accent} 14%, var(--surface))`, color: accent }}
-    >
-      {church.initials}
-    </span>
-  );
-}
-
 /* ── Хто це ─────────────────────────────────────────────────────── */
+/* Та сама сцена, що й «Наш амбасадор» на головній (2026-09-30, «тут так
+   само перероби: більше лого, менше води, акуратніше»): позаду петля з їхнього
+   промо, посередині кнопка фільму, внизу візитівка з великим знаком.
+   Над сценою лише крихти й заголовок. Надпис «Амбасадор», плашка строку,
+   речення про церкву і фото з цитатою прибрані: строк і місто стоять у
+   візитівці, а решту розповідає фільм. Єдина дія — сайт самої церкви:
+   «Замовити демо» чекає в закривашці й у меню. */
 function Hero({ ctx, parentLabel }: { ctx: Ctx; parentLabel: string }) {
   const { church, copy, accent } = ctx;
-
 
   return (
     <section className="relative w-full overflow-hidden bg-surface flex flex-col items-center pt-8 md:pt-12 pb-14 md:pb-20">
@@ -65,99 +54,45 @@ function Hero({ ctx, parentLabel }: { ctx: Ctx; parentLabel: string }) {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-[1120px] px-5 md:px-8 flex flex-col gap-8 md:gap-12">
-        <FadeIn>
+      <div className="relative z-10 w-full max-w-[1120px] px-5 md:px-8 flex flex-col gap-6 md:gap-10">
+        <FadeIn className="flex flex-col gap-5 md:gap-6">
           <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-[13.5px] text-ink-3">
             <Link href="/about" className="hover:text-ink transition-colors">{parentLabel}</Link>
             <ChevronRight className="w-3.5 h-3.5" />
             <span className="text-ink-2 font-medium">{church.name}</span>
           </nav>
+          <h1 className="font-semibold text-ink leading-[1.04] tracking-[-1.2px] md:tracking-[-2px] text-[36px] sm:text-[46px] md:text-[58px] max-w-[900px]">
+            {copy.titleAccent && copy.title.endsWith(copy.titleAccent) ? (
+              <>
+                {copy.title.slice(0, -copy.titleAccent.length).trim()}
+                <span className="block whitespace-nowrap" style={{ color: accent }}>
+                  {copy.titleAccent}
+                </span>
+              </>
+            ) : (
+              copy.title
+            )}
+          </h1>
         </FadeIn>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] gap-10 lg:gap-14 items-center">
-          <FadeIn className="flex flex-col gap-6">
-            <div className="flex items-center gap-4">
-              <Logo church={church} accent={accent} />
-              <div className="flex flex-col gap-1.5">
-                <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em]" style={{ color: accent }}>
-                  {copy.eyebrow}
-                </span>
-                <span className="text-[17px] font-semibold text-ink leading-none tracking-[-0.3px]">{church.name}</span>
-                <span className="flex items-center gap-1.5 text-[13.5px] text-ink-3 leading-none">
-                  <MapPin className="w-3.5 h-3.5" strokeWidth={2} />
-                  {church.city}
-                </span>
-              </div>
-            </div>
-
-            <span
-              className="inline-flex items-center gap-2 self-start rounded-full px-3.5 py-1.5 text-[13.5px] font-medium leading-none"
-              style={{ background: `color-mix(in oklab, ${accent} 12%, var(--surface))`, color: accent }}
-            >
-              <Clock className="w-4 h-4" strokeWidth={2.2} />
-              {copy.badge}
-            </span>
-
-            <h1 className="font-semibold text-ink leading-[1.04] tracking-[-1.2px] md:tracking-[-2px] text-[36px] sm:text-[46px] md:text-[58px] max-w-[660px]">
-              {copy.title}
-            </h1>
-            <p className="text-[17px] md:text-[19px] text-ink-2 leading-[1.55] max-w-[560px]">{copy.lead}</p>
-
-            {/* Головна дія тут — сайт самої церкви: сторінка доводить, що
-                громада справжня, а «Замовити демо» стоїть тихим лінком і
-                ще раз великою кнопкою в закривашці. */}
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1">
+        <FadeIn delay={1} variant="scale">
+          <ChurchScene
+            church={church}
+            source="ambassador"
+            actions={
               <Link
                 href={church.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-center gap-2 h-12 px-7 rounded-full text-white font-semibold text-[15.5px] tracking-[-0.3px] whitespace-nowrap transition-opacity hover:opacity-90"
+                className="group inline-flex items-center gap-2 h-11 px-5 rounded-full text-white font-semibold text-[15px] tracking-[-0.3px] transition-opacity hover:opacity-90"
                 style={{ background: accent }}
               >
                 {copy.siteCta}
                 <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
-              {/* «Замовити демо» в шапці прибрано 2026-09-21: сторінка про
-                  церкву, а не про нас — заявка чекає в закривашці й у меню. */}
-            </div>
-          </FadeIn>
-
-          {/* Один кадр церкви — і на ньому рядок із їхнього ж сайту.
-              Окремий блок із цитатою був другим блоком «про них», а його
-              має бути рівно один. */}
-          <FadeIn delay={2} variant="scale" className="w-full">
-            <figure className="relative w-full aspect-[4/5] overflow-hidden rounded-[24px] border border-hairline">
-              <Image
-                src={copy.heroPhoto.src}
-                alt={copy.heroPhoto.alt}
-                fill
-                sizes="(max-width: 1024px) 100vw, 440px"
-                className="object-cover"
-                priority
-              />
-              <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
-              <figcaption className="absolute inset-x-0 bottom-0 p-5 md:p-7 flex flex-col gap-2">
-                <blockquote className="font-semibold text-white text-[20px] md:text-[24px] leading-[1.25] tracking-[-0.5px]">
-                  «{copy.quote.text}»
-                </blockquote>
-                <Link
-                  href={copy.quote.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 self-start text-[12.5px] text-white/70 hover:text-white transition-colors"
-                >
-                  {copy.quote.source}
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
-              </figcaption>
-            </figure>
-          </FadeIn>
-        </div>
-
-        {/* Рядок фактів (адреса, час служінь, «понад рік») прибрано
-            2026-09-21 як шум: адреса й розклад є на сайті самої церкви,
-            а «скільки вже в системі» стоїть плашкою над заголовком. Самі
-            факти лишаються в контенті — їх бере блок на головній і /about. */}
+            }
+          />
+        </FadeIn>
       </div>
     </section>
   );
@@ -186,14 +121,14 @@ function Clip({
 
   const Icon = MODULE_ICONS[id] ?? LayoutGrid;
   const tone = MODULE_ACCENTS[id] ?? accent;
-  const file = getModuleClip(id);
+  const videoId = getModuleVideo(id);
   const poster = getModuleVideoPoster(id);
-  if (!file || !poster) return null;
+  if (!videoId || !poster) return null;
 
   return (
     <figure className="grid grid-cols-1 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] gap-6 md:gap-12 items-center py-9 md:py-14 border-b border-hairline">
       <ClipPlayer
-        src={file}
+        videoId={videoId}
         poster={poster}
         title={name}
         label={`${c.clipPlay}: ${name}`}
@@ -266,7 +201,7 @@ function Clips({ ctx }: { ctx: Ctx }) {
     return map;
   }, [t]);
 
-  const clips = copy.clips.filter((c) => getModuleClip(c.id));
+  const clips = copy.clips.filter((c) => getModuleVideo(c.id));
   if (!clips.length) return null;
 
   return (

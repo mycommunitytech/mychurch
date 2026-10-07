@@ -4,15 +4,15 @@ export const post: BlogPost = {
   slug: "dani-v-riznykh-mistsiakh",
   category: "data",
   date: "2026-08-18",
-  minutes: 7,
+  updated: "2026-09-30",
   related: ["piat-pytan-pro-systemu", "yak-obraty-systemu-dlia-tserkvy", "stavte-tsili"],
   copy: {
     ua: {
       seoTitle: "Дані церкви в п'яти місцях: чому інформація губиться",
       seoDescription:
         "Таблиці, чати, зошити й пам'ять лідерів — чому церква втрачає інформацію, навіть коли її нібито зберігають, і як звести все в один простір.",
-      title: "Не втрачайте інформацію, коли вона збережена в різних місцях",
-      lead: "Інформація рідко зникає повністю. Частіше вона є — але в чужому файлі, у закритому чаті й у пам'яті людини, яка сьогодні не на зв'язку.",
+      title: "Дані церкви в п'яти місцях: як їх звести й не загубити",
+      lead: "Дані церкви рідко зникають повністю. Частіше вони є, але в чужому файлі, закритому чаті чи пам'яті людини, яка сьогодні не на зв'язку.",
       keywords: [
         "дані церкви в таблицях",
         "як зберігати інформацію про членів церкви",
@@ -22,11 +22,11 @@ export const post: BlogPost = {
       ],
       problem: {
         title: "«Це у Валі в таблиці»",
-        text: "Питання просте: як зв'язатися з родиною, яка минулого місяця просила про допомогу. Відповідь: у Валі. Валя у відпустці, файл у неї на комп'ютері, а копія в чаті — від березня.",
+        text: "Як зв'язатися з родиною, яка минулого місяця просила про допомогу? Відповідь: у Валі. Валя у відпустці, файл у неї на комп'ютері, а копія в чаті ще з березня.",
       },
       sections: [
         {
-          heading: "Як виглядає типова карта даних церкви",
+          heading: "Де лежать дані типової церкви",
           blocks: [
             {
               kind: "table",
@@ -41,13 +41,13 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "Жодне з цих місць не є помилкою саме собою. Проблема в тому, що між ними немає зв'язку: людина з таблиці, її заявка з пошти й її присутність із зошита ніде не зустрічаються.",
+              text: "Поодинці кожне місце працює. Біда в тому, що вони не зустрічаються: родина Ковальчуків є в таблиці, її заявка про допомогу лежить у пошті, а про що з нею домовились, пам'ятає лише лідер групи.",
             },
             {
               kind: "solution",
               title: "Одна картка людини",
               text:
-                "Контакт, сім'я, група, присутність і звернення стоять в одному записі — і відкриваються тому, кому це дозволено, без прохання «скинь файл».",
+                "Контакт, сім'я, група, присутність і звернення стоять в одному записі, і кожен, кому дозволено, відкриває його без прохання «скинь файл».",
               spec: {
                 kind: "list",
                 title: "Люди",
@@ -65,35 +65,36 @@ export const post: BlogPost = {
           ],
         },
         {
-          heading: "Три наслідки, які відчуває вся церква",
+          heading: "Чого це коштує церкві",
           blocks: [
             {
               kind: "list",
               items: [
-                "Подвійна робота: одну й ту саму людину питають про контакти тричі за рік.",
-                "Втрачені прохання: звернення живе в тому каналі, у який потрапило, і не має власника.",
-                "Неможливість передати справи: новий лідер отримує доступ до інструментів, але не до знання.",
+                "Подвійна робота: ту саму людину питають про контакти тричі за рік.",
+                "Прохання без відповідального: кожен думає, що родині вже зателефонував хтось інший.",
+                "Служіння не передати: новий лідер отримує посилання на чат, а історію людей збирає розпитами.",
               ],
             },
-            { kind: "quote", text: "Дані, які лежать у п'яти місцях, — це нуль місць у момент, коли вони потрібні." },
+            { kind: "quote", text: "Дані в п'яти місцях — це нуль місць, коли вони потрібні." },
           ],
         },
         {
-          heading: "Що зводити в першу чергу",
+          heading: "Як переносити: одне джерело за раз",
           blocks: [
             {
               kind: "steps",
               items: [
-                { title: "Люди", text: "Один реєстр людей і сімей. Це фундамент: до нього чіпляється все інше." },
-                { title: "Присутність", text: "Відмітки з груп і служінь, прив'язані до людини, а не до зошита." },
-                { title: "Звернення", text: "Заявки з усіх каналів в один список зі статусом і відповідальним." },
-                { title: "Домовленості", text: "База знань служінь: інструкції, підрядники, рішення сезону." },
+                { title: "Візьміть найповніше джерело", text: "Зазвичай це таблиця адміністратора. Решту додавайте до неї по одному." },
+                { title: "Домовтесь про слова до переносу", text: "Хто для вас «член церкви», а хто «регулярний відвідувач»; які є статуси й групи. Інакше в одній базі зійдуться п'ять різних визначень." },
+                { title: "Почистіть дублікати", text: "Та сама людина як «Олена Гнатюк» і «Гнатюк О.» з двома номерами — найчастіша знахідка першого імпорту. Злити їх до завантаження простіше, ніж після." },
+                { title: "Перевірте на десяти людях", text: "Відкрийте десять карток і звірте з джерелом телефон, сім'ю й групу. Помилку в зіставленні колонок видно одразу." },
+                { title: "Закрийте старе того ж дня", text: "Старий файл стає архівом тільки для читання. Поки його можна правити, хтось туди допише, і копій знову дві." },
               ],
             },
             {
               kind: "visual",
               caption:
-                "Джерела нікуди не діваються — вони перестають бути єдиною копією. Коли контакт, група, присутність і звернення чіпляються до однієї картки, питання «а де це?» зникає разом із відповіддю «у Валі».",
+                "П'ять джерел сходяться в картку людини: біля кожного імені одразу видно групу, звернення чи служіння. Питати, в кого останній файл, більше не треба.",
               visual: {
                 type: "merge",
                 title: "П'ять місць, з яких збирають одне й те саме",
@@ -110,45 +111,43 @@ export const post: BlogPost = {
               },
             },
             {
-              kind: "callout",
-              title: "Не переносьте все одразу",
-              text: "Спроба перенести п'ять джерел за тиждень закінчується тим, що церква працює у двох системах паралельно. Переносьте по одному й закривайте старе джерело одразу після переносу.",
+              kind: "text",
+              text: "Що зводити першим (людей, відвідуваність, служіння чи заявки), підкаже перевірка зі статті [«П'ять питань, які показують, чи є у вас система»](/blog/piat-pytan-pro-systemu). Як «Моя Церква» зіставляє колонки й показує дублікати ще до завантаження, видно на сторінці [імпорту](/import).",
             },
           ],
         },
         {
-          heading: "Як не повернутись до старого за пів року",
+          heading: "Як не повернутися до таблиць за пів року",
           blocks: [
             {
               kind: "list",
               items: [
-                "Одне правило: якщо чогось немає в системі, цього не існує. Без винятків для «зручніше в чаті».",
-                "Закривайте старі файли, а не залишайте «про всяк випадок» — паралельна копія завжди перемагає.",
-                "Дайте доступ лідерам: дані вмирають там, де їх може оновити лише одна людина.",
-                "Раз на квартал перевіряйте, чи не з'явилась нова тіньова таблиця. Зазвичай з'являється — і це сигнал, що чогось у системі бракує.",
+                "Якщо чогось немає в системі, цього не існує. Навіть коли «в чаті зручніше».",
+                "Дайте лідерам право вносити зміни: якщо оновлює лише Валя, дані застигають, щойно вона йде у відпустку.",
+                "Раз на квартал шукайте нову тіньову таблицю. Вона майже завжди є і підказує, чого бракує в системі.",
               ],
             },
           ],
         },
       ],
       takeaways: [
-        "Проблема не в кількості інструментів, а у відсутності зв'язку між ними.",
-        "Фундамент — один реєстр людей; усе інше чіпляється до нього.",
-        "Переносьте джерела по одному й одразу закривайте старе.",
-        "Тіньова таблиця — сигнал, що в системі чогось бракує.",
+        "Шкодить не кількість інструментів, а те, що вони між собою не пов'язані.",
+        "Зводити всі п'ять джерел одночасно — прямий шлях до двох паралельних систем.",
+        "Старий файл, який ще можна правити, стає другою копією.",
+        "Тіньова таблиця — готовий список того, чого бракує в системі.",
       ],
       faq: [
         {
           q: "А якщо лідерам зручніше в чаті?",
-          a: "Чат залишається для спілкування — його не треба забороняти. Але все, що має пережити тиждень, фіксується в системі: заявка, відмітка, домовленість.",
+          a: "Хай спілкуються в чаті, забороняти його не треба. Але все, що має пережити тиждень, записують у систему: заявку, відмітку, домовленість.",
         },
         {
           q: "Що робити з архівом старих таблиць?",
-          a: "Імпортувати актуальне, решту зберегти окремо як архів тільки для читання. Видаляти не варто, редагувати — теж.",
+          a: "Актуальне імпортуйте, решту збережіть як архів тільки для читання: не видаляйте й не редагуйте.",
         },
         {
           q: "Скільки часу займає зведення даних?",
-          a: "Найчастіше кілька тижнів: сам імпорт — це години, а домовленості про визначення та чистка списків — решта часу.",
+          a: "Зазвичай кілька тижнів. Сам імпорт триває години, решту часу забирають домовленості про визначення й чистка списків.",
         },
       ],
       cta: {
@@ -162,8 +161,8 @@ export const post: BlogPost = {
       seoTitle: "Church data in five places: why information gets lost",
       seoDescription:
         "Spreadsheets, chats, notebooks and leaders' memory — why churches lose information even when it is stored, and how to bring it into one place.",
-      title: "Do not lose information stored in five different places",
-      lead: "Information rarely disappears completely. More often it exists — in someone else's file, in a closed chat, and in the memory of a person who is offline today.",
+      title: "Church data in five places: how to bring it together",
+      lead: "Church data rarely vanishes. More often it is there, but in someone else's file, a closed chat or the memory of someone offline today.",
       keywords: [
         "church data in spreadsheets",
         "single church database",
@@ -172,12 +171,12 @@ export const post: BlogPost = {
         "church contact list",
       ],
       problem: {
-        title: "It is in Valya's spreadsheet",
-        text: "A simple question: how do we reach the family that asked for help last month? The answer: ask Valya. Valya is away, the file is on her laptop, and the copy in the chat is from March.",
+        title: "“It's in Valia's spreadsheet”",
+        text: "How do we reach the family that asked for help last month? Ask Valia. Valia is on holiday, the file is on her laptop, and the copy in the chat is from March.",
       },
       sections: [
         {
-          heading: "The typical map of church data",
+          heading: "Where a typical church keeps its data",
           blocks: [
             {
               kind: "table",
@@ -192,13 +191,13 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "None of these places is wrong by itself. The problem is that nothing connects them: the person in the spreadsheet, their request in the inbox and their attendance in the notebook never meet.",
+              text: "Each place works on its own; they just never meet. The Kovalchuk family is in the spreadsheet, their request for help in the inbox, and only a group leader remembers what was agreed with them.",
             },
             {
               kind: "solution",
               title: "One person, one record",
               text:
-                "Contact, family, group, attendance and requests sit in a single record — open to whoever is allowed to see it, with no “send me the file” in between.",
+                "Contact, family, group, attendance and requests sit in one record that anyone with access can open, no “send me the file” needed.",
               spec: {
                 kind: "list",
                 title: "People",
@@ -216,35 +215,36 @@ export const post: BlogPost = {
           ],
         },
         {
-          heading: "Three consequences the whole church feels",
+          heading: "What it costs the church",
           blocks: [
             {
               kind: "list",
               items: [
-                "Duplicated work: the same person is asked for their contact details three times a year.",
-                "Lost requests: an ask lives in whichever channel it landed in and has no owner.",
-                "Handovers become impossible: a new leader inherits tools but not knowledge.",
+                "Duplicated work: the same person gives their contact details three times a year.",
+                "Requests without an owner: everyone assumes someone else has already called the family.",
+                "No handover: a new leader gets a link to the chat and learns people's history by asking around.",
               ],
             },
-            { kind: "quote", text: "Data in five places is data in no place at the moment you need it." },
+            { kind: "quote", text: "Data in five places is data in no place when you need it." },
           ],
         },
         {
-          heading: "What to consolidate first",
+          heading: "How to migrate: one source at a time",
           blocks: [
             {
               kind: "steps",
               items: [
-                { title: "People", text: "One register of people and families. Everything else attaches to it." },
-                { title: "Attendance", text: "Marks from groups and ministries attached to a person, not a notebook." },
-                { title: "Requests", text: "Every channel into one list with a status and an owner." },
-                { title: "Agreements", text: "A ministry knowledge base: instructions, suppliers, decisions of the season." },
+                { title: "Take the fullest source", text: "Usually the administrator's spreadsheet. Add the others to it one at a time." },
+                { title: "Agree on words before you move", text: "Who counts as a “member” and who as a “regular attender”; which statuses and groups exist. Otherwise one database ends up with five definitions." },
+                { title: "Clean up duplicates", text: "The same person as “Olena Hnatiuk” and “Hnatiuk O.”, with two phone numbers, is the most common find of a first import. Merging before the upload is easier than after." },
+                { title: "Check ten people", text: "Open ten records and compare phone, family and group with the source. A wrong column mapping shows up at once." },
+                { title: "Close the old source the same day", text: "The old file becomes a read-only archive. While it is editable, someone will add to it and you have two copies again." },
               ],
             },
             {
               kind: "visual",
               caption:
-                "The sources do not disappear — they stop being the only copy. Once the contact, the group, the attendance and the request all hang off one record, where is it? stops being answered with ask Valia.",
+                "Five sources flow into one person record, with the group, request or ministry beside each name. Nobody asks who has the latest file.",
               visual: {
                 type: "merge",
                 title: "Five places holding the same thing",
@@ -255,47 +255,45 @@ export const post: BlogPost = {
                     { title: "Olena Hnatiuk", meta: "Roots group" },
                     { title: "The Kovalchuk family", meta: "Request, in progress" },
                     { title: "Andrii Pylypenko", meta: "Sound team" },
-                    { title: "Maria Didukh", meta: "Guest, second week" },
+                    { title: "Mariia Didukh", meta: "Guest, second week" },
                   ],
                 },
               },
             },
             {
-              kind: "callout",
-              title: "Do not migrate everything at once",
-              text: "Moving five sources in a week ends with the church running two systems in parallel. Move one at a time and close the old source immediately.",
+              kind: "text",
+              text: "[Five questions that show whether you have a system](/blog/piat-pytan-pro-systemu) tells you what to bring over first: people, attendance, ministries or requests. The [import page](/import) shows how My Church maps columns and flags duplicates before the upload.",
             },
           ],
         },
         {
-          heading: "How not to slide back in six months",
+          heading: "How not to slide back to spreadsheets in six months",
           blocks: [
             {
               kind: "list",
               items: [
-                "One rule: if it is not in the system, it does not exist. No exceptions for it is easier in the chat.",
-                "Close old files rather than keeping them just in case — the parallel copy always wins.",
-                "Give leaders access: data dies where only one person can update it.",
-                "Check quarterly for a new shadow spreadsheet. If one appeared, something is missing in the system.",
+                "If it is not in the system, it does not exist. Even when “the chat is easier”.",
+                "Let leaders make changes: if only Valia can update the data, it freezes the moment she goes on holiday.",
+                "Once a quarter, look for a new shadow spreadsheet. There almost always is one, and it shows what the system lacks.",
               ],
             },
           ],
         },
       ],
       takeaways: [
-        "The problem is not the number of tools but the lack of connection between them.",
-        "One people register is the foundation.",
-        "Migrate one source at a time and close the old one.",
-        "A shadow spreadsheet is a signal, not a crime.",
+        "What hurts is not the number of tools but the lack of links between them.",
+        "Merging all five sources at once leads straight to two parallel systems.",
+        "An old file that can still be edited becomes a second copy.",
+        "A shadow spreadsheet is a ready-made list of what the system lacks.",
       ],
       faq: [
         {
           q: "What if leaders prefer the chat?",
-          a: "Chat stays for conversation. But anything that must outlive the week is recorded in the system: a request, a mark, an agreement.",
+          a: "Keep it for talking; there is no need to ban it. But anything that must outlive the week goes into the system: a request, a mark, an agreement.",
         },
         {
           q: "What about the archive of old spreadsheets?",
-          a: "Import what is current and keep the rest as a read-only archive. Do not delete and do not edit.",
+          a: "Import what is current and keep the rest as a read-only archive: no deleting, no editing.",
         },
         {
           q: "How long does consolidation take?",

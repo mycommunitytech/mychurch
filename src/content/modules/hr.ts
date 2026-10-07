@@ -4,11 +4,11 @@ import type { ModuleDetail } from "./types";
 export const hrModules: ModuleDetail[] = [
   {
     id: "org",
-    group: "team",
+    group: "structure",
     related: ["people", "ministries", "requests", "knowledge"],
     copy: {
       ua: {
-        seoTitle: "Оргструктура — модуль «Моя Церква»",
+        seoTitle: "Оргструктура церкви — відділи, служіння, ролі | Моя Церква",
         seoDescription: "Оргструктура церкви: відділи, служіння, ролі та підпорядкування. Хто за що відповідає, хто кому звітує, де вакансії — наочно й завжди актуально.",
         title: "Уся команда церкви — на одній схемі",
         lead: "Модуль «Оргструктура» показує церкву як команду: відділи й служіння, керівники, ролі та підпорядкування. Новий служитель за хвилину розуміє, до кого йти, а пастор бачить, де людей забагато, а де нікого.",
@@ -29,7 +29,7 @@ export const hrModules: ModuleDetail[] = [
         steps: [
           { title: "Опишіть відділи й служіння", text: "Почніть із великих блоків: прославлення, діти, малі групи, адміністрація. Додавайте команди всередині." },
           { title: "Призначте ролі людям", text: "Керівники, помічники, служителі — з бази «Люди». Одна людина може бути в кількох відділах." },
-          { title: "Підтримуйте актуальність", text: "Зміни вносить HR або керівник відділу, історія зберігається. Запити на погодження одразу йдуть новому керівнику." },
+          { title: "Підтримуйте актуальність", text: "Зміни вносить адміністрація або керівник відділу, історія зберігається. Запити на погодження одразу йдуть новому керівнику." },
         ],
         audience: [
           { role: "hr", text: "Тримає структуру актуальною, бачить вакансії й навантаження, оформлює переходи між командами." },
@@ -62,7 +62,7 @@ export const hrModules: ModuleDetail[] = [
           text: "Приклад для ролі «Звукооператор» у технічній команді. Кожен етап змінює статус ролі на схемі.",
           stages: [
             { title: "Роль вільна", tone: "neutral", text: "Керівник відділу позначає роль як вакантну: обов'язки, скільки неділь на місяць, кому звітує.", auto: "Додає роль у список вакансій церкви й в оголошення бота для охочих служити." },
-            { title: "Кандидат", tone: "brand", text: "HR підбирає людей із бази за дарами й інтересами. Охочі подають заявку самі.", auto: "Ставить керівнику задачу «поговорити» з терміном тиждень." },
+            { title: "Кандидат", tone: "brand", text: "Адміністрація підбирає людей із бази за дарами й інтересами. Охочі подають заявку самі.", auto: "Ставить керівнику задачу «поговорити» з терміном тиждень." },
             { title: "Стажування", tone: "amber", text: "Людина пробує служіння три-чотири неділі поруч із наставником.", auto: "Додає її в графік служіння як стажера й нагадує наставнику про зустріч." },
             { title: "Призначено", tone: "green", text: "Роль закріплена за людиною. Вакансія зникає зі схеми, з'являється ім'я.", auto: "Відкриває доступи за роллю, оновлює підпорядкування й записує зміну в історію." },
           ],
@@ -100,7 +100,7 @@ export const hrModules: ModuleDetail[] = [
         steps: [
           { title: "Describe departments and ministries", text: "Start with the big blocks: worship, kids, small groups, administration. Add teams inside them." },
           { title: "Assign roles to people", text: "Heads, assistants, volunteers — from the People database. One person can be in several departments." },
-          { title: "Keep it current", text: "HR or a department head makes changes, history is kept. Approval requests go straight to the new head." },
+          { title: "Keep it current", text: "Administration or a department head makes changes, history is kept. Approval requests go straight to the new head." },
         ],
         audience: [
           { role: "hr", text: "Keeps the structure current, sees vacancies and workload, and handles moves between teams." },
@@ -133,7 +133,7 @@ export const hrModules: ModuleDetail[] = [
           text: "Example for the \"Sound engineer\" role on the tech team. Each stage changes the role's status on the chart.",
           stages: [
             { title: "Role open", tone: "neutral", text: "The department head marks the role vacant: duties, how many Sundays a month, who it reports to.", auto: "Adds the role to the church's vacancy list and to the bot's announcement for anyone willing to serve." },
-            { title: "Candidate", tone: "brand", text: "HR suggests people from the database by gifts and interests. Volunteers also apply themselves.", auto: "Gives the head a \"have a chat\" task with a one-week deadline." },
+            { title: "Candidate", tone: "brand", text: "Administration suggests people from the database by gifts and interests. Volunteers also apply themselves.", auto: "Gives the head a \"have a chat\" task with a one-week deadline." },
             { title: "Trial", tone: "amber", text: "The person tries the ministry for three or four Sundays alongside a mentor.", auto: "Adds them to the rota as a trainee and reminds the mentor about their catch-up." },
             { title: "Appointed", tone: "green", text: "The role now belongs to that person. The vacancy disappears from the chart and a name appears.", auto: "Grants the role's access, updates the reporting line and logs the change in history." },
           ],
@@ -153,14 +153,14 @@ export const hrModules: ModuleDetail[] = [
   },
   {
     id: "requests",
-    group: "team",
+    group: "structure",
     related: ["org", "service-planning", "telegram-bot", "automations"],
     copy: {
       ua: {
         seoTitle: "Запити — модуль «Моя Церква»",
-        seoDescription: "Відпустки, заміни на служінні, заявки на кошти чи приміщення: служитель подає з телефону, керівник погоджує в один клік, HR бачить усю чергу запитів.",
+        seoDescription: "Відпустки, заміни на служінні, заявки на кошти чи приміщення: служитель подає з телефону, керівник погоджує в один клік, Адміністрація бачить усю чергу запитів.",
         title: "Погодження за хвилину, а не за тиждень у чатах",
-        lead: "Модуль «Запити» замінює переписки «а можна мені в неділю не служити?». Служитель подає запит з телефону, він іде до потрібного керівника, той погоджує одним натисканням, а HR бачить усю картину.",
+        lead: "Модуль «Запити» замінює переписки «а можна мені в неділю не служити?». Служитель подає запит з телефону, він іде до потрібного керівника, той погоджує одним натисканням, а Адміністрація бачить усю картину.",
         highlights: [
           "Типи запитів під процеси вашої церкви",
           "Маршрут погодження за оргструктурою",
@@ -169,16 +169,16 @@ export const hrModules: ModuleDetail[] = [
         ],
         features: [
           { icon: "Inbox", title: "Типи запитів", text: "Відпустка, заміна на служінні, кошти на подію, приміщення, техніка, довідка. Свої типи — з потрібними полями." },
-          { icon: "Route", title: "Маршрут погодження", text: "Запит іде до керівника за оргструктурою, далі — до HR або бухгалтера, якщо це потрібно. Один крок або кілька." },
+          { icon: "Route", title: "Маршрут погодження", text: "Запит іде до керівника за оргструктурою, далі — до адміністрації або бухгалтера, якщо це потрібно. Один крок або кілька." },
           { icon: "Smartphone", title: "Подати з телефону", text: "Форма на дві хвилини у вебі або в Telegram-боті. Фото документа чи рахунку — одразу до запиту." },
           { icon: "CheckCircle2", title: "Погодження в один клік", text: "Керівник отримує повідомлення й погоджує або відхиляє, не заходячи в систему. Коментар — за бажанням." },
           { icon: "RefreshCw", title: "Заміна на служінні", text: "Служитель просить заміну — система пропонує вільних людей із тієї ж команди, і графік оновлюється сам." },
-          { icon: "ClipboardList", title: "Черга та історія", text: "HR бачить усі відкриті запити, хто затримує погодження й скільки днів відпустки лишилось у людини." },
+          { icon: "ClipboardList", title: "Черга та історія", text: "Адміністрація бачить усі відкриті запити, хто затримує погодження й скільки днів відпустки лишилось у людини." },
         ],
         steps: [
           { title: "Оберіть типи запитів", text: "Увімкніть готові: відпустка, заміна, кошти, приміщення. Додайте свої з потрібними полями." },
-          { title: "Задайте, хто погоджує", text: "Для кожного типу — маршрут: керівник, HR, бухгалтер. Підставляється з оргструктури автоматично." },
-          { title: "Розкажіть команді", text: "Служителі подають запити з бота або вебу, керівники погоджують з телефону, HR бачить усе." },
+          { title: "Задайте, хто погоджує", text: "Для кожного типу — маршрут: керівник, адміністрація, бухгалтер. Підставляється з оргструктури автоматично." },
+          { title: "Розкажіть команді", text: "Служителі подають запити з бота або вебу, керівники погоджують з телефону, Адміністрація бачить усе." },
         ],
         audience: [
           { role: "volunteer", text: "Просить відпустку чи заміну за дві хвилини з телефону й бачить, на якому етапі запит." },
@@ -190,7 +190,7 @@ export const hrModules: ModuleDetail[] = [
           { q: "Чи можна погодити запит, не заходячи в систему?", a: "Так. Повідомлення приходить у Telegram із кнопками «Погодити» й «Відхилити». Рішення одразу записується в систему." },
           { q: "Що буде з графіком служіння після запиту на заміну?", a: "Коли заміну погоджено, система сама оновить графік у модулі «Служіння» й повідомить обох служителів." },
           { q: "Чи можна вести облік відпусток для штатних працівників?", a: "Так. Для кожного працівника — норма днів на рік, використані й залишок. Погоджена відпустка автоматично зменшує залишок." },
-          { q: "Хто бачить чужі запити?", a: "Служитель — лише свої, керівник — своєї команди, HR і пастор — усі. Запити на кошти додатково бачить бухгалтер." },
+          { q: "Хто бачить чужі запити?", a: "Служитель — лише свої, керівник — своєї команди, адміністрація і пастор — усі. Запити на кошти додатково бачить бухгалтер." },
         ],
         mock: {
           kind: "board",
@@ -209,7 +209,7 @@ export const hrModules: ModuleDetail[] = [
               title: "На погодженні",
               cards: [
                 { title: "Кімната 2 на суботу", sub: "Наталя Рудь · чекає рецепцію", tag: { label: "Приміщення", tone: "neutral" } },
-                { title: "Відпустка 1–7 лис", sub: "Андрій Мельник · чекає HR", tag: { label: "Відпустка", tone: "brand" } },
+                { title: "Відпустка 1–7 лис", sub: "Андрій Мельник · чекає адміністрацію", tag: { label: "Відпустка", tone: "brand" } },
               ],
             },
             {
@@ -224,9 +224,9 @@ export const hrModules: ModuleDetail[] = [
       },
       en: {
         seoTitle: "Requests — My Church module",
-        seoDescription: "Time off, cover on a ministry, requests for funds or rooms: a volunteer submits from a phone, a leader approves in one click and HR sees the whole queue.",
+        seoDescription: "Time off, cover on a ministry, requests for funds or rooms: a volunteer submits from a phone, a leader approves in one click and administration sees the whole queue.",
         title: "Approvals in a minute, not a week of chats",
-        lead: "The Requests module replaces the \"can I skip serving on Sunday?\" messages. A volunteer submits a request from their phone, it goes to the right leader, who approves with one tap, and HR sees the full picture.",
+        lead: "The Requests module replaces the \"can I skip serving on Sunday?\" messages. A volunteer submits a request from their phone, it goes to the right leader, who approves with one tap, and administration sees the full picture.",
         highlights: [
           "Request types that match your church's processes",
           "Approval routes based on the org structure",
@@ -235,16 +235,16 @@ export const hrModules: ModuleDetail[] = [
         ],
         features: [
           { icon: "Inbox", title: "Request types", text: "Time off, cover on a ministry, funds for an event, a room, equipment, a reference letter. Your own types — with the fields you need." },
-          { icon: "Route", title: "Approval route", text: "A request goes to the leader from the org structure, then to HR or the accountant if needed. One step or several." },
+          { icon: "Route", title: "Approval route", text: "A request goes to the leader from the org structure, then to administration or the accountant if needed. One step or several." },
           { icon: "Smartphone", title: "Submit from a phone", text: "A two-minute form on the web or in the Telegram bot. A photo of a document or invoice attaches straight to the request." },
           { icon: "CheckCircle2", title: "One-click approval", text: "The leader gets a notification and approves or declines without opening the system. A comment is optional." },
           { icon: "RefreshCw", title: "Cover on a ministry", text: "A volunteer asks for cover — the system suggests free people from the same team, and the rota updates itself." },
-          { icon: "ClipboardList", title: "Queue and history", text: "HR sees every open request, who is holding up an approval and how much leave a person has left." },
+          { icon: "ClipboardList", title: "Queue and history", text: "Administration sees every open request, who is holding up an approval and how much leave a person has left." },
         ],
         steps: [
           { title: "Choose request types", text: "Turn on the ready-made ones: time off, cover, funds, rooms. Add your own with the fields you need." },
-          { title: "Set who approves", text: "A route for each type: leader, HR, accountant. It's filled in from the org structure automatically." },
-          { title: "Tell the team", text: "Volunteers submit requests from the bot or the web, leaders approve from their phones, HR sees everything." },
+          { title: "Set who approves", text: "A route for each type: leader, адміністрація, accountant. It's filled in from the org structure automatically." },
+          { title: "Tell the team", text: "Volunteers submit requests from the bot or the web, leaders approve from their phones, administration sees everything." },
         ],
         audience: [
           { role: "volunteer", text: "Asks for time off or cover in two minutes from a phone and sees which stage the request is at." },
@@ -256,7 +256,7 @@ export const hrModules: ModuleDetail[] = [
           { q: "Can I approve a request without opening the system?", a: "Yes. The notification arrives in Telegram with Approve and Decline buttons. The decision is recorded in the system immediately." },
           { q: "What happens to the rota after a cover request?", a: "Once cover is approved, the system updates the rota in the Ministries module itself and notifies both volunteers." },
           { q: "Can we track leave for paid staff?", a: "Yes. Each employee has an annual allowance, days used and days remaining. An approved leave request reduces the balance automatically." },
-          { q: "Who can see other people's requests?", a: "A volunteer sees only their own, a leader their team's, HR and the pastor all of them. Requests for funds are also visible to the accountant." },
+          { q: "Who can see other people's requests?", a: "A volunteer sees only their own, a leader their team's, administration and the pastor all of them. Requests for funds are also visible to the accountant." },
         ],
         mock: {
           kind: "board",
@@ -275,7 +275,7 @@ export const hrModules: ModuleDetail[] = [
               title: "In review",
               cards: [
                 { title: "Room 2 on Saturday", sub: "Natalia Rud · waiting for reception", tag: { label: "Room", tone: "neutral" } },
-                { title: "Leave 1–7 Nov", sub: "Andrii Melnyk · waiting for HR", tag: { label: "Leave", tone: "brand" } },
+                { title: "Leave 1–7 Nov", sub: "Andrii Melnyk · waiting for administration", tag: { label: "Leave", tone: "brand" } },
               ],
             },
             {
@@ -292,11 +292,11 @@ export const hrModules: ModuleDetail[] = [
   },
   {
     id: "accounting",
-    group: "team",
+    group: "accounting",
     related: ["analytics", "events", "camps", "projects"],
     copy: {
       ua: {
-        seoTitle: "Бухгалтерія — модуль «Моя Церква»",
+        seoTitle: "Облік фінансів церкви — пожертви й витрати | Моя Церква",
         seoDescription: "Фінанси церкви прозоро: пожертви готівкою, карткою та онлайн, витрати з погодженням, виплати команді, бюджети служінь і звіти за будь-який період.",
         title: "Кожна пожертва облікована, звіт — за хвилину",
         lead: "Модуль «Бухгалтерія» збирає всі гроші церкви в одному журналі: пожертви з неділі, онлайн-платежі, витрати служінь, виплати команді. Звіт для ради за квартал — одним натисканням, без Excel.",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   Check, Sparkles, UserCheck, Bell, MapPin, Music, QrCode, Ticket, Wallet, Download, Search,
@@ -931,7 +931,7 @@ function Body({ id, accent, scene }: { id: string; accent: string; scene: number
 /* Одна роль на сцені: привидний курсор з її ім'ям заходить і тисне ту саму
    кнопку, яку ця людина тисне в житті. Коли сцена догралася, вона сама
    передає естафету — тому в кадрі завжди рівно один курсор. */
-function Panel({ id, scene, run, startDelay, onDone }: { id: string; scene: number; run: number; startDelay: number; onDone: () => void }) {
+function Panel({ id, scene, run, active, startDelay, onDone }: { id: string; scene: number; run: number; active: boolean; startDelay: number; onDone: () => void }) {
   const t = useT().audience;
   const role = t.roles.find((r) => r.id === id);
   if (!role) return null;
@@ -942,6 +942,7 @@ function Panel({ id, scene, run, startDelay, onDone }: { id: string; scene: numb
   return (
     <CursorDemo
       playKey={`${id}-${run}`}
+      active={active}
       startDelay={startDelay}
       onDone={onDone}
       label={role.short}
@@ -988,90 +989,221 @@ const GROUPS: { key: "lead" | "serve" | "admin" | "come"; ids: string[] }[] = [
   { key: "come", ids: ["visitor", "member"] },
 ];
 
-/* Один блок — одна роль: ліворуч чим вона живе, праворуч її живий екран.
-   Тиснути нічого не треба — екран заводиться сам, коли доїхав у кадр, і
-   сам переходить до наступної сцени тієї ж ролі. */
-function RoleBlock({ id, flip }: { id: string; flip: boolean }) {
-  const t = useT().audience;
+type Role = ReturnType<typeof useT>["audience"]["roles"][number];
+
+/* Екран однієї ролі сам іде по своїх трьох сценах. Стан живе тут, а не на
+   сторінці: вибрана наново роль починає з першої. */
+function LivePanel({ id, active = true }: { id: string; active?: boolean }) {
   const [cur, setCur] = useState({ scene: 0, run: 0 });
-  const role = t.roles.find((r) => r.id === id);
-  if (!role) return null;
-  const accent = ROLE_ACCENTS[id];
-  const Icon = ROLE_ICONS[id];
-
   return (
-    <article className="w-full max-w-[1120px] px-5 md:px-8 grid grid-cols-1 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1fr)] gap-6 lg:gap-14 items-center">
-      <FadeIn className={cn("flex flex-col gap-4 min-w-0", flip && "lg:order-2")}>
-        <span
-          className="w-11 h-11 rounded-2xl flex items-center justify-center"
-          style={{ background: `color-mix(in oklab, ${accent} 13%, var(--surface))`, color: accent }}
-        >
-          <Icon className="w-[22px] h-[22px]" strokeWidth={2.1} />
-        </span>
-        <div className="flex flex-col gap-2.5">
-          <h3 className="font-semibold text-ink text-[28px] md:text-[34px] leading-[1.1] tracking-[-1px]">
-            {t.blocks.for} {role.plural}
-          </h3>
-          <p className="text-[16px] md:text-[17px] text-ink-2 leading-[1.55]">{role.hero.subtitle}</p>
-        </div>
-        <ul className="flex flex-col gap-2">
-          {role.hero.proof.map((p) => (
-            <li key={p} className="flex items-start gap-2.5 text-[14.5px] text-ink leading-[1.45]">
-              <span
-                className="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0 mt-[2px]"
-                style={{ background: `color-mix(in oklab, ${accent} 16%, var(--surface))`, color: accent }}
-              >
-                <Check className="w-3 h-3" strokeWidth={3.2} />
-              </span>
-              {p}
-            </li>
-          ))}
-        </ul>
-        <Link
-          href={`/for-whom/${role.id}`}
-          className="group inline-flex items-center gap-1.5 text-[14.5px] font-semibold w-fit"
-          style={{ color: `color-mix(in oklab, ${accent} 78%, var(--ink))` }}
-        >
-          {t.more}
-          <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-        </Link>
-      </FadeIn>
-
-      <FadeIn delay={1} variant="scale" className={cn("min-w-0", flip && "lg:order-1")}>
-        <Panel
-          id={id}
-          scene={cur.scene}
-          run={cur.run}
-          startDelay={700}
-          onDone={() => setCur((c) => ({ scene: (c.scene + 1) % SCENES, run: c.run + 1 }))}
-        />
-      </FadeIn>
-    </article>
+    <Panel
+      id={id}
+      scene={cur.scene}
+      run={cur.run}
+      active={active}
+      startDelay={600}
+      onDone={() => setCur((c) => ({ scene: (c.scene + 1) % SCENES, run: c.run + 1 }))}
+    />
   );
 }
 
-/* Дев'ять ролей — дев'ять великих блоків поспіль, без вкладок і без вибору:
-   сторінку просто гортають, а кожен екран програє себе сам. Ролі згруповані
-   за тим, що людина робить у церкві, — щоб довгий список читався. */
+/* ────────────────────────────────────────────────────────────────
+   /for-whom — спрощено 2026-09-30, так само, як каталог /modules.
+
+   Було: дев'ять великих блоків поспіль, у кожному іконка, заголовок,
+   два речення, три пункти з галочками, посилання — і живий екран. Разом
+   п'ять з половиною тисяч пікселів і дев'ять курсорів.
+
+   Стало: ліворуч покажчик — самі назви ролей по групах. Праворуч один
+   екран, що стоїть на місці: наведи на роль — він програє її сцени, під
+   ним одне речення. На телефоні — стрічка карток, по одній на роль.
+   ──────────────────────────────────────────────────────────────── */
 export default function AudienceStage() {
   const t = useT().audience;
-  let n = 0;
+  const groups = GROUPS.map((g) => ({
+    key: g.key,
+    title: t.blocks.groups[g.key],
+    roles: g.ids.map((id) => t.roles.find((r) => r.id === id)).filter((r): r is Role => !!r),
+  }));
+  const flat = groups.flatMap((g) => g.roles.map((r) => ({ g, r })));
+
+  /* ── Покажчик + екран (десктоп) ── */
+  const [active, setActive] = useState(flat[0]?.r.id ?? "");
+  const current = flat.find((x) => x.r.id === active) ?? flat[0];
+
+  /* Намір, а не проліт: миша, що просто перетинає назву дорогою до екрана,
+     не має перемикати його. */
+  const intent = useRef<number | undefined>(undefined);
+  const preview = (id: string) => {
+    window.clearTimeout(intent.current);
+    intent.current = window.setTimeout(() => setActive(id), 90);
+  };
+  const cancel = () => window.clearTimeout(intent.current);
+  useEffect(() => () => window.clearTimeout(intent.current), []);
+
+  /* ── Стрічка карток (телефон, планшет) ── */
+  const railRef = useRef<HTMLDivElement>(null);
+  const [slide, setSlide] = useState(0);
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const first = rail.children[0] as HTMLElement | undefined;
+        const second = rail.children[1] as HTMLElement | undefined;
+        if (!first) return;
+        const step = second ? second.offsetLeft - first.offsetLeft : first.offsetWidth;
+        setSlide(Math.max(0, Math.round(rail.scrollLeft / step)));
+      });
+    };
+    rail.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      rail.removeEventListener("scroll", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  const count = t.page.text.replace("{n}", String(flat.length));
 
   return (
-    <section className="w-full flex flex-col items-center gap-12 md:gap-20 pt-4 md:pt-8 pb-14 md:pb-20">
-      {GROUPS.map((g) => (
-        <div key={g.key} className="w-full flex flex-col items-center gap-12 md:gap-20">
-          <FadeIn className="w-full max-w-[1120px] px-5 md:px-8 flex items-center gap-4">
-            <h2 className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-ink-3 whitespace-nowrap">
-              {t.blocks.groups[g.key]}
-            </h2>
-            <span aria-hidden className="h-px flex-1 bg-hairline" />
-          </FadeIn>
-          {g.ids.map((id) => (
-            <RoleBlock key={id} id={id} flip={n++ % 2 === 1} />
-          ))}
+    <section className="w-full flex flex-col items-center pt-24 md:pt-32 pb-12 md:pb-20">
+      <div className="w-full max-w-[1120px] px-5 md:px-8 flex flex-col gap-8 md:gap-12">
+        <FadeIn className="flex flex-col gap-3 md:gap-4 max-w-[760px]">
+          <h1 className="font-semibold text-ink text-[44px] sm:text-[60px] lg:text-[84px] leading-[1.0] tracking-[-1.6px] lg:tracking-[-3px] text-balance">
+            {t.page.title}
+          </h1>
+          <p className="text-[16px] md:text-[19px] text-ink-2 leading-[1.45]">{count}</p>
+        </FadeIn>
+
+        {/* ══ Десктоп: покажчик ліворуч, екран праворуч ══ */}
+        <FadeIn className="hidden lg:grid grid-cols-[minmax(0,1fr)_520px] xl:grid-cols-[minmax(0,1fr)_560px] gap-12 xl:gap-16 items-start">
+          <nav aria-label={t.page.title} className="flex flex-col">
+            {groups.map((g) => (
+              <div key={g.key} className="flex flex-col gap-1.5 py-5 border-t border-hairline first:border-t-0 first:pt-0">
+                <h2 className="text-[12px] font-semibold uppercase tracking-[0.12em] leading-none text-ink-3 mb-1">{g.title}</h2>
+                <ul className="flex flex-col">
+                  {g.roles.map((role) => {
+                    const on = current?.r.id === role.id;
+                    return (
+                      <li key={role.id}>
+                        <Link
+                          href={`/for-whom/${role.id}`}
+                          aria-current={on ? "true" : undefined}
+                          onPointerEnter={(e) => {
+                            if (e.pointerType === "mouse") preview(role.id);
+                          }}
+                          onPointerLeave={cancel}
+                          onFocus={() => setActive(role.id)}
+                          /* Дотик без наведення (планшет у ландшафті):
+                             перший тап показує екран, другий — відкриває. */
+                          onClick={(e) => {
+                            if (!on && window.matchMedia("(hover: none)").matches) {
+                              e.preventDefault();
+                              setActive(role.id);
+                            }
+                          }}
+                          className={cn(
+                            "relative inline-flex py-1 font-semibold text-[28px] xl:text-[32px] leading-[1.2] tracking-[-0.8px] outline-none transition-colors duration-200",
+                            on ? "text-ink" : "text-ink-2 hover:text-ink focus-visible:text-ink"
+                          )}
+                        >
+                          {role.name}
+                          {/* Риска під вибраною роллю — у її колір. */}
+                          <span
+                            aria-hidden
+                            className="absolute left-0 right-0 bottom-0 h-[3px] rounded-full origin-left transition-transform duration-300 ease-out"
+                            style={{ background: ROLE_ACCENTS[role.id], transform: `scaleX(${on ? 1 : 0})` }}
+                          />
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </nav>
+
+          {current && (
+            <div className="sticky top-[104px]">
+              <Screen role={current.r} more={t.detail} />
+            </div>
+          )}
+        </FadeIn>
+
+        {/* ══ Телефон і планшет: стрічка карток ══ */}
+        <div className="lg:hidden flex flex-col gap-4">
+          <div
+            ref={railRef}
+            className="relative -mx-5 md:-mx-8 px-5 md:px-8 scroll-px-5 md:scroll-px-8 flex gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory overscroll-x-contain"
+          >
+            {flat.map(({ g, r }, index) => (
+              <Card key={r.id} role={r} groupTitle={g.title} live={index === slide} more={t.detail} />
+            ))}
+          </div>
+          <p className="text-[13px] text-ink-3 tabular-nums text-center">
+            {Math.min(slide + 1, flat.length)} / {flat.length}
+          </p>
         </div>
-      ))}
+      </div>
     </section>
+  );
+}
+
+const tint = (accent: string) =>
+  `linear-gradient(170deg, color-mix(in oklab, ${accent} 12%, var(--surface)) 0%, color-mix(in oklab, ${accent} 4%, var(--surface)) 60%, var(--surface) 100%)`;
+
+/* ── Екран вибраної ролі (десктоп) ────────────────────────────── */
+/* Без рамки довкола: панель ролі сама вже картка, а рамка навколо неї
+   давала «картку в картці» з порожнечею знизу під короткими сценами. */
+function Screen({ role, more }: { role: Role; more: string }) {
+  return (
+    <div className="flex flex-col gap-5">
+      <div key={`head-${role.id}`} className="flex items-start justify-between gap-4" style={{ animation: "softFade 0.35s ease-out both" }}>
+        <p className="text-ink font-semibold text-[24px] xl:text-[26px] leading-[1.2] tracking-[-0.5px]">{role.tagline}</p>
+        <Link
+          href={`/for-whom/${role.id}`}
+          className="shrink-0 mt-0.5 inline-flex items-center gap-1.5 rounded-full border border-hairline bg-surface px-3 py-1.5 text-[13px] font-medium text-ink-2 hover:text-ink hover:border-hairline-strong transition-colors"
+        >
+          {more}
+          <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.2} />
+        </Link>
+      </div>
+      <LivePanel key={`panel-${role.id}`} id={role.id} />
+    </div>
+  );
+}
+
+/* ── Картка стрічки (телефон, планшет) ────────────────────────── */
+function Card({ role, groupTitle, live, more }: { role: Role; groupTitle: string; live: boolean; more: string }) {
+  const accent = ROLE_ACCENTS[role.id];
+  return (
+    <article
+      className="snap-start shrink-0 w-[calc(100vw-64px)] max-w-[420px] rounded-[24px] border border-hairline overflow-hidden flex flex-col"
+      style={{ background: tint(accent) }}
+    >
+      <div className="px-5 pt-5 flex flex-col gap-1.5">
+        <span className="text-[12px] font-semibold uppercase tracking-[0.1em] leading-none" style={{ color: accent }}>{groupTitle}</span>
+        <h2 className="font-semibold text-ink text-[28px] leading-[1.1] tracking-[-0.6px] mt-1">{role.name}</h2>
+        <p className="text-[15px] text-ink-2 leading-[1.4]">{role.tagline}</p>
+      </div>
+      <div className="px-4 mt-4">
+        {/* Курсор грає лише в картці, що на екрані. */}
+        <LivePanel id={role.id} active={live} />
+      </div>
+      <div className="mt-auto px-4 pt-4 pb-4">
+        <Link
+          href={`/for-whom/${role.id}`}
+          className="w-full h-11 rounded-full flex items-center justify-center gap-1.5 text-[15px] font-semibold text-white"
+          /* Колір ролі трохи поглиблюємо, щоб білий текст тримав контраст. */
+          style={{ background: `color-mix(in oklab, ${accent} 80%, #04121f)` }}
+        >
+          {more}
+          <ArrowRight className="w-4 h-4" strokeWidth={2.2} />
+        </Link>
+      </div>
+    </article>
   );
 }

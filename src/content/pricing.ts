@@ -88,7 +88,7 @@ const ua: PricingCopy = {
     { title: "Навчання команди", text: "Пастори, лідери груп і адміністрація — поки не почнуть працювати самі." },
   ],
   programNote:
-    "Налаштування займає до 14 днів. Безкоштовний період не перетворюється на платну підписку сам собою: щоб продовжити на платній основі, потрібна ваша окрема згода.",
+    "Налаштування займає до 7 днів. Безкоштовний період не перетворюється на платну підписку сам собою: щоб продовжити на платній основі, потрібна ваша окрема згода.",
 
   tiersEyebrow: "Щаблі",
   tiersTitle: "Кожен наступний знімає більший шматок рутини",
@@ -182,8 +182,8 @@ const ua: PricingCopy = {
       text: "Повний експорт у CSV або Excel будь-коли, без пояснень, навіщо він вам.",
     },
     {
-      title: "60 днів після припинення",
-      text: "Якщо розійдемось — база чекає на вас ще два місяці, щоб ви встигли все забрати.",
+      title: "Час, щоб усе забрати",
+      text: "Якщо розійдемось, база не зникне того ж дня — ви спокійно все заберете.",
     },
     {
       title: "Підтримка протягом робочого дня",
@@ -217,7 +217,7 @@ const en: PricingCopy = {
     { title: "Training your team", text: "Pastors, group leaders and administrators — until they can work on their own." },
   ],
   programNote:
-    "Setup takes up to 14 days. A free period never turns into a paid subscription by itself: continuing on paid terms requires your separate agreement.",
+    "Setup takes up to 7 days. A free period never turns into a paid subscription by itself: continuing on paid terms requires your separate agreement.",
 
   tiersEyebrow: "The steps",
   tiersTitle: "Each one takes a bigger piece of the routine",
@@ -302,8 +302,8 @@ const en: PricingCopy = {
       text: "A full export as CSV or Excel at any time, with no need to explain why you want it.",
     },
     {
-      title: "60 days after you stop",
-      text: "If we part ways, the database waits two more months so you can take everything with you.",
+      title: "Time to take everything",
+      text: "If we part ways, the database doesn't vanish the same day — you can take everything with you calmly.",
     },
     {
       title: "Support within the working day",

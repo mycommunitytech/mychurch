@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import FadeIn, { prefersReducedMotion } from "@/components/shared/fade-in";
@@ -44,13 +44,17 @@ interface Node {
 function Step({ node, lit }: { node: Node; lit?: boolean }) {
   return (
     <span className={cn("flex items-center gap-3", lit && "zap-lift")}>
-      <span
-        className="w-8 h-8 rounded-[10px] shrink-0 flex items-center justify-center"
-        style={{ background: node.accent }}
-      >
-        <node.Icon className="w-4 h-4 text-white" strokeWidth={2.2} />
+      {/* Гніздо завширшки з подію: значки кроків дрібніші за неї, але
+          стоять на одній осі — інакше провід ішов би навскіс. */}
+      <span className="w-12 shrink-0 flex justify-center">
+        <span
+          className="w-10 h-10 rounded-[12px] flex items-center justify-center"
+          style={{ background: node.accent }}
+        >
+          <node.Icon className="w-[19px] h-[19px] text-white" strokeWidth={2.2} />
+        </span>
       </span>
-      <span className="text-white text-[16px] md:text-[17.5px] font-semibold leading-[1.25] tracking-[-0.35px]">
+      <span className="text-white text-[17px] md:text-[18.5px] font-semibold leading-[1.25] tracking-[-0.4px]">
         {node.text}
       </span>
     </span>
@@ -60,7 +64,7 @@ function Step({ node, lit }: { node: Node; lit?: boolean }) {
 /* Провід між кроками: риска під значком, якою згори вниз біжить розряд. */
 function Drop({ delay, paused }: { delay: number; paused: boolean }) {
   return (
-    <span aria-hidden className="relative block h-7 w-px ml-[15.5px] bg-white/15">
+    <span aria-hidden className="relative block h-7 w-px ml-[23.5px] bg-white/15">
       <span
         className="absolute inset-0 origin-top"
         style={{
@@ -78,17 +82,33 @@ function Drop({ delay, paused }: { delay: number; paused: boolean }) {
 }
 
 /* Подія, з якої все починається: єдиний бурштиновий значок у схемі. */
-function Event({ text }: { text: string }) {
+function Event({ text, label }: { text: string; label: string }) {
   return (
     <span className="zap-trigger flex items-center gap-3">
+      {/* Подія більша за все, що під нею: значок ширший, напис крупніший,
+          а над ним написано «Якщо» — щоб схема читалась як «якщо — то»,
+          а не як п'ять однакових рядків (2026-09-22). */}
       <span
-        className="w-8 h-8 rounded-[10px] shrink-0 flex items-center justify-center"
-        style={{ background: AMBER }}
+        className="w-12 h-12 rounded-[14px] shrink-0 flex items-center justify-center"
+        style={{
+          background: AMBER,
+          /* Світиться вдвічі сильніше за решту схеми: подія має бити в
+             око першою, ще до того, як прочитали напис. */
+          boxShadow: `0 0 0 6px color-mix(in oklab, ${AMBER} 16%, transparent), 0 14px 34px -10px ${AMBER}`,
+        }}
       >
-        <Zap className="w-4 h-4" strokeWidth={2.4} style={{ color: INK }} fill={INK} />
+        <Zap className="w-[25px] h-[25px]" strokeWidth={2.4} style={{ color: INK }} fill={INK} />
       </span>
-      <span className="text-white text-[16px] md:text-[17.5px] font-semibold leading-[1.25] tracking-[-0.35px]">
-        {text}
+      <span className="flex flex-col gap-[5px] min-w-0">
+        <span
+          className="text-[11px] font-bold uppercase tracking-[0.2em] leading-none"
+          style={{ color: AMBER }}
+        >
+          {label}
+        </span>
+        <span className="text-white text-[23px] md:text-[27px] font-bold leading-[1.05] tracking-[-0.8px]">
+          {text}
+        </span>
       </span>
     </span>
   );
@@ -101,6 +121,9 @@ export default function Automations() {
   const [paused, setPaused] = useState(false);
   /* Куди саме дійшов розряд (-1 — нікуди). */
   const [lit, setLit] = useState(-1);
+  /* Риска через «рутину» малюється один раз — коли блок доїхав до ока. */
+  const [seen, setSeen] = useState(false);
+  const titleRef = useRef<HTMLDivElement>(null);
 
   const count = c.recipes.length;
   const r = c.recipes[active];
@@ -119,6 +142,22 @@ export default function Automations() {
     };
   }, [active, r.steps]);
 
+  useEffect(() => {
+    const el = titleRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([en]) => {
+        if (en.isIntersecting) {
+          setSeen(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   const card = (x: { text: string; module: string }): Node => ({
     text: x.text,
     accent: MODULE_ACCENTS[x.module] ?? AMBER,
@@ -131,7 +170,7 @@ export default function Automations() {
   return (
     <section
       id="automations"
-      className="w-full flex flex-col items-center pt-2.5 md:pt-3 pb-16 md:pb-24 scroll-mt-24"
+      className="w-full flex flex-col items-center py-2.5 md:py-3 scroll-mt-24"
     >
       <div className="w-full max-w-[1120px] px-5 md:px-8">
         <FadeIn variant="scale">
@@ -186,7 +225,7 @@ export default function Automations() {
                   й кольорові плашки на всю ширину жили тут до 2026-09-21:
                   на пів картки це читалось як схема метро. */}
               <div key={active} className="relative flex-1 w-full max-w-[340px] mx-auto flex flex-col justify-center">
-                <Event text={r.when} />
+                <Event text={r.when} label={c.triggerLabel} />
                 {r.steps.map((x, i) => (
                   <Fragment key={x.text}>
                     <Drop delay={START_MS + i * STEP_MS} paused={paused} />
@@ -237,13 +276,27 @@ export default function Automations() {
               </div>
             </div>
 
-            <div className="flex flex-col justify-center gap-3 p-7 md:p-10">
+            <div ref={titleRef} className="flex flex-col justify-center p-7 md:p-10">
               <h2 className="font-semibold text-ink text-[34px] sm:text-[48px] md:text-[64px] leading-[1.0] tracking-[-1px] md:tracking-[-2.2px]">
-                {c.title}
+                {c.title}{" "}
+                {/* Рутину не описують — її викреслюють. Риска їде зліва
+                    направо, щойно блок доїхав до екрана. */}
+                <span className="relative inline-block whitespace-nowrap">
+                  {c.titleStrike}
+                  {/* Зсув по вертикалі — на зовнішньому шарі, масштаб — на
+                      внутрішньому: інакше анімація scaleX() затирає
+                      translateY() і риска з'їжджає нижче слова. */}
+                  <span
+                    aria-hidden
+                    className="absolute left-0 right-0 top-1/2 h-[5px] md:h-[7px] -translate-y-1/2"
+                  >
+                    <span
+                      className={cn("strike-line block w-full h-full origin-left rounded-full", seen && "strike-draw")}
+                      style={{ background: AMBER }}
+                    />
+                  </span>
+                </span>
               </h2>
-              <p className="text-[16.5px] md:text-[18px] font-normal text-ink-2 leading-[1.5] max-w-[340px]">
-                {c.text}
-              </p>
             </div>
           </div>
         </FadeIn>

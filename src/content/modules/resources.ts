@@ -4,7 +4,7 @@ import type { ModuleDetail } from "./types";
 export const resourcesModules: ModuleDetail[] = [
   {
     id: "rooms",
-    group: "property",
+    group: "resources",
     related: ["calendar", "events", "groups", "infrastructure"],
     copy: {
       ua: {
@@ -50,7 +50,7 @@ export const resourcesModules: ModuleDetail[] = [
           events: [
             { day: 0, start: 1, span: 2, title: "Штаб команди", tone: "neutral" },
             { day: 1, start: 5, span: 2, title: "Група «Центр»", tone: "green" },
-            { day: 2, start: 3, span: 2, title: "Альфа-курс", tone: "brand" },
+            { day: 2, start: 3, span: 2, title: "Основи віри", tone: "brand" },
             { day: 3, start: 5, span: 2, title: "Молодіжка", tone: "green" },
             { day: 4, start: 4, span: 3, title: "Репетиція", tone: "violet" },
             { day: 5, start: 2, span: 3, title: "Весілля", tone: "amber" },
@@ -102,7 +102,7 @@ export const resourcesModules: ModuleDetail[] = [
           events: [
             { day: 0, start: 1, span: 2, title: "Staff meeting", tone: "neutral" },
             { day: 1, start: 5, span: 2, title: "Centre group", tone: "green" },
-            { day: 2, start: 3, span: 2, title: "Alpha course", tone: "brand" },
+            { day: 2, start: 3, span: 2, title: "Foundations", tone: "brand" },
             { day: 3, start: 5, span: 2, title: "Youth", tone: "green" },
             { day: 4, start: 4, span: 3, title: "Rehearsal", tone: "violet" },
             { day: 5, start: 2, span: 3, title: "Wedding", tone: "amber" },
@@ -115,11 +115,11 @@ export const resourcesModules: ModuleDetail[] = [
   },
   {
     id: "inventory",
-    group: "property",
+    group: "resources",
     related: ["infrastructure", "rooms", "ministries", "tables"],
     copy: {
       ua: {
-        seoTitle: "Інвентаризація — модуль «Моя Церква»",
+        seoTitle: "Облік майна церкви — інвентаризація | Моя Церква",
         seoDescription: "Облік майна церкви: мікрофони, проєктори, стільці, матеріали. Хто взяв, де лежить, коли повернути — з QR-кодами, історією руху та нагадуваннями.",
         title: "Хто взяв, де лежить, коли поверне — завжди відомо",
         lead: "Модуль «Інвентаризація» веде облік усього, що належить церкві: від мікрофонів і проєкторів до стільців і наметів для табору. Видали річ за QR-кодом — і система знає, у кого вона й коли має повернутись.",
@@ -242,7 +242,7 @@ export const resourcesModules: ModuleDetail[] = [
   },
   {
     id: "infrastructure",
-    group: "property",
+    group: "resources",
     related: ["rooms", "inventory", "campuses", "projects"],
     copy: {
       ua: {

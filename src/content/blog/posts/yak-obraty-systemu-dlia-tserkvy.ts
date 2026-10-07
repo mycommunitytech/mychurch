@@ -4,7 +4,8 @@ export const post: BlogPost = {
   slug: "yak-obraty-systemu-dlia-tserkvy",
   category: "choice",
   date: "2026-09-16",
-  minutes: 9,
+  updated: "2026-09-30",
+  /* Запит «церковна СРМ» тримає окрема стаття, тож тут на неї лише посилання в «Читати далі». */
   related: ["vasha-tserkva-unikalna", "piat-pytan-pro-systemu", "dani-v-riznykh-mistsiakh"],
   copy: {
     ua: {
@@ -12,29 +13,29 @@ export const post: BlogPost = {
       seoDescription:
         "Критерії вибору програми для церкви: мова, гнучкість, ролі, імпорт, мобільність, ціна й підтримка. Що перевірити на демо й де зазвичай ховаються проблеми.",
       title: "Як обрати систему управління церквою",
-      lead: "Систему обирають раз на кілька років, а живуть з нею щодня. Тому важливіші не списки можливостей, а відповіді на дванадцять незручних запитань.",
+      lead: "Систему для церкви обирають раз на кілька років, а живуть із нею щодня. Тому важливіші не списки можливостей, а відповіді на дванадцять незручних запитань.",
       keywords: [
         "система управління церквою",
         "як обрати програму для церкви",
-        "церковна CRM",
+        "як обрати систему для церкви",
         "порівняння систем для церкви",
         "впровадження програми в церкві",
       ],
       problem: {
         title: "Обрали за списком можливостей — і не користуються",
-        text: "Система вміє все: від обліку до розсилок. Через три місяці в ній працює один адміністратор, лідери повернулись у чат, а дані знову в таблиці. Можливості були, а щоденного використання — ні.",
+        text: "Система вміє все: від обліку до розсилок. Через три місяці в ній працює один адміністратор, лідери повернулись у чат, а дані знову в таблиці.",
       },
       sections: [
         {
-          heading: "Почніть не з системи, а зі своїх процесів",
+          heading: "Почніть зі своїх процесів",
           blocks: [
             {
               kind: "steps",
               items: [
-                { title: "Випишіть п'ять щотижневих дій", text: "Те, що повторюється кожного тижня: відмітка явки, графік служіння, робота з гостями, заявки, зведення для пастора." },
-                { title: "Позначте, хто їх робить", text: "Лідер групи, керівник служіння, адміністратор, пастор. Це і є ваші майбутні ролі в системі." },
-                { title: "Порахуйте, скільки часу вони займають зараз", text: "Це ваша точка відліку — без неї ви не зрозумієте, чи стало краще." },
-                { title: "І тільки тоді дивіться системи", text: "Перевіряйте не наявність функцій, а те, як у них виконуються саме ці п'ять дій." },
+                { title: "Випишіть п'ять щотижневих дій", text: "Наприклад: відмітка явки, графік служіння, робота з гостями, заявки, зведення для пастора." },
+                { title: "Позначте, хто їх робить", text: "Лідер групи, керівник служіння, адміністратор, пастор. Це ваші майбутні ролі в системі." },
+                { title: "Порахуйте, скільки часу вони займають зараз", text: "Без цього числа ви не побачите, чи стало краще." },
+                { title: "І тільки тоді дивіться системи", text: "На кожному демо пройдіть ці п'ять дій крок за кроком." },
               ],
             },
           ],
@@ -47,7 +48,7 @@ export const post: BlogPost = {
               title: "Про щоденну роботу",
               items: [
                 "Скільки дотиків потрібно лідеру, щоб відмітити явку?",
-                "Чи можна працювати з телефона без встановлення окремого застосунку?",
+                "Чи працює все потрібне лідеру з телефона і що для цього треба встановити?",
                 "Чи бачить лідер лише свою групу?",
                 "Що бачить пастор і чи готується цей екран автоматично?",
               ],
@@ -56,9 +57,9 @@ export const post: BlogPost = {
               kind: "list",
               title: "Про дані й гнучкість",
               items: [
-                "Чи можна перейменувати сутності під наш словник?",
-                "Чи можна додати власні поля й етапи?",
+                "Чи можна змінити назви під наш словник і додати свої поля та етапи без розробника?",
                 "Як імпортуються наші таблиці й чи можна скасувати імпорт?",
+                "Де зберігаються дані людей, хто має до них доступ і як часто робляться резервні копії?",
                 "Чи можемо ми вивантажити свої дані, якщо підемо?",
               ],
             },
@@ -72,25 +73,29 @@ export const post: BlogPost = {
                 "Що входить у ціну, а що рахується окремо?",
               ],
             },
+            {
+              kind: "text",
+              text: "Про гнучкість докладніше в статті [«Ваша церква унікальна»](/blog/vasha-tserkva-unikalna), а наші відповіді про ціну — на сторінці [«Вартість»](/pricing).",
+            },
           ],
         },
         {
-          heading: "Що перевірити саме на демо",
+          heading: "Що перевірити на демо",
           blocks: [
             {
               kind: "table",
               columns: ["Перевірка", "Як робити", "На що дивитись"],
               rows: [
-                ["Ваші дані", "Попросіть завантажити фрагмент вашої таблиці", "Скільки часу і скільки ручної роботи"],
-                ["Роль лідера", "Попросіть показати екран лідера, а не адміністратора", "Чи не бачить він зайвого"],
-                ["Щотижнева дія", "Відмітьте явку самі, а не дивіться, як це роблять", "Кількість кроків"],
+                ["Ваші дані", "Попросіть завантажити фрагмент вашої таблиці", "Скільки часу й ручної роботи"],
+                ["Роль лідера", "Попросіть показати екран лідера групи", "Чи немає там зайвого"],
+                ["Щотижнева дія", "Відмітьте явку самі", "Скільки кроків"],
                 ["Зміна назви", "Попросіть перейменувати «малу групу» при вас", "Чи це налаштування, чи розробка"],
               ],
             },
             {
               kind: "callout",
               title: "Демо на ваших даних варте десяти презентацій",
-              text: "Презентація показує найкращий сценарій. Ваша таблиця з дублями й порожніми полями показує реальність.",
+              text: "Беріть фрагмент із дублями й порожніми полями: у презентаціях таких не буває.",
             },
           ],
         },
@@ -100,32 +105,31 @@ export const post: BlogPost = {
             {
               kind: "list",
               items: [
-                "«Ми налаштуємо все під вас за окрему плату» — і кожна дрібниця потім стає окремою платою.",
+                "«Налаштуємо все під вас за окрему плату»: далі платна кожна дрібниця.",
                 "Немає ролей: усі бачать усе.",
                 "Немає експорту даних.",
-                "Впровадження триває пів року до першого реального використання.",
+                "Пів року впровадження до першої відмітки явки.",
                 "Підтримка лише поштою й лише іноземною мовою.",
               ],
             },
           ],
         },
         {
-          heading: "Скільки це має коштувати за часом",
+          heading: "Скільки має тривати впровадження",
           blocks: [
             {
               kind: "list",
               items: [
-                "Перший запуск: тиждень-два до першої реальної відмітки явки.",
-                "Перенос даних: дні, не місяці.",
+                "Запуск: тиждень-два до першої реальної відмітки явки.",
+                "Перенесення даних: кілька днів.",
                 "Навчання лідера: 15 хвилин на щотижневі дії.",
-                "Повне впровадження всіх модулів: місяць. Модулі вмикаються один за одним, а не всі разом.",
+                "Повне впровадження: місяць, модулі вмикаються по одному.",
               ],
             },
             {
               kind: "solution",
               title: "Розклад перших двох тижнів",
-              text:
-                "Так виглядає розклад, який ще тримає ентузіазм команди: реальна відмітка явки на другому тижні, а не «повне впровадження» через квартал. Якщо система не вміщається в цей розклад — питання не до вас.",
+              text: "Приклад: група вперше відмічає явку в системі на дев'ятий день від першої розмови.",
               spec: {
                 kind: "timeline",
                 title: "Від демо до першої відмітки",
@@ -142,35 +146,35 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "Якщо до першого реального використання минає більше місяця, впровадження зупиниться. Не тому що система погана, а тому що ентузіазм команди має свій термін.",
+              text: "Якщо до першого реального використання минає більше місяця, впровадження зупиняється навіть із доброю системою: ентузіазм команди має свій термін.",
             },
           ],
         },
       ],
       takeaways: [
-        "Спершу опишіть свої п'ять щотижневих дій, потім дивіться системи.",
-        "На демо перевіряйте свої дані й екран лідера, а не презентацію.",
-        "Відсутність ролей і експорту — привід не продовжувати розмову.",
-        "Перше реальне використання має настати за тиждень-два.",
+        "Мірило вибору — ваші п'ять щотижневих дій і час, який вони забирають зараз.",
+        "На демо завантажте свою таблицю й відмітьте явку з екрана лідера.",
+        "Немає ролей чи експорту даних — розмову можна закінчувати.",
+        "Перша відмітка явки за два тижні — норма, за пів року — червоний прапорець.",
       ],
       faq: [
         {
           q: "Скільки систем варто порівняти?",
-          a: "Дві-три. Більше — і порівняння перетворюється на дослідження, яке ніколи не закінчується рішенням.",
+          a: "Дві-три. Більше — і порівняння стає дослідженням, яке не закінчується рішенням.",
         },
         {
           q: "Чи важлива українська мова інтерфейсу?",
-          a: "Так, якщо ви хочете, щоб системою користувались лідери, а не лише адміністратор. Кожне незрозуміле слово — це мінус кілька людей.",
+          a: "Так, якщо системою мають користуватися лідери груп. Кожне незрозуміле слово — мінус кілька людей у системі.",
         },
         {
           q: "Що робити, якщо частина команди проти змін?",
-          a: "Почніть з тих, кому система дає негайну користь, — зазвичай це лідери груп. Успіх однієї команди переконує краще за будь-яку презентацію.",
+          a: "Почніть із тих, кому система одразу полегшує тиждень: зазвичай це лідери груп. Успіх однієї групи переконує решту краще за будь-яку презентацію.",
         },
       ],
       cta: {
         title: "Подивіться, як це влаштовано",
-        text: "Модулі, ролі й налаштування — і демо на ваших даних, а не на вигаданих.",
-        label: "Замовити демо",
+        text: "Модулі, ролі й налаштування, а демо — на ваших даних.",
+        label: "Подивитись модулі",
         href: "/modules",
       },
     },
@@ -179,7 +183,7 @@ export const post: BlogPost = {
       seoDescription:
         "Criteria for choosing church software: language, flexibility, roles, import, mobile use, price and support. What to test in a demo and where problems hide.",
       title: "How to choose a church management system",
-      lead: "You choose a system once every few years and live with it daily. Feature lists matter less than the answers to twelve awkward questions.",
+      lead: "You choose church software once every few years and live with it daily. So feature lists matter less than the answers to twelve awkward questions.",
       keywords: [
         "church management software",
         "choosing church software",
@@ -189,19 +193,19 @@ export const post: BlogPost = {
       ],
       problem: {
         title: "Chosen on features, then unused",
-        text: "The system can do everything. Three months later one administrator uses it, leaders are back in the chat and the data is in a spreadsheet again. The features existed; the daily use did not.",
+        text: "The system can do everything, from records to mailings. Three months later one administrator uses it, leaders are back in the chat and the data is in a spreadsheet again.",
       },
       sections: [
         {
-          heading: "Start with your processes, not the software",
+          heading: "Start with your processes",
           blocks: [
             {
               kind: "steps",
               items: [
                 { title: "List five weekly actions", text: "Attendance, rota, guest follow-up, requests, the pastor's summary." },
                 { title: "Note who does them", text: "Group leader, ministry lead, administrator, pastor. Those are your future roles." },
-                { title: "Measure how long they take now", text: "That is your baseline; without it you cannot tell whether anything improved." },
-                { title: "Only then look at systems", text: "Test how those five actions work, not whether a feature exists." },
+                { title: "Measure how long they take now", text: "Without that number you cannot tell whether anything improved." },
+                { title: "Only then look at systems", text: "In every demo, walk through those five actions step by step." },
               ],
             },
           ],
@@ -214,7 +218,7 @@ export const post: BlogPost = {
               title: "About daily work",
               items: [
                 "How many taps does a leader need to mark attendance?",
-                "Can it be used from a phone without installing a separate app?",
+                "Does everything a leader needs work from a phone, and what has to be installed for it?",
                 "Does a leader see only their own group?",
                 "What does the pastor see, and is that screen built automatically?",
               ],
@@ -223,9 +227,9 @@ export const post: BlogPost = {
               kind: "list",
               title: "About data and flexibility",
               items: [
-                "Can entities be renamed to match our vocabulary?",
-                "Can we add our own fields and stages?",
+                "Can names be changed to our vocabulary and our own fields and stages added without a developer?",
                 "How are our spreadsheets imported, and can an import be undone?",
+                "Where is people's data stored, who can access it, and how often is it backed up?",
                 "Can we export our data if we leave?",
               ],
             },
@@ -239,6 +243,10 @@ export const post: BlogPost = {
                 "What is included in the price and what is billed separately?",
               ],
             },
+            {
+              kind: "text",
+              text: "More on flexibility in [Your church is unique](/blog/vasha-tserkva-unikalna); our own answers on price are on the [pricing page](/pricing).",
+            },
           ],
         },
         {
@@ -249,15 +257,15 @@ export const post: BlogPost = {
               columns: ["Test", "How", "What to watch"],
               rows: [
                 ["Your data", "Ask them to load a slice of your spreadsheet", "Time and manual work involved"],
-                ["The leader role", "Ask for the leader screen, not the admin one", "Whether they see too much"],
+                ["The leader role", "Ask to see a group leader's screen", "Anything they should not see"],
                 ["A weekly action", "Mark attendance yourself", "Number of steps"],
-                ["Renaming", "Ask them to rename small group live", "Configuration or development?"],
+                ["Renaming", "Ask them to rename small group while you watch", "Configuration or development?"],
               ],
             },
             {
               kind: "callout",
               title: "A demo on your data beats ten presentations",
-              text: "A presentation shows the best case. Your spreadsheet with duplicates and gaps shows reality.",
+              text: "Bring a slice with duplicates and empty fields: presentations never have them.",
             },
           ],
         },
@@ -267,32 +275,31 @@ export const post: BlogPost = {
             {
               kind: "list",
               items: [
-                "We will configure it for you for an extra fee — and every detail becomes an extra fee.",
+                "“We will configure everything for you for an extra fee”: then every detail costs extra.",
                 "No roles: everyone sees everything.",
                 "No data export.",
-                "Six months of implementation before the first real use.",
-                "Support by email only, in one foreign language.",
+                "Six months of implementation before the first attendance mark.",
+                "Support by email only, and only in a foreign language.",
               ],
             },
           ],
         },
         {
-          heading: "What it should cost in time",
+          heading: "How long rollout should take",
           blocks: [
             {
               kind: "list",
               items: [
                 "Launch: a week or two until the first real attendance mark.",
-                "Data migration: days, not months.",
+                "Data migration: a few days.",
                 "Training a leader: fifteen minutes for the weekly actions.",
-                "Full rollout of every module: a month. Modules switch on one after another, not all at once.",
+                "Full rollout: a month, switching modules on one at a time.",
               ],
             },
             {
               kind: "solution",
               title: "The first two weeks",
-              text:
-                "This is the schedule that still holds the team's enthusiasm: a real attendance mark in week two, not a full rollout a quarter from now. If a system cannot fit this schedule, the problem is not on your side.",
+              text: "Example: a group first marks attendance in the system on day nine after the first conversation.",
               spec: {
                 kind: "timeline",
                 title: "From demo to the first mark",
@@ -309,34 +316,34 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "If the first real use is more than a month away, the rollout will stall — not because the system is bad, but because team enthusiasm has a shelf life.",
+              text: "If first real use is more than a month away, the rollout stalls even with a good system: team enthusiasm has a shelf life.",
             },
           ],
         },
       ],
       takeaways: [
-        "Describe your five weekly actions first.",
-        "In a demo, test your own data and the leader's screen.",
-        "No roles and no export are reasons to stop the conversation.",
-        "First real use should arrive within a week or two.",
+        "Judge every system by your five weekly actions.",
+        "In a demo, load your spreadsheet and mark attendance as a leader.",
+        "No roles or no export: end the conversation.",
+        "A first attendance mark within two weeks is normal; six months is a red flag.",
       ],
       faq: [
         {
           q: "How many systems should we compare?",
-          a: "Two or three. More turns the comparison into research that never ends in a decision.",
+          a: "Two or three. Beyond that, comparing turns into research that never ends in a decision.",
         },
         {
-          q: "Does interface language matter?",
-          a: "It does if you want leaders to use it, not only the administrator. Every unclear word costs you a few people.",
+          q: "Does the interface language matter?",
+          a: "Yes, if group leaders are meant to use the system. Every unclear word loses you a few people.",
         },
         {
           q: "What if part of the team resists?",
-          a: "Start with those who gain immediately, usually group leaders. One team's success convinces better than any presentation.",
+          a: "Start with those who gain right away, usually group leaders. One group's success convinces the rest better than any presentation.",
         },
       ],
       cta: {
         title: "See how it is built",
-        text: "Modules, roles and configuration — and a demo on your data rather than invented data.",
+        text: "Modules, roles and configuration, and a demo on your own data.",
         label: "Explore modules",
         href: "/modules",
       },

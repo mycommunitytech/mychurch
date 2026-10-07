@@ -1,11 +1,15 @@
 "use client";
 
 import FadeIn from "@/components/shared/fade-in";
-import SectionHeading from "@/components/shared/section-heading";
 import { useT } from "@/lib/lang";
 
 /* ────────────────────────────────────────────────────────────────
-   «Місія» — три принципи, які слоган зобов'язує виконувати.
+   «Бачення й місія» — два дослівні формулювання і три принципи, які
+   з них випливають.
+
+   Шапка своя, а не SectionHeading: заголовків два, по слову кожен, і
+   під кожним — одне речення. Поруч і однакової ваги: це пара, а не
+   заголовок із підписом (2026-09-25).
 
    Було: темна картка з іконкою-серцем і дві однакові плитки збоку.
    Стало (2026-09-21): маніфест смугами — номер, великий заголовок і
@@ -20,7 +24,19 @@ export default function AboutMission() {
   return (
     <section className="w-full flex flex-col items-center py-16 md:py-24 bg-page">
       <div className="w-full max-w-[1120px] px-5 md:px-8 flex flex-col gap-10 md:gap-14">
-        <SectionHeading eyebrow={t.eyebrow} title={t.title} text={t.text} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-20 gap-y-10">
+          {[
+            { label: t.visionLabel, text: t.vision },
+            { label: t.missionLabel, text: t.mission },
+          ].map((item, i) => (
+            <FadeIn key={item.label} delay={i} className="flex flex-col gap-4 md:gap-5">
+              <h2 className="font-semibold text-ink text-[40px] md:text-[56px] leading-[1.04] tracking-[-1.4px] md:tracking-[-2.2px]">
+                {item.label}
+              </h2>
+              <p className="text-[18px] md:text-[21px] text-ink leading-[1.5] max-w-[500px]">{item.text}</p>
+            </FadeIn>
+          ))}
+        </div>
 
         <div className="flex flex-col">
           {t.points.map((point, i) => (

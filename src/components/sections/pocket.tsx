@@ -416,7 +416,7 @@ export default function Pocket() {
   return (
     <section
       id="pocket"
-      className="w-full flex flex-col items-center pt-2.5 md:pt-3 pb-16 md:pb-24 scroll-mt-24"
+      className="w-full flex flex-col items-center py-2.5 md:py-3 scroll-mt-24"
     >
       <div className="w-full max-w-[1120px] px-5 md:px-8">
         {/* Той самий розкрій, що й у модулів та інтеграцій: екран у кольоровій

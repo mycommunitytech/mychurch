@@ -1,17 +1,23 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Inter, Manrope } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { DemoModalProvider } from "@/context/demo-modal-context";
 import DemoModal from "@/components/shared/demo-modal";
+import { CalendlyProvider } from "@/context/calendly-context";
+import CalendlyModal from "@/components/shared/calendly-modal";
 import { WorkspaceProvider } from "@/context/workspace-context";
 import WorkspaceModal from "@/components/shared/workspace-modal";
 import { THEME_KEY, LANG_KEY } from "@/lib/prefs";
 import JsonLd from "@/components/shared/json-ld";
 import SkipLink from "@/components/shared/skip-link";
 import AnchorGuard from "@/components/shared/anchor-guard";
+import OffscreenPause from "@/components/shared/offscreen-pause";
 import BackToTop from "@/components/shared/back-to-top";
+import CallbackDock from "@/components/shared/callback-dock";
 import Analytics from "@/components/shared/analytics";
+import ServiceWorker from "@/components/shared/service-worker";
 import { graph, organizationSchema, websiteSchema } from "@/lib/schema";
 import { OG_IMAGE, SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL, absoluteUrl, ogImage, twitterImage } from "@/lib/seo";
 
@@ -23,22 +29,28 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
-/* Шрифт логотипа: тільки для написання «Моя Церква» / «My Church». */
-const manrope = Manrope({
+/* Шрифт логотипа: тільки для написання «Моя Церква» / «My Church».
+   Не повний Manrope з Google (два файли, ~38 КБ), а вирізка ваги 800 з
+   літерами назви — ~2 КБ, тож її можна вантажити першою без шкоди для
+   решти екрана. Збирає brand/logofont.py; інші літери домалює Inter. */
+const manrope = localFont({
+  src: "../assets/fonts/manrope-brand-800.woff2",
   variable: "--font-manrope",
-  subsets: ["latin", "cyrillic"],
+  weight: "800",
   display: "swap",
   preload: true,
-  weight: ["500", "800"],
 });
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#080a0f" },
-  ],
+  /* <meta name="color-scheme">: сайт сам уміє і світлу, і темну — вебв'ю
+     застосунків читають це ще до CSS і не «затемнюють» сторінку самі. */
+  colorScheme: "light dark",
+  /* theme-color тут не задаємо: Next ставить його парою тегів за системною
+     темою і після гідратації додає ще один, що перебивав обрану на сайті.
+     Один власний тег створює скрипт до першого кадру (у JSX React 19 його
+     дублює при гідратації), а applyTheme (src/lib/theme.ts) міняє колір. */
 };
 
 /* Дефолти для всього сайту. Сторінки доповнюють їх через `pageMeta()`
@@ -91,12 +103,13 @@ var d=document.documentElement;
 var t=localStorage.getItem('${THEME_KEY}');
 if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
 if(t==='dark'){d.classList.add('dark');}
-d.style.colorScheme=t;
+d.style.colorScheme=t==='dark'?'dark':'only light';
+var m=document.createElement('meta');m.name='theme-color';
+m.content=t==='dark'?'#080a0f':'#fcfcfc';document.head.appendChild(m);
 var l=localStorage.getItem('${LANG_KEY}')==='en'?'en':'ua';
 d.setAttribute('data-lang',l);
 d.setAttribute('lang',l==='en'?'en':'uk');
 }catch(e){}
-document.documentElement.classList.add('theme-ready');
 })();`;
 
 export default function RootLayout({
@@ -121,15 +134,27 @@ export default function RootLayout({
         <SkipLink />
         {/* Якорі гортають сторінку, але не лишають #hash в адресі. */}
         <AnchorGuard />
+        {/* Анімації блоків, яких не видно, стоять на паузі. */}
+        <OffscreenPause />
         <DemoModalProvider>
-          <WorkspaceProvider>
-            {children}
-            <BackToTop />
-            {/* Трекер кроків відвідувача — події йдуть у GA4. */}
-            <Analytics />
-            <DemoModal />
-            <WorkspaceModal />
-          </WorkspaceProvider>
+          <CalendlyProvider>
+            <WorkspaceProvider>
+              {children}
+              <BackToTop />
+              {/* Слухавка «ми вам перетелефонуємо»: одне поле, той самий приймач. */}
+              <CallbackDock />
+              {/* Трекер кроків відвідувача — події йдуть у GA4. */}
+              <Analytics />
+              {/* Кеш на пристрої: сайт відкривається без мережі (src/components/shared/service-worker.tsx). */}
+              <ServiceWorker />
+              <DemoModal />
+              {/* Календар зустрічей (Calendly) у своєму вікні; без адреси в
+                  NEXT_PUBLIC_CALENDLY_URL його немає. Стоїть після модалки
+                  демо, бо відкривається з неї. */}
+              <CalendlyModal />
+              <WorkspaceModal />
+            </WorkspaceProvider>
+          </CalendlyProvider>
         </DemoModalProvider>
       </body>
     </html>

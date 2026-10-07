@@ -2,6 +2,10 @@
 
    Телефон їде по українській масці «+380 XX XXX XX XX»: код країни стоїть
    намертво, після нього рівно дев'ять цифр — більше набрати неможливо.
+   Виняток — номер іншої країни, вставлений чи підставлений браузером з
+   плюсом («+48 512 345 678»): його лишаємо як є, плюс і до 15 цифр. До
+   2026-10-07 маска переписувала його в «+380 48 512 34 56» — у CRM лягав
+   правдоподібний український номер, за яким людину не знайти.
    Ім'я піднімає першу літеру кожного слова, розповідь про церкву — першу
    літеру тексту. Виправляємо на ходу, щоб у заявку не потрапив ні номер
    із зайвими цифрами, ні «віфа петренко», ні «ВІФА» з Caps Lock. */
@@ -11,6 +15,28 @@ export const UA_PREFIX = "+380";
 const NATIONAL_LEN = 9;
 /** Як вони розбиваються на групи. Сума = NATIONAL_LEN. */
 const GROUPS = [2, 3, 2, 2];
+
+/** Найдовший номер за E.164 — разом із кодом країни. */
+const INTL_MAX = 15;
+
+/* Номер іншої країни — рядок від останнього плюса, якщо код після нього
+   не український. Останнього — бо поле саме підставляє «+380», і номер,
+   вставлений після нього, приходить як «+380+48512345678».
+
+   Неукраїнським код вважаємо лише тоді, коли його вже видно: «+3» і «+38»
+   ще можуть стати «+380», а «8» і «0» — звичні українські початки
+   («80…», «0…»). Тож +3x і +8x набрати вручну цифра за цифрою не вийде —
+   лише вставити чи підставити автозаповненням; решту кодів — і набрати. */
+function foreignDigits(raw: string): string | null {
+  const plus = raw.lastIndexOf("+");
+  if (plus < 0) return null;
+  const d = raw.slice(plus).replace(/\D/g, "");
+  if (!d || d[0] === "0") return null;
+  const ua =
+    (d[0] === "8" && (d.length < 2 || d[1] === "0")) ||
+    (d[0] === "3" && (d.length < 2 || (d[1] === "8" && (d.length < 3 || d[2] === "0"))));
+  return ua ? null : d.slice(0, INTL_MAX);
+}
 
 /* Цифри номера без коду країни — і скільки цифр з'їв початок рядка.
    Друге потрібне, щоб повернути каретку туди, де вона стояла. */
@@ -44,13 +70,15 @@ function split(raw: string): { national: string; eaten: number } {
   return { national: rest.slice(0, NATIONAL_LEN), eaten };
 }
 
-/** Дев'ять цифр номера без коду країни. */
+/** Дев'ять цифр номера без коду країни; для номера іншої країни — усі цифри разом із кодом. */
 export function phoneDigits(raw: string): string {
-  return split(raw).national;
+  return foreignDigits(raw) ?? split(raw).national;
 }
 
 /** «+380 67 123 45 67» із будь-якого вводу: набраного, вставленого, автозаповненого. */
 export function formatPhone(raw: string): string {
+  const intl = foreignDigits(raw);
+  if (intl !== null) return `+${intl}`;
   const d = split(raw).national;
   if (!d) return UA_PREFIX;
   const parts: string[] = [];
@@ -66,6 +94,12 @@ export function formatPhone(raw: string): string {
    Рахуємо, скільки цифр номера стояло перед кареткою, і ставимо її
    після стількох же цифр у новому рядку. */
 export function phoneCaret(raw: string, caret: number, formatted: string): number {
+  const intl = foreignDigits(raw);
+  if (intl !== null) {
+    const plus = raw.lastIndexOf("+");
+    const before = raw.slice(plus, Math.max(plus, caret)).replace(/\D/g, "").length;
+    return 1 + Math.min(intl.length, before);
+  }
   const { national, eaten } = split(raw);
   const digitsBefore = raw.slice(0, caret).replace(/\D/g, "").length;
   const n = Math.max(0, Math.min(national.length, digitsBefore - eaten));

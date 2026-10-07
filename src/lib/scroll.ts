@@ -22,8 +22,21 @@ export function centerInRail(rail: HTMLElement | null, index: number, smooth = t
    перехід — там якоря ще нема, його треба спершу завантажити, а вже на місці
    адресу чистить <AnchorGuard />. */
 
+/* Секції головної, яких ще не видно, браузер не розкладає
+   (`content-visibility: auto`, див. .lazy-sections у globals.css) — їхня
+   висота поки лише оцінка. Перед стрибком до якоря на мить розкладаємо все:
+   браузер запам'ятовує справжні висоти, і прокрутка сідає рівно на блок,
+   а не туди, де він був би за оцінкою. */
+export function settleSections() {
+  const root = document.documentElement;
+  root.classList.add("cv-settle");
+  void document.body.offsetHeight;
+  requestAnimationFrame(() => root.classList.remove("cv-settle"));
+}
+
 /** Прокрутити до секції з таким id. */
 export function scrollToSection(id: string) {
+  settleSections();
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { settleSections } from "@/lib/scroll";
 
 /* Прийшли за глибоким посиланням (/#product з іншої сторінки, з пошуку, з
    закладки): секцію показуємо, а #hash з адреси прибираємо. Інакше він
@@ -20,6 +21,7 @@ export default function AnchorGuard() {
       /* Кадр після завантаження: картинки вже мають розмір, секції стали на
          місце — інакше сторінка зупиняється повз потрібний блок. */
       frame = requestAnimationFrame(() => {
+        settleSections();
         document.getElementById(id)?.scrollIntoView({ behavior: "auto", block: "start" });
         /* Стан роутера зберігаємо — інакше «Назад» поверне порожню сторінку. */
         window.history.replaceState(

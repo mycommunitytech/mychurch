@@ -4,7 +4,7 @@ export const post: BlogPost = {
   slug: "vasha-tserkva-unikalna",
   category: "process",
   date: "2026-09-18",
-  minutes: 8,
+  updated: "2026-09-30",
   related: ["yak-obraty-systemu-dlia-tserkvy", "dani-v-riznykh-mistsiakh", "piat-pytan-pro-systemu"],
   copy: {
     ua: {
@@ -22,11 +22,11 @@ export const post: BlogPost = {
       ],
       problem: {
         title: "Програма диктує, як має жити громада",
-        text: "У системі є «members» і «visitors», а у вас — п'ять станів. Є «groups», а у вас групи, домашні церкви й молодіжні команди. І щоразу доводиться пояснювати лідерам, чому в програмі все називається не так, як у житті.",
+        text: "У програмі людина буває лише «учасником» або «гостем», а у вас — п'ять станів. Там є тільки «групи», а у вас — домашні групи, домашні церкви й молодіжні команди. Щоразу доводиться пояснювати лідерам, чому в програмі все називається не так, як у житті.",
       },
       sections: [
         {
-          heading: "Що в кожній церкві справді своє",
+          heading: "Що в кожній церкві своє",
           blocks: [
             {
               kind: "list",
@@ -40,12 +40,12 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "Це не примхи. Це і є ідентичність громади: те, як вона говорить про себе й як ухвалює рішення. Система, яка стирає цей словник, поступово стирає й участь людей — бо вони перестають впізнавати в ній свою церкву.",
+              text: "З цього складається ідентичність громади. Лідер домашньої церкви, який бачить у програмі «малу групу», вирішує, що система чужа, і відкриває її дедалі рідше.",
             },
           ],
         },
         {
-          heading: "Що варто змінити, а що — залишити",
+          heading: "Що варто змінити, а що залишити",
           blocks: [
             {
               kind: "table",
@@ -60,22 +60,26 @@ export const post: BlogPost = {
               ],
             },
             {
-              kind: "text",
-              text: "Правило просте: підлаштовувати систему треба під те, що є ідентичністю церкви, і не варто — під те, що є просто безладом. Безлад не унікальний: він однаковий у всіх.",
+              kind: "quote",
+              text: "Безлад не унікальний: він однаковий у всіх.",
             },
           ],
         },
         {
-          heading: "Питання, які варто поставити до впровадження",
+          heading: "Чотири питання до впровадження",
           blocks: [
             {
               kind: "steps",
               items: [
-                { title: "Чи можна перейменувати сутності?", text: "Якщо «мала група» ніяк не стане «домашньою церквою», уся подальша робота йтиме проти вашого словника." },
+                { title: "Чи можна змінити назви?", text: "Якщо «мала група» ніяк не стане «домашньою церквою», уся подальша робота йтиме проти вашого словника." },
                 { title: "Чи можна додати свої поля?", text: "У кожної церкви є те, що вона обов'язково фіксує: рік хрещення, місто, волонтерська згода." },
-                { title: "Чи можна змінити етапи?", text: "Шлях людини має описувати вашу практику, а не практику розробника." },
-                { title: "Що станеться, якщо ми передумаємо?", text: "Гнучкість перевіряється не на старті, а на другій зміні рішення." },
+                { title: "Чи можна змінити етапи?", text: "Шлях у системі має збігатися з тим, яким людина йде у вашій громаді." },
+                { title: "Що станеться, якщо ми передумаємо?", text: "Попросіть на демо додати етап посередині шляху, де вже є люди. Гнучкість перевіряється на другій зміні рішення." },
               ],
+            },
+            {
+              kind: "text",
+              text: "Питання про ролі, перенесення таблиць, телефон лідера й підтримку зібрані в статті [«Як обрати систему управління церквою»](/blog/yak-obraty-systemu-dlia-tserkvy).",
             },
           ],
         },
@@ -83,13 +87,13 @@ export const post: BlogPost = {
           heading: "Гнучкість не означає «зроблю все з нуля»",
           blocks: [
             {
-              kind: "callout",
-              title: "Межа розумного",
-              text: "Хороша система дає готові модулі й дозволяє налаштувати назви, поля, етапи, ролі та звіти. Але якщо доводиться писати процес з нуля для кожної дрібниці, це вже не гнучкість, а перекладання роботи на вас.",
+              kind: "text",
+              text: "Хороша система дає готові модулі, а ви налаштовуєте в них назви, поля, етапи, ролі й звіти. Якщо ж кожну дрібницю доводиться будувати з нуля, розробник переклав свою роботу на вас.",
             },
             {
-              kind: "text",
-              text: "Орієнтир такий: типова церква має запуститись за тиждень-два на готових модулях, а налаштування під себе — робити поступово, у процесі, без програміста.",
+              kind: "callout",
+              title: "Орієнтир",
+              text: "Типова церква має запуститися на готових модулях приблизно за тиждень, а під себе налаштовуватися поступово, без програміста.",
             },
           ],
         },
@@ -97,19 +101,10 @@ export const post: BlogPost = {
           heading: "Як це працює в «Моїй Церкві»",
           blocks: [
             {
-              kind: "list",
-              items: [
-                "Модулі вмикаються окремо: беріть тільки те, що потрібно вашій громаді зараз.",
-                "Назви й поля змінюються під ваш словник.",
-                "Етапи шляху людини описуєте ви, а не шаблон.",
-                "Ролі й доступи налаштовуються під вашу структуру — від однієї церкви до мережі кампусів.",
-              ],
-            },
-            {
               kind: "solution",
               title: "Ваші назви, ваші етапи",
               text:
-                "Той самий екран у двох церквах виглядає по-різному: словник і етапи заповнює громада, а не шаблон. Міняється підпис — міняється всюди, без програміста.",
+                "Словник і етапи тут задає громада: перейменували малі групи на «домашні», і ця назва стоїть усюди, без програміста.",
               spec: {
                 kind: "form",
                 title: "Налаштування громади",
@@ -127,25 +122,25 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "Мета одна: щоб лідер, відкривши систему, бачив свою церкву, а не чужу схему.",
+              text: "Модулі вмикаються окремо: беріть лише те, що громаді потрібно зараз. Ролі й доступи налаштовуються під вашу структуру, від однієї церкви до мережі кампусів.",
             },
           ],
         },
       ],
       takeaways: [
-        "Словник, структура й шлях людини — це ідентичність громади, її не варто ламати.",
-        "Безлад у даних не є унікальністю: його варто змінювати.",
-        "Гнучкість перевіряється на другій зміні рішення, а не на старті.",
-        "Запуск на готових модулях, налаштування — поступово й без програміста.",
+        "Назви, структуру й шлях людини не ламайте: під них налаштовують систему.",
+        "П'ять таблиць, усні домовленості й доступ «у всіх до всього» варто змінити.",
+        "Гнучкість видно, коли громада передумала, а люди вже в системі.",
+        "Близько тижня на запуск, далі поступові правки без програміста.",
       ],
       faq: [
         {
           q: "Чи не стане надмірна гнучкість джерелом хаосу?",
-          a: "Стане, якщо налаштовувати все одразу. Тому починають із базової конфігурації, живуть із нею місяць і змінюють тільки те, що реально заважає.",
+          a: "Стане, якщо міняти все одразу. Почніть із базової конфігурації, поживіть із нею місяць і змініть лише те, що заважає.",
         },
         {
           q: "Хто має відповідати за налаштування?",
-          a: "Одна людина в церкві — адміністратор системи. Не комітет: узгодження назв комітетом триває довше, ніж саме впровадження.",
+          a: "Одна людина в церкві: адміністратор системи. Комітет узгоджує назви довше, ніж триває саме впровадження.",
         },
         {
           q: "Що робити, якщо в нас кілька церков у мережі?",
@@ -153,8 +148,8 @@ export const post: BlogPost = {
         },
       ],
       cta: {
-        title: "Подивіться, що саме налаштовується",
-        text: "Модулі, назви, поля, етапи й ролі — під вашу церкву, а не навпаки.",
+        title: "Подивіться, що налаштовується",
+        text: "Модулі, назви, поля, етапи й ролі — під вашу церкву.",
         label: "Модуль «Налаштування»",
         href: "/modules/customization",
       },
@@ -164,7 +159,7 @@ export const post: BlogPost = {
       seoDescription:
         "Why a church should not rewrite its processes for software: what to configure, what genuinely needs changing, and how to test it before you commit.",
       title: "Your church is unique — do not bend to the software",
-      lead: "Ministry names, structure, the path a person walks, even who counts as a member: every church does it differently. Software that demands you rewrite that costs more than it looks.",
+      lead: "Ministry names, structure, the path a person walks, even who counts as a member: every church does it differently. Software that demands you rewrite that costs more than you think.",
       keywords: [
         "configurable church software",
         "flexible church management system",
@@ -174,11 +169,11 @@ export const post: BlogPost = {
       ],
       problem: {
         title: "The software dictates how the church should live",
-        text: "The system has members and visitors; you have five states. It has groups; you have groups, house churches and youth teams. And every time, leaders have to be told why nothing is called what they call it.",
+        text: "The system has members and visitors; you have five states. It has groups; you have groups, house churches and youth teams. Every time, leaders have to be told why nothing is called what they call it.",
       },
       sections: [
         {
-          heading: "What is genuinely unique in every church",
+          heading: "What every church does its own way",
           blocks: [
             {
               kind: "list",
@@ -192,7 +187,7 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "These are not whims. They are identity: how a church speaks about itself and makes decisions. Software that erases that vocabulary gradually erases participation too, because people stop recognising their own church in it.",
+              text: "This is the church's identity. A house church leader who sees “small group” in the software decides it belongs to someone else, and opens it less and less.",
             },
           ],
         },
@@ -212,22 +207,26 @@ export const post: BlogPost = {
               ],
             },
             {
-              kind: "text",
-              text: "The rule: adapt the system to what is identity, and do not adapt it to what is simply mess. Mess is not unique — it looks the same everywhere.",
+              kind: "quote",
+              text: "Mess is not unique: it looks the same everywhere.",
             },
           ],
         },
         {
-          heading: "Questions to ask before you commit",
+          heading: "Four questions before you commit",
           blocks: [
             {
               kind: "steps",
               items: [
-                { title: "Can entities be renamed?", text: "If small group can never become house church, everything afterwards fights your vocabulary." },
+                { title: "Can we rename things?", text: "If “small group” can never become “house church”, everything afterwards fights your vocabulary." },
                 { title: "Can we add our own fields?", text: "Every church records something specific: year of baptism, city, volunteer consent." },
-                { title: "Can stages be changed?", text: "The path should describe your practice, not the developer's." },
-                { title: "What if we change our minds?", text: "Flexibility is tested on the second change of mind, not the first setup." },
+                { title: "Can stages be changed?", text: "The path in the system should match the one people walk in your church." },
+                { title: "What if we change our minds?", text: "In the demo, ask them to insert a stage into a path people are already on. Flexibility is tested on the second change of mind." },
               ],
+            },
+            {
+              kind: "text",
+              text: "Roles, spreadsheet import, the leader's phone and support are covered in [How to choose a church management system](/blog/yak-obraty-systemu-dlia-tserkvy).",
             },
           ],
         },
@@ -235,13 +234,13 @@ export const post: BlogPost = {
           heading: "Flexible does not mean build it yourself",
           blocks: [
             {
-              kind: "callout",
-              title: "The reasonable limit",
-              text: "Good software ships ready modules and lets you configure names, fields, stages, roles and reports. If every small thing has to be built from scratch, that is not flexibility — it is work handed back to you.",
+              kind: "text",
+              text: "Good software ships ready modules; you configure their names, fields, stages, roles and reports. If every small thing must be built from scratch, the vendor has handed its work to you.",
             },
             {
-              kind: "text",
-              text: "A fair benchmark: a typical church should go live in a week or two on ready modules, then tune things gradually, without a developer.",
+              kind: "callout",
+              title: "A benchmark",
+              text: "A typical church should go live on ready modules in about a week, then tune things gradually, without a developer.",
             },
           ],
         },
@@ -249,19 +248,10 @@ export const post: BlogPost = {
           heading: "How My Church handles it",
           blocks: [
             {
-              kind: "list",
-              items: [
-                "Modules switch on separately: take only what your church needs now.",
-                "Names and fields follow your vocabulary.",
-                "You describe the stages of the path, not a template.",
-                "Roles and access match your structure, from one church to a network of campuses.",
-              ],
-            },
-            {
               kind: "solution",
               title: "Your labels, your stages",
               text:
-                "The same screen looks different in two churches: the vocabulary and the stages are filled in by the church, not by a template. Change a label and it changes everywhere, with no developer.",
+                "The church sets vocabulary and stages here: rename small groups “home groups” and that name appears everywhere, no developer needed.",
               spec: {
                 kind: "form",
                 title: "Church setup",
@@ -279,25 +269,25 @@ export const post: BlogPost = {
             },
             {
               kind: "text",
-              text: "One goal: a leader who opens the system should see their own church, not someone else's diagram.",
+              text: "Modules switch on separately: take only what your church needs now. Roles and access match your structure, from one church to a network of campuses.",
             },
           ],
         },
       ],
       takeaways: [
-        "Vocabulary, structure and the path of a person are identity — do not break them.",
-        "Messy data is not uniqueness; change that part.",
-        "Flexibility is proven on the second change of mind.",
-        "Launch on ready modules, configure gradually, without a developer.",
+        "Do not break your names, structure or path: configure the system around them.",
+        "Five spreadsheets, verbal agreements and open access to everything are worth changing.",
+        "Flexibility shows when the church changes its mind with people already in the system.",
+        "About a week to launch, then gradual changes without a developer.",
       ],
       faq: [
         {
           q: "Will too much flexibility create chaos?",
-          a: "It will if you configure everything at once. Start with a basic setup, live with it for a month, and change only what genuinely gets in the way.",
+          a: "It will if you change everything at once. Start with a basic setup, live with it for a month, and change only what gets in the way.",
         },
         {
           q: "Who should own the configuration?",
-          a: "One person: the system administrator. Not a committee — agreeing names by committee takes longer than the rollout itself.",
+          a: "One person: the system administrator. A committee takes longer to agree on names than the whole rollout.",
         },
         {
           q: "What if we are a network of churches?",
@@ -306,7 +296,7 @@ export const post: BlogPost = {
       ],
       cta: {
         title: "See what can be configured",
-        text: "Modules, names, fields, stages and roles — shaped to your church, not the other way round.",
+        text: "Modules, names, fields, stages and roles, shaped to your church.",
         label: "Customisation module",
         href: "/modules/customization",
       },

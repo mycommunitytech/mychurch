@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { i18n, type Lang } from "@/lib/i18n";
+import { i18n, isLangReady, loadEn, type Lang } from "@/lib/i18n";
 import { LANG_KEY } from "@/lib/prefs";
 
 /* Same approach as the theme: <html data-lang> is the source of truth, set by a
@@ -20,15 +20,25 @@ function subscribe(cb: () => void) {
   };
 }
 
+/* Англійські рядки приходять окремим файлом (див. loadEn). Поки вони в
+   дорозі, React далі малює українською — а тоді перемикається одним кадром. */
 function getSnapshot(): Lang {
-  return document.documentElement.getAttribute("data-lang") === "en" ? "en" : "ua";
+  const lang = document.documentElement.getAttribute("data-lang") === "en" ? "en" : "ua";
+  return isLangReady(lang) ? lang : "ua";
+}
+
+/* Хто повернувся з обраною англійською: скрипт у <head> уже поставив
+   data-lang="en", лишається довезти рядки. */
+if (typeof document !== "undefined" && document.documentElement.getAttribute("data-lang") === "en") {
+  void loadEn().then(emit);
 }
 
 function getServerSnapshot(): Lang {
   return "ua";
 }
 
-export function applyLang(lang: Lang) {
+export async function applyLang(lang: Lang) {
+  if (lang === "en") await loadEn();
   const el = document.documentElement;
   el.setAttribute("data-lang", lang);
   el.setAttribute("lang", lang === "en" ? "en" : "uk");

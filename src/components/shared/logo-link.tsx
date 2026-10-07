@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 import { useT } from "@/lib/lang";
@@ -25,7 +26,17 @@ export default function LogoLink({ size = "md" }: LogoLinkProps) {
   const [firstWord, ...restWords] = t.common.brand.split(" ");
   const rest = restWords.join(" ");
 
-  function handleClick() {
+  /* Логотип — справжнє посилання на «/», а не кнопка: це головний шлях на
+     головну з кожної сторінки й у підвалі. Кнопка не мала href, тож її не
+     можна було відкрити в новій вкладці чи скопіювати адресу, скрінрідер
+     читав її як «кнопка», а пошук не бачив у ній посилання на корінь сайту.
+     Перехід лишився тим самим: затемнення, і аж потім сторінка. */
+  function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    /* Ctrl/Cmd-клік, середня кнопка, «відкрити в новій вкладці» — віддаємо
+       браузеру як є: затемнювати поточну сторінку тут нічого. */
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+    e.preventDefault();
     if (timerRef.current) return;
     setFading(true);
 
@@ -46,7 +57,7 @@ export default function LogoLink({ size = "md" }: LogoLinkProps) {
         <div className="fixed inset-0 z-[9999] bg-surface pointer-events-none animate-fade-in-out" style={{ willChange: "opacity" }} />
       )}
 
-      <button onClick={handleClick} aria-label={t.common.brand} className="flex items-center">
+      <Link href="/" onClick={handleClick} aria-label={t.common.brand} className="flex items-center">
         {/* Поки що лише словесна частина — знак ще в роботі. */}
         <span
           aria-hidden
@@ -55,7 +66,7 @@ export default function LogoLink({ size = "md" }: LogoLinkProps) {
           <span className="text-brand">{firstWord}</span>
           {rest ? ` ${rest}` : ""}
         </span>
-      </button>
+      </Link>
     </>
   );
 }

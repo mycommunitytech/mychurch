@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Send } from "lucide-react";
+import { ArrowRight, CalendarDays, Send } from "lucide-react";
 import FadeIn from "@/components/shared/fade-in";
 import { useDemoModal } from "@/context/demo-modal-context";
+import { useCalendly } from "@/context/calendly-context";
 import { useT } from "@/lib/lang";
-import { SITE_TELEGRAM } from "@/lib/seo";
+import { SITE_CALENDLY, SITE_TELEGRAM } from "@/lib/seo";
 
 /* This panel is intentionally dark in both themes — it is the one high-contrast
    moment on the page, so the white/blue values here are deliberate.
@@ -21,7 +22,7 @@ export default function Cta({ rollout = false }: { rollout?: boolean }) {
       className="w-full flex flex-col items-center px-5 md:px-8 py-12 sm:py-16 md:py-24 bg-page scroll-mt-24"
     >
       <FadeIn variant="scale" className="w-full max-w-[1120px]">
-        <div className="no-theme-transition relative overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[40px] px-5 py-9 sm:px-8 sm:py-12 md:px-14 md:py-16">
+        <div className="relative overflow-hidden rounded-[24px] sm:rounded-[28px] md:rounded-[40px] px-5 py-9 sm:px-8 sm:py-12 md:px-14 md:py-16">
           <div
             aria-hidden
             className="absolute inset-0 -z-10"
@@ -74,6 +75,25 @@ export default function Cta({ rollout = false }: { rollout?: boolean }) {
 }
 
 function Actions({ open, t }: { open: () => void; t: ReturnType<typeof useT> }) {
+  const { open: openCalendly } = useCalendly();
+
+  /* Тихий лінк поруч із запрошенням. Заголовок кличе на зустріч — тож коли
+     є календар (NEXT_PUBLIC_CALENDLY_URL), другою дією стає «обрати час»,
+     а Telegram лишається в шапці, футері й запасних каналах. Без календаря
+     тут, як і раніше, «Написати». Посилання справжнє: середня кнопка миші
+     відкриє календар у новій вкладці, звичайний клік — у нашому вікні. */
+  const quiet = SITE_CALENDLY
+    ? {
+        href: SITE_CALENDLY,
+        label: t.calendly.action,
+        Icon: CalendarDays,
+        onClick: (e: React.MouseEvent) => {
+          e.preventDefault();
+          openCalendly({ source: "cta" });
+        },
+      }
+    : { href: SITE_TELEGRAM, label: t.cta.telegram, Icon: Send, onClick: undefined };
+
   return (
     <>
       <button
@@ -90,14 +110,15 @@ function Actions({ open, t }: { open: () => void; t: ReturnType<typeof useT> }) 
       </button>
 
       <Link
-        href={SITE_TELEGRAM}
+        href={quiet.href}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={quiet.onClick}
         className="relative flex items-center justify-center gap-2 h-[48px] sm:h-[52px] w-full sm:w-auto px-8 rounded-full border border-white/25 bg-white/5 backdrop-blur transition-colors duration-200 hover:bg-white/12"
       >
-        <Send className="w-[16px] h-[16px] text-white/80" />
+        <quiet.Icon className="w-[16px] h-[16px] text-white/80" />
         <span className="text-white font-medium text-[16px] tracking-[-0.32px] leading-[1.4] whitespace-nowrap">
-          {t.cta.telegram}
+          {quiet.label}
         </span>
       </Link>
     </>
